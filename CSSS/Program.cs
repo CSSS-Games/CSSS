@@ -25,7 +25,15 @@ namespace CSSS
 
         public static void Main(string[] args)
         {
-            logger.Info("Hello World!");
+            // Performing bootstrap checks to see if the program should load
+            // normally, or perform a specific task
+            var bootstrapChecks = new Bootstrap();
+            bool canStart = bootstrapChecks.CheckArguments(args);
+
+            if (canStart)
+            {
+                logger.Info("Bootstrap checks complete - starting program");
+            }
             Console.ReadLine();
         }
     }
