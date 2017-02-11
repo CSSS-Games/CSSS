@@ -14,15 +14,19 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see<http://www.gnu.org/licenses/>.
 
+using NLog;
 using System;
 
 namespace CSSS
 {
     class MainClass
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            logger.Info("Hello World!");
+            Console.ReadLine();
         }
     }
 }
