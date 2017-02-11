@@ -1,6 +1,12 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{429D7241-EDB8-4E8E-BFE5-E84B7D05A1D2}"
+    ProjectSection(SolutionItems) = preProject
+        LICENSE.md = LICENSE.md
+        README.md = README.md
+    EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSS", "CSSS\CSSS.csproj", "{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}"
 EndProject
 Global
