@@ -149,7 +149,7 @@ namespace CSSS
         {
             int rightPadding = 18;
 
-            Console.WriteLine("Cyber Security Scoring System (CSSS) Usage");
+            Console.WriteLine("CyberSecurity Scoring System (CSSS) Usage");
             Console.WriteLine("==========================================");
             Console.WriteLine();
 
