@@ -23,10 +23,22 @@ namespace CSSS
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            logger.Info("Hello World!");
+            // Performing bootstrap checks to see if the program should load
+            // normally, or perform a specific task
+            var bootstrapChecks = new Bootstrap();
+            bool canStart = bootstrapChecks.CheckArguments(args);
+
+            if (!canStart)
+            {
+                // We can't go any further, so we can return early
+                return 1;
+            }
+
+            // Goodbye
             Console.ReadLine();
+            return 0;
         }
     }
 }
