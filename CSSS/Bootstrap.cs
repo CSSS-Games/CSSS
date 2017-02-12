@@ -38,7 +38,8 @@ namespace CSSS
             Help = 0x0,
             Check = 0x1,
             Prepare = 0x2,
-            Start = 0x4
+            Observe = 0x4,
+            Start = 0x8
         }
 
         /// <summary>
@@ -64,9 +65,17 @@ namespace CSSS
         /// 
         /// Valid arguments that CSSS accepts are:
         ///   * -c, --check:   Checks the config files for any problems
+        ///   * -o, --observe: Observes CSSS running before preparing it (implies 'c')
         ///   * -p, --prepare: Prepares CSSS ready for image release (implies '-c')
         ///   * -s, --start:   Starts the scoring system
         ///   * -h, --help:    Shows the program usage
+        /// 
+        /// These arguments have been chosen to spell 'COPS', as competitors
+        /// are 'policing' the security of the computer
+        /// 
+        /// Under normal debugging, the 'o' option should be passed, as
+        /// this allows CSSS to run as it would for training, but without
+        /// affecting the files used to list the 'issues'
         /// </summary>
         /// <returns><c>true</c>, if the main part of the program can start, <c>false</c> otherwise</returns>
         /// <param name="arguments">The arguments passed to the CSSS Main function</param>
@@ -97,6 +106,12 @@ namespace CSSS
                     case "c":
                     case "check":
                         bootstrapResult = BootstrapOptions.Check;
+                        canStart = true;
+                        break;
+
+                    case "o":
+                    case "observe":
+                        bootstrapResult = BootstrapOptions.Check | BootstrapOptions.Observe;
                         canStart = true;
                         break;
 
@@ -132,30 +147,36 @@ namespace CSSS
         /// </summary>
         private void ShowUsage()
         {
+            int rightPadding = 18;
+
             Console.WriteLine("Cyber Security Scoring System (CSSS) Usage");
             Console.WriteLine("==========================================");
             Console.WriteLine();
 
             // Valid parameter combinations to pass
             Console.WriteLine("Usage:");
-            Console.WriteLine("  CSSS.exe -c | -p | -s | -h");
+            Console.WriteLine("  CSSS.exe -c | -o | -p | -s | -h");
             Console.WriteLine();
             Console.WriteLine("Options:");
 
             // Check config files
-            Console.Write("-c, --check:".PadRight(16));
+            Console.Write("  -c, --check:".PadRight(rightPadding));
             Console.WriteLine("Checks the config files for any problems");
 
+            // Observe running
+            Console.Write("  -o, --observe:".PadRight(rightPadding));
+            Console.WriteLine("Observes CSSS running before preparing it (implies '-c')");
+
             // Prepare CSSS
-            Console.Write("-p, --prepare:".PadRight(16));
+            Console.Write("  -p, --prepare:".PadRight(rightPadding));
             Console.WriteLine("Prepares CSSS ready for image release (implies '-c')");
 
             // Start scoring system
-            Console.Write("-s, --start:".PadRight(16));
+            Console.Write("  -s, --start:".PadRight(rightPadding));
             Console.WriteLine("Starts the scoring system");
 
             // Help
-            Console.Write("-h, --help:".PadRight(16));
+            Console.Write("  -h, --help:".PadRight(rightPadding));
             Console.WriteLine("Shows this help message");
         }
     }
