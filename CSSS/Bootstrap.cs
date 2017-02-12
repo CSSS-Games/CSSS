@@ -36,6 +36,18 @@ namespace CSSS
         /// Checks the arguments passed to the program, and calls
         /// relevant functions to see if anything needs to be processed,
         /// or if the main part of the program can begin
+        /// 
+        /// Performing a check for any arguments being passed is a way
+        /// to prevent any 'shooting yourself in the foot' problems by
+        /// the user accidentally double-clicking the main executible,
+        /// as the config files that are used are encrypted before the
+        /// image is released, to prevent any cheating by competitors
+        /// 
+        /// Valid arguments that CSSS accepts are:
+        ///   * -c, --check:   Checks the config files for any problems
+        ///   * -p, --prepare: Prepares CSSS ready for image release (implies '-c')
+        ///   * -s, --start:   Starts the scoring system
+        ///   * -h, --help:    Shows the program usage
         /// </summary>
         /// <returns><c>true</c>, if the main part of the program can start, <c>false</c> otherwise</returns>
         /// <param name="arguments">The arguments passed to the CSSS Main function</param>
@@ -47,8 +59,8 @@ namespace CSSS
             // and stop program execution
             if (arguments.Length == 0)
             {
-                logger.Debug("No arguments have been passed to CSSS, so showing program help messages");
-                ShowHelp();
+                logger.Debug("No arguments passed to CSSS - showing program usage");
+                ShowUsage();
 
                 // No further checks are needed here, so we can return early
                 return canStart;
@@ -66,7 +78,7 @@ namespace CSSS
                     case "h":
                     case "help":
                     default:
-                        ShowHelp();
+                        ShowUsage();
                         break;
                 }
             }
@@ -75,15 +87,33 @@ namespace CSSS
         }
 
         /// <summary>
-        /// Shows the help usage documentation on using CSSS
+        /// Shows the usage documentation on using CSSS
         /// </summary>
-        private void ShowHelp()
+        private void ShowUsage()
         {
             Console.WriteLine("Cyber Security Scoring System (CSSS) Usage");
             Console.WriteLine("==========================================");
             Console.WriteLine();
 
-            // If there are no arguments passed, or the help argument is passed
+            // Valid parameter combinations to pass
+            Console.WriteLine("Usage:");
+            Console.WriteLine("  CSSS.exe -c | -p | -s | -h");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+
+            // Check config files
+            Console.Write("-c, --check:".PadRight(16));
+            Console.WriteLine("Checks the config files for any problems");
+
+            // Prepare CSSS
+            Console.Write("-p, --prepare:".PadRight(16));
+            Console.WriteLine("Prepares CSSS ready for image release (implies '-c')");
+
+            // Start scoring system
+            Console.Write("-s, --start:".PadRight(16));
+            Console.WriteLine("Starts the scoring system");
+
+            // Help
             Console.Write("-h, --help:".PadRight(16));
             Console.WriteLine("Shows this help message");
         }
