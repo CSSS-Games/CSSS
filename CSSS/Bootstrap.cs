@@ -28,6 +28,25 @@ namespace CSSS
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// The values that can be returned from this class, once the
+        /// argument checks have been carried out
+        /// </summary>
+        [Flags]
+        public enum BootstrapOptions
+        {
+            Help = 0x0,
+            Check = 0x1,
+            Prepare = 0x2,
+            Start = 0x4
+        }
+
+        /// <summary>
+        /// The result of the argument checks, used to decide the next
+        /// step CSSS should take
+        /// </summary>
+        public BootstrapOptions bootstrapResult;
+
         public Bootstrap()
         {
         }
@@ -75,13 +94,35 @@ namespace CSSS
 
                 switch (argument.ToLower().Replace("-", ""))
                 {
+                    case "c":
+                    case "check":
+                        bootstrapResult = BootstrapOptions.Check;
+                        canStart = true;
+                        break;
+
+                    case "p":
+                    case "prepare":
+                        bootstrapResult = BootstrapOptions.Check | BootstrapOptions.Prepare;
+                        canStart = true;
+                        break;
+
+                    case "s":
+                    case "start":
+                        bootstrapResult = BootstrapOptions.Start;
+                        canStart = true;
+                        break;
+
                     case "h":
                     case "help":
                     default:
+                        bootstrapResult = BootstrapOptions.Help;
                         ShowUsage();
                         break;
                 }
             }
+
+            logger.Debug("Actions to perform: {0}", bootstrapResult);
+            logger.Debug("CSSS can continue: {0}", canStart);
 
             return canStart;
         }
