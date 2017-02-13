@@ -7,3 +7,7 @@ matrix:
 		  mono: none
 		  env: DOTNETCORE=1
 		- mono: latest
+
+script:
+	- xbuild /p:Configuration=Release CSSS.sln
+	- mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSSTests/bin/Release/CSSSTests.dll
