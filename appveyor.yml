@@ -1,0 +1,29 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+version: 0.1.{build}-{branch}
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+image: Visual Studio 2015  # Allows use if Xamarin: https://www.appveyor.com/docs/installed-software/#xamarin
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+platform: Any CPU
+
+configuration: Release
+
+before_build: nuget restore
+
+build:
+  project: CSSS.sln
+  verbosity: normal
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+test: off
+
+test_script: nunit3-console.exe .\CSSSTests\bin\Release\CSSSTests.dll --result=myresults.xml;format=AppVeyor
