@@ -1,0 +1,16 @@
+language: csharp
+solution: CSSS.sln
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: false
+      mono: latest
+    - os: linux
+      dist: precise
+      mono: latest
+
+script:
+  - xbuild /p:Configuration=Release CSSS.sln
+  - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSSTests/bin/Release/CSSSTests.dll

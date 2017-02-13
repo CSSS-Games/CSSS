@@ -46,7 +46,7 @@ namespace CSSS
         /// The result of the argument checks, used to decide the next
         /// step CSSS should take
         /// </summary>
-        public BootstrapOptions bootstrapResult;
+        public BootstrapOptions bootstrapResult { get; set; }
 
         public Bootstrap()
         {
