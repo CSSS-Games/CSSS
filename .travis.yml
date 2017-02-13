@@ -3,10 +3,13 @@ solution: CSSS.sln
 
 matrix:
   include:
-    - dotnet: 1.0.0-preview2-003121
-      mono: none
-      env: DOTNETCORE=1
-    - mono: latest
+    - os: linux
+      dist: trusty
+      sudo: false
+      mono: latest
+    - os: linux
+      dist: precise
+      mono: latest
 
 script:
   - xbuild /p:Configuration=Release CSSS.sln
