@@ -2,12 +2,12 @@ language: csharp
 solution: CSSS.sln
 
 matrix:
-	include:
-		- dotnet: 1.0.0-preview2-003121
-		  mono: none
-		  env: DOTNETCORE=1
-		- mono: latest
+  include:
+    - dotnet: 1.0.0-preview2-003121
+      mono: none
+      env: DOTNETCORE=1
+    - mono: latest
 
 script:
-	- xbuild /p:Configuration=Release CSSS.sln
-	- mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSSTests/bin/Release/CSSSTests.dll
+  - xbuild /p:Configuration=Release CSSS.sln
+  - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSSTests/bin/Release/CSSSTests.dll
