@@ -19,30 +19,20 @@ using System;
 
 namespace CSSS
 {
-    class MainClass
+    /// <summary>
+    /// Performs a number of initialization tasks for CSSS, such as
+    /// setting the current OS and the location of various files
+    /// </summary>
+    public class Init
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        /// <summary>
+        /// Creating an instance of the CSSS config class, to be
+        /// able to read and set values for it
+        /// </summary>
+        private static Config config = Config.GetCurrentConfig;
 
-        public static int Main(string[] args)
+        public Init()
         {
-            // Performing bootstrap checks to see if the program should load
-            // normally, or perform a specific task
-            var bootstrapChecks = new Bootstrap();
-            bool canStart = bootstrapChecks.CheckArguments(args);
-
-            if (!canStart)
-            {
-                // We can't go any further, so we can return early
-                return 1;
-            }
-
-            // Setting up any environment options, such as the OS
-            // CSSS is running on
-            var init = new Init();
-
-            // Goodbye
-            Console.ReadLine();
-            return 0;
         }
     }
 }
