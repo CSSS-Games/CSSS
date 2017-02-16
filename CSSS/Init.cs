@@ -16,6 +16,7 @@
 
 using NLog;
 using System;
+using System.IO;
 
 namespace CSSS
 {
@@ -25,14 +26,67 @@ namespace CSSS
     /// </summary>
     public class Init
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Creating an instance of the CSSS config class, to be
         /// able to read and set values for it
         /// </summary>
         private static Config config = Config.GetCurrentConfig;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:CSSS.Init"/> class
+        /// </summary>
         public Init()
         {
+            // Setting the current Operating System
+            SetCurrentOperatingSystem();
+        }
+
+        /// <summary>
+        /// Sets the current operating system that CSSS is running on
+        /// in the <see cref="T:CSSS.Config"/> class
+        /// 
+        /// <para>CSSS can run on a variety of Operating Systems as long
+        /// as there is a supported checker class for it. To assist with
+        /// using the right checker, we need to find out what Operating
+        /// System CSSS is currently running on</para>
+        /// 
+        /// <para>There doesn't seem to be an easy way to accomplish this
+        /// using either .Net or Mono, so a selection of methods found
+        /// online are used to perform these checks</para>
+        /// 
+        /// <para>If the Operating System cannot be identified, then an
+        /// 'unknown' value is returned. It is up to the calling function
+        /// to throw an error</para>
+        /// 
+        /// <para>The resources used are:
+        ///   * https://blez.wordpress.com/2012/09/17/determine-os-with-netmono/
+        ///   * http://softwarerecs.stackexchange.com/a/13722
+        ///   * http://stackoverflow.com/q/10138040
+        ///   * http://www.mono-project.com/docs/faq/technical/#how-to-detect-the-execution-platform
+        /// </para>
+        /// </summary>
+        /// <returns>The current operating system</returns>
+        public Config.CurrentOperatingSystem SetCurrentOperatingSystem()
+        {
+            Config.CurrentOperatingSystem currentOS = Config.CurrentOperatingSystem.Unknown;
+
+            // Seeing if CSSS us running on WinNT (this seems to be the
+            // easiest check to carry out
+            if (Path.DirectorySeparatorChar == '\\')
+            {
+                currentOS = Config.CurrentOperatingSystem.WinNT;
+                logger.Info("CSSS is running on: {0}", currentOS);
+                config.currentOperatingSystem = currentOS;
+                return currentOS;
+            }
+
+            // We haven't been able to work out what Operating System CSSS
+            // is running on, so return unknown. It is up to the calling
+            // function to throw an error
+            logger.Error("Unable to identify what operating system is in use");
+            return currentOS;
         }
     }
 }

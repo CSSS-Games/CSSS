@@ -55,5 +55,22 @@ namespace CSSS
                 return configInstance;
             }
         }
+
+        /// <summary>
+        /// The Operating Systems that CSSS supports to run checks on
+        /// </summary>
+        [Flags]
+        public enum CurrentOperatingSystem
+        {
+            Unknown,
+            Linux,
+            WinNT
+        }
+
+        /// <summary>
+        /// Sets or gets the current Operating System that CSSS is
+        /// running on
+        /// </summary>
+        public CurrentOperatingSystem currentOperatingSystem { get; set; }
     }
 }
