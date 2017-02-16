@@ -16,6 +16,7 @@
 
 using NLog;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace CSSS
@@ -82,11 +83,72 @@ namespace CSSS
                 return currentOS;
             }
 
+            // Attempting to identify the Unix-based OS based on the returned
+            // string from the `uname -s` command
+            // While currently only Linux is also supported by CSSS, a switch
+            // function is used here should additional OS support be added in
+            // the future
+            switch (ReadProcessOutput("uname", "-s").ToLower())
+            {
+                case "linux":
+                    currentOS = Config.CurrentOperatingSystem.Linux;
+                    break;
+                default:
+                    break;
+            }
+
+            if (currentOS != Config.CurrentOperatingSystem.Unknown)
+            {
+                logger.Info("CSSS is running on: {0}", currentOS);
+                config.currentOperatingSystem = currentOS;
+                return currentOS;
+            }
+
             // We haven't been able to work out what Operating System CSSS
             // is running on, so return unknown. It is up to the calling
             // function to throw an error
             logger.Error("Unable to identify what operating system is in use");
-            return currentOS;
+            throw new NotImplementedException("CSSS does not support running on your operating system");
+        }
+
+        /// <summary>
+        /// Reads system program process output to determine information about
+        /// the current Operating System type
+        /// 
+        /// <para>For Unix-like Operating Systems various commands can be used
+        /// to dertermine some information about the current computer, such as
+        /// the kernel type and version. This function serves as a wrapper to
+        /// those programs to return any data to CSSS</para>
+        /// 
+        /// <para>See: https://blez.wordpress.com/2012/09/17/determine-os-with-netmono/</para>
+        /// </summary>
+        /// <returns>Any string returned from the program output</returns>
+        /// <param name="name">The name of the program to get system information</param>
+        /// <param name="args">Any arguments to pass to the program</param>
+        private static string ReadProcessOutput(string name, string args)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                if (args != null && args != "") p.StartInfo.Arguments = " " + args;
+                p.StartInfo.FileName = name;
+                p.Start();
+                // Do not wait for the child process to exit before
+                // reading to the end of its redirected stream.
+                // p.WaitForExit();
+                // Read the output stream first and then wait.
+                string output = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+                if (output == null) output = "";
+                output = output.Trim();
+                return output;
+            }
+            catch
+            {
+                return "";
+            }
         }
     }
 }
