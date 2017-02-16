@@ -38,7 +38,17 @@ namespace CSSS
 
             // Setting up any environment options, such as the OS
             // CSSS is running on
-            var init = new Init();
+            // Should any errors occur, an exception is thrown and
+            // program execution will stop
+            try
+            {
+                var init = new Init();
+            }
+            catch (NotImplementedException e)
+            {
+                logger.Fatal("An error occurred trying to start CSSS: {0}", e.Message);
+                return 10;
+            }
 
             // Goodbye
             Console.ReadLine();
