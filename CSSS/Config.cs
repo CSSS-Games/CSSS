@@ -60,7 +60,7 @@ namespace CSSS
         /// The Operating Systems that CSSS supports to run checks on
         /// </summary>
         [Flags]
-        public enum CurrentOperatingSystem
+        public enum OperatingSystemType
         {
             Unknown,
             Linux,
@@ -71,6 +71,6 @@ namespace CSSS
         /// Sets or gets the current Operating System that CSSS is
         /// running on
         /// </summary>
-        public CurrentOperatingSystem currentOperatingSystem { get; set; }
+        public OperatingSystemType operatingSystemType { get; set; }
     }
 }

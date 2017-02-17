@@ -55,7 +55,7 @@ namespace CSSSTests
         [Test()]
         public void TestOperatingSystemDetected()
         {
-            Assert.AreNotEqual(Config.CurrentOperatingSystem.Unknown,
+            Assert.AreNotEqual(Config.OperatingSystemType.Unknown,
                                initTests.SetCurrentOperatingSystem(),
                                "The operating system detected should not be an unknown type");
         }

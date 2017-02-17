@@ -69,17 +69,17 @@ namespace CSSS
         /// </para>
         /// </summary>
         /// <returns>The current operating system</returns>
-        public Config.CurrentOperatingSystem SetCurrentOperatingSystem()
+        public Config.OperatingSystemType SetCurrentOperatingSystem()
         {
-            Config.CurrentOperatingSystem currentOS = Config.CurrentOperatingSystem.Unknown;
+            Config.OperatingSystemType currentOS = Config.OperatingSystemType.Unknown;
 
             // Seeing if CSSS us running on WinNT (this seems to be the
             // easiest check to carry out
             if (Path.DirectorySeparatorChar == '\\')
             {
-                currentOS = Config.CurrentOperatingSystem.WinNT;
+                currentOS = Config.OperatingSystemType.WinNT;
                 logger.Info("CSSS is running on: {0}", currentOS);
-                config.currentOperatingSystem = currentOS;
+                config.operatingSystemType = currentOS;
                 return currentOS;
             }
 
@@ -91,16 +91,16 @@ namespace CSSS
             switch (ReadProcessOutput("uname", "-s").ToLower())
             {
                 case "linux":
-                    currentOS = Config.CurrentOperatingSystem.Linux;
+                    currentOS = Config.OperatingSystemType.Linux;
                     break;
                 default:
                     break;
             }
 
-            if (currentOS != Config.CurrentOperatingSystem.Unknown)
+            if (currentOS != Config.OperatingSystemType.Unknown)
             {
                 logger.Info("CSSS is running on: {0}", currentOS);
-                config.currentOperatingSystem = currentOS;
+                config.operatingSystemType = currentOS;
                 return currentOS;
             }
 
