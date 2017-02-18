@@ -41,5 +41,11 @@
     <None Include="packages.config" />
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
+      <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
+      <Name>CSSSSupportLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
