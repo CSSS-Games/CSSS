@@ -139,9 +139,21 @@ namespace CSSS
             switch (config.operatingSystemType)
             {
                 case Config.OperatingSystemType.WinNT:
+                    // Using the OSVersionInfo class from the Support Library
                     config.OperatingSystemName = WinNTVersionInfo.Name;
                     logger.Info("Operating System name: {0}", config.OperatingSystemName);
                     return true;
+                    
+                case Config.OperatingSystemType.Linux:
+                    // Using the `lsb_release -i -s` and `lsb_release -c -s`
+                    // program and arguments to join the Operating System
+                    // distributor and codename
+                    config.OperatingSystemName = ReadProcessOutput("lsb_release", "-i -s")
+                                               + " "
+                                               + ReadProcessOutput("lsb_release", "-c -s");
+                    logger.Info("Operating System name: {0}", config.OperatingSystemName);
+                    return true;
+                    
                 default:
                     // The operating system type is not known, so it is not
                     // possible to set a name
