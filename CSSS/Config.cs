@@ -56,6 +56,7 @@ namespace CSSS
             }
         }
 
+        #region OperatingSystemType
         /// <summary>
         /// The Operating Systems that CSSS supports to run checks on
         /// </summary>
@@ -71,6 +72,16 @@ namespace CSSS
         /// Sets or gets the current Operating System that CSSS is
         /// running on
         /// </summary>
+        /// <value>The type of the operating system</value>
         public OperatingSystemType operatingSystemType { get; set; }
+        #endregion OperatingSystemType
+
+        #region OperatingSystemName
+        /// <summary>
+        /// Gets or sets the name of the operating system
+        /// </summary>
+        /// <value>The name of the operating system</value>
+        public string OperatingSystemName { get; set; }
+        #endregion OperatingSystemName
     }
 }

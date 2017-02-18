@@ -18,6 +18,7 @@ using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
+using SupportLibrary.OSVersionInfo;
 
 namespace CSSS
 {
@@ -40,12 +41,20 @@ namespace CSSS
         /// </summary>
         public Init()
         {
-            // Setting the current Operating System
-            SetCurrentOperatingSystem();
+            // Setting the current Operating System type
+            SetOperatingSystemType();
+
+            // Setting the name of the Operating System, or
+            // throw an error if not possible to be found
+            if (!SetOperatingSystemName())
+            {
+                throw new NotImplementedException("CSSS was not able to identify the name of the Operating System");
+            }
         }
 
+        #region SetOperatingSystemType
         /// <summary>
-        /// Sets the current operating system that CSSS is running on
+        /// Sets the current operating system type that CSSS is running on
         /// in the <see cref="T:CSSS.Config"/> class
         /// 
         /// <para>CSSS can run on a variety of Operating Systems as long
@@ -69,7 +78,7 @@ namespace CSSS
         /// </para>
         /// </summary>
         /// <returns>The current operating system</returns>
-        public Config.OperatingSystemType SetCurrentOperatingSystem()
+        public Config.OperatingSystemType SetOperatingSystemType()
         {
             Config.OperatingSystemType currentOS = Config.OperatingSystemType.Unknown;
 
@@ -78,7 +87,7 @@ namespace CSSS
             if (Path.DirectorySeparatorChar == '\\')
             {
                 currentOS = Config.OperatingSystemType.WinNT;
-                logger.Info("CSSS is running on: {0}", currentOS);
+                logger.Info("Operating System type: {0}", currentOS);
                 config.operatingSystemType = currentOS;
                 return currentOS;
             }
@@ -99,7 +108,7 @@ namespace CSSS
 
             if (currentOS != Config.OperatingSystemType.Unknown)
             {
-                logger.Info("CSSS is running on: {0}", currentOS);
+                logger.Info("Operating System type: {0}", currentOS);
                 config.operatingSystemType = currentOS;
                 return currentOS;
             }
@@ -107,9 +116,42 @@ namespace CSSS
             // We haven't been able to work out what Operating System CSSS
             // is running on, so return unknown. It is up to the calling
             // function to throw an error
-            logger.Error("Unable to identify what operating system is in use");
-            throw new NotImplementedException("CSSS does not support running on your operating system");
+            logger.Error("Unable to identify what Operating System is in use");
+            throw new NotImplementedException("CSSS does not support running on your Operating System");
         }
+        #endregion SetOperatingSystemType
+
+        #region SetOperatingSystemName
+        /// <summary>
+        /// Sets the name of the operating system that CSSS is running
+        /// on, such as Windown Seven or Ubuntu Trusty
+        /// 
+        /// <para>This function is used to let CSSS know what operating
+        /// system version it is running on, so that should any specific
+        /// changes need to be made when checks are being carried out
+        /// they can be</para>
+        /// 
+        /// <para>This function will always return false if an operating
+        /// system is unknown once the `SetOperatingSystemType` function
+        /// has been called. If the operating system name can not be
+        /// detected then an error is thrown</para>
+        /// </summary>
+        /// <returns><c>true</c>, if operating system name was set, <c>false</c> otherwise.</returns>
+        public bool SetOperatingSystemName()
+        {
+            switch (config.operatingSystemType)
+            {
+                case Config.OperatingSystemType.WinNT:
+                    config.OperatingSystemName = WinNTVersionInfo.Name;
+                    logger.Info("Operating System name: {0}", config.OperatingSystemName);
+                    return true;
+                default:
+                    // The operating system type is not known, so it is not
+                    // possible to set a name
+                    return false;
+            }
+        }
+        #endregion SetOperatingSystemName
 
         /// <summary>
         /// Reads system program process output to determine information about
