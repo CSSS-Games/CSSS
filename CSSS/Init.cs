@@ -52,7 +52,6 @@ namespace CSSS
             }
         }
 
-        #region SetOperatingSystemType
         /// <summary>
         /// Sets the current operating system type that CSSS is running on
         /// in the <see cref="T:CSSS.Config"/> class
@@ -119,9 +118,7 @@ namespace CSSS
             logger.Error("Unable to identify what Operating System is in use");
             throw new NotImplementedException("CSSS does not support running on your Operating System");
         }
-        #endregion SetOperatingSystemType
 
-        #region SetOperatingSystemName
         /// <summary>
         /// Sets the name of the operating system that CSSS is running
         /// on, such as Windown Seven or Ubuntu Trusty
@@ -151,7 +148,6 @@ namespace CSSS
                     return false;
             }
         }
-        #endregion SetOperatingSystemName
 
         /// <summary>
         /// Reads system program process output to determine information about
