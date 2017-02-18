@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SupportLibrary\OSVersionInfo\LICENSE.md" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
