@@ -53,11 +53,23 @@ namespace CSSSTests
         /// running the tests
         /// </summary>
         [Test()]
-        public void TestOperatingSystemDetected()
+        public void TestOperatingSystemTypeDetected()
         {
             Assert.AreNotEqual(Config.OperatingSystemType.Unknown,
                                initTests.SetOperatingSystemType(),
-                               "The operating system detected should not be an unknown type");
+                               "The Operating System detected should not be an unknown type");
+        }
+
+        /// <summary>
+        /// Tests if the Oerating System name could be detected. If
+        /// the name of the OS could not be found then the called
+        /// function returns false or throws an exception
+        /// </summary>
+        [Test()]
+        public void TestOperatingSystemNameDetected()
+        {
+            Assert.IsTrue(initTests.SetOperatingSystemName(),
+                          "The Operating System name should be detected and not empty");
         }
     }
 }
