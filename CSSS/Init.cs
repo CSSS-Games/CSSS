@@ -50,6 +50,13 @@ namespace CSSS
             {
                 throw new NotImplementedException("CSSS was not able to identify the name of the Operating System");
             }
+
+            // Setting the version of the Operating System, or
+            // throw an error if not possible to be found
+            if (!SetOperatingSystemVersion())
+            {
+                throw new NotImplementedException("CSSS was not able to identify the version of the Operating System");
+            }
         }
 
         /// <summary>
@@ -157,6 +164,38 @@ namespace CSSS
                 default:
                     // The operating system type is not known, so it is not
                     // possible to set a name
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the version of the operating system that CSSS is running
+        /// on, such as 6.1.7600.0 (Windows) or 14.04.5 (Ubuntu)
+        /// 
+        /// <para>This function is used to let CSSS know what operating
+        /// system version it is running on, so that should any specific
+        /// changes need to be made when checks are being carried out
+        /// they can be</para>
+        /// 
+        /// <para>This function will always return false if an operating
+        /// system is unknown once the `SetOperatingSystemType` function
+        /// has been called. If the operating system name can not be
+        /// detected then an error is thrown</para>
+        /// </summary>
+        /// <returns><c>true</c>, if operating system version was set, <c>false</c> otherwise.</returns>
+        public bool SetOperatingSystemVersion()
+        {
+            switch (config.operatingSystemType)
+            {
+                case Config.OperatingSystemType.WinNT:
+                    // Using the OSVersionInfo class from the Support Library
+                    config.OperatingSystemVersion = WinNTVersionInfo.VersionString;
+                    logger.Info("Operating System ver.: {0}", config.OperatingSystemVersion);
+                    return true;
+                    
+                default:
+                    // The operating system type is not known, so it is not
+                    // possible to set a version number
                     return false;
             }
         }

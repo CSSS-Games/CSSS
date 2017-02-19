@@ -79,5 +79,11 @@ namespace CSSS
         /// </summary>
         /// <value>The name of the operating system</value>
         public string OperatingSystemName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version of the operating system
+        /// </summary>
+        /// <value>The name of the operating system</value>
+        public string OperatingSystemVersion { get; set; }
     }
 }
