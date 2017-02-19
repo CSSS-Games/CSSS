@@ -4,6 +4,28 @@ CyberSecurity Scoring System (CSSS) is a program to assist with training for the
 
 While it is currently possible to create [your own practice images](https://www.uscyberpatriot.org/competition/training-materials/practice-images), there is only a scoring client for Windows computers. To assist with training competitors with Windows, Ubuntu and Debian Operating Systems, this program has been created to provide a scoring system for them.
 
+## Requirements
+To run CSSS, you will need to have an image running one of the supported operating systems:
+  * Windows:
+    * Windows Vista
+    * Windows 7
+    * Windows 8
+    * Windows Server 2008
+  * Linux:
+    * Ubuntu 14.04
+    * Ubuntu 16.04
+    * Debian 7
+
+Other operating systems should work, but they are not supported as the CyberPatriot / CyberCenturion competitions do not use them.
+
+## Installing
+Before CSSS will run, the following additional programs need to be installed onto your image:
+  * Windows:
+    * The .Net framework versions [4.0](https://www.microsoft.com/en-gb/download/details.aspx?id=17718) or [4.5](https://www.microsoft.com/en-gb/download/details.aspx?id=42642) (which one is required depends on if your image contains any of the needed Service Packs). Please follow the usual installation steps (Next, Next, ..., Finish)
+  * Linux:
+    * The Mono client should be installed. Please follow their instructions on the [Install Mono on Linux](http://www.mono-project.com/docs/getting-started/install/linux/) help article (summary: run the 3 lines of terminal commands from the top of the article, then run `sudo apt-get install -y mono-devel`)
+    * __For Debian images__, the libnotify package also needs to be installed (`sudo apt-get install libnotify-bin`)
+
 ## Copyright
 CyberPatriot is copyright of US Air Force Association
 CyberCentrurion is copyright of Cyber Security Challenge UK
