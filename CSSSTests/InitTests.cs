@@ -28,6 +28,8 @@ namespace CSSSTests
     {
         private Init initTests;
 
+        private static Config config = Config.GetCurrentConfig;
+
         /// <summary>
         /// Creates an instance of the init class
         /// </summary>
@@ -68,8 +70,30 @@ namespace CSSSTests
         [Test()]
         public void TestOperatingSystemNameDetected()
         {
-            Assert.IsTrue(initTests.SetOperatingSystemName(),
-                          "The Operating System name should be detected and not empty");
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(initTests.SetOperatingSystemName(),
+                              "The Operating System name should be detected and not empty");
+                Assert.IsNotEmpty(config.OperatingSystemName,
+                                  "The Operating System name should be saved and not empty");
+            });
+        }
+
+        /// <summary>
+        /// Tests if the Oerating System version could be detected.
+        /// If the name of the OS could not be found then the called
+        /// function returns false or throws an exception
+        /// </summary>
+        [Test()]
+        public void TestOperatingSystemVersionDetected()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(initTests.SetOperatingSystemVersion(),
+                              "The Operating System version should be detected and not empty");
+                Assert.IsNotEmpty(config.OperatingSystemVersion,
+                                  "The Operating System version should be saved and not empty");
+            });
         }
     }
 }
