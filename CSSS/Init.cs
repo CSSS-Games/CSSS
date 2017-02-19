@@ -18,6 +18,7 @@ using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using SupportLibrary.OSVersionInfo;
 
 namespace CSSS
@@ -190,6 +191,17 @@ namespace CSSS
                 case Config.OperatingSystemType.WinNT:
                     // Using the OSVersionInfo class from the Support Library
                     config.OperatingSystemVersion = WinNTVersionInfo.VersionString;
+                    logger.Info("Operating System ver.: {0}", config.OperatingSystemVersion);
+                    return true;
+
+                case Config.OperatingSystemType.Linux:
+                    // Using the `lsb_release -d -s` to get the Operating
+                    // System description string, then removing any characters
+                    // apart from numbers and dots
+                    string operatingSystemDescription = ReadProcessOutput("lsb_release", "-d -s");
+                    config.OperatingSystemVersion = Regex.Replace(operatingSystemDescription,
+                                                                  @"[^0-9\.]+",
+                                                                  "");
                     logger.Info("Operating System ver.: {0}", config.OperatingSystemVersion);
                     return true;
                     
