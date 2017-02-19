@@ -56,6 +56,13 @@ namespace CSSS
             }
         }
 
+
+
+
+        // **********************************************************
+        //   Operating System
+        // **********************************************************
+
         /// <summary>
         /// The Operating Systems that CSSS supports to run checks on
         /// </summary>
@@ -85,5 +92,28 @@ namespace CSSS
         /// </summary>
         /// <value>The name of the operating system</value>
         public string OperatingSystemVersion { get; set; }
+
+
+
+
+        // **********************************************************
+        //   Runtime Environment
+        // **********************************************************
+
+        /// <summary>
+        /// The various runtime environments that CSSS can run on
+        /// </summary>
+        public enum RuntimeEnvironment
+        {
+            Unknown,
+            DotNet,
+            Mono
+        }
+
+        /// <summary>
+        /// Gets or sets the runtime environment
+        /// </summary>
+        /// <value>The runtime environment</value>
+        public RuntimeEnvironment runtimeEnvironment { get; set; }
     }
 }

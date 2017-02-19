@@ -58,6 +58,9 @@ namespace CSSS
             {
                 throw new NotImplementedException("CSSS was not able to identify the version of the Operating System");
             }
+
+            // Setting the runtime environment
+            SetRuntimeEnvironment();
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace CSSS
         /// 
         /// <para>If the Operating System cannot be identified, then an
         /// 'unknown' value is returned. It is up to the calling function
-        /// to throw an error</para>
+        /// to catch the exception thrown</para>
         /// 
         /// <para>The resources used are:
         ///   * https://blez.wordpress.com/2012/09/17/determine-os-with-netmono/
@@ -210,6 +213,30 @@ namespace CSSS
                     // possible to set a version number
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Sets the runtime environment that CSSS is running on
+        /// </summary>
+        /// <returns>The runtime environment</returns>
+        public Config.RuntimeEnvironment SetRuntimeEnvironment()
+        {
+            // This is taken almost directly from the Mono FAQs
+            // See: http://www.mono-project.com/docs/faq/technical/#how-can-i-detect-if-am-running-in-mono
+            config.runtimeEnvironment = Config.RuntimeEnvironment.Unknown;
+
+            Type t = Type.GetType("Mono.Runtime");
+            if (t != null)
+            {
+                config.runtimeEnvironment = Config.RuntimeEnvironment.Mono;
+            }
+            else
+            {
+                config.runtimeEnvironment = Config.RuntimeEnvironment.DotNet;
+            }
+
+            logger.Info("Runtime environment: {0}", config.runtimeEnvironment);
+            return config.runtimeEnvironment;
         }
 
         /// <summary>

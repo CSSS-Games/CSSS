@@ -95,5 +95,17 @@ namespace CSSSTests
                                   "The Operating System version should be saved and not empty");
             });
         }
+
+        /// <summary>
+        /// Sees if the runtime environment detected matches one of
+        /// the supported ones in CSSS
+        /// </summary>
+        [Test()]
+        public void TestRuntimeEnvironmentTypeDetected()
+        {
+            Assert.AreNotEqual(Config.RuntimeEnvironment.Unknown,
+                               initTests.SetRuntimeEnvironment(),
+                               "The runtime environment detected should not be an unknown type");
+        }
     }
 }
