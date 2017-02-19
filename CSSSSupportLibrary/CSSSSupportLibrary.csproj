@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>CSSS</RootNamespace>
-    <AssemblyName>CSSS</AssemblyName>
+    <ProjectGuid>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CSSSSupportLibrary</RootNamespace>
+    <AssemblyName>CSSSSupportLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,35 +17,29 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.4.4.2\lib\net45\NLog.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Bootstrap.cs" />
-    <Compile Include="Init.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="SupportLibrary\OSVersionInfo\WinNTVersionInfo.OSVersionInfo.SupportLibrary.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="app.config" />
+    <Folder Include="SupportLibrary\" />
+    <Folder Include="SupportLibrary\OSVersionInfo\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
-      <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
-      <Name>CSSSSupportLibrary</Name>
-    </ProjectReference>
+    <None Include="SupportLibrary\OSVersionInfo\LICENSE.md" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
