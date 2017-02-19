@@ -26,6 +26,20 @@ Before CSSS will run, the following additional programs need to be installed ont
     * The Mono client should be installed. Please follow their instructions on the [Install Mono on Linux](http://www.mono-project.com/docs/getting-started/install/linux/) help article (summary: run the 3 lines of terminal commands from the top of the article, then run `sudo apt-get install -y mono-devel`)
     * __For Debian images__, the libnotify package also needs to be installed (`sudo apt-get install libnotify-bin`)
 
+## Running
+Double-clicking on CSSS will cause it to quickly show the usage window, then close itself. This is by design. To run CSSS properly, a number of arguments need to be passed to the program, which are:
+```
+-c, --check:   Checks the config files for any problems
+-o, --observe: Observes CSSS running before preparing it (implies 'c')
+-p, --prepare: Prepares CSSS ready for image release (implies '-c')
+-s, --start:   Starts the scoring system
+-h, --help:    Shows the program usage
+```
+
+These arguments have been chosen to spell 'COPS', as competitors are 'policing' the security of the computer.
+
+Under normal image building, the 'o' option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+
 ## Copyright
 CyberPatriot is copyright of US Air Force Association
 CyberCentrurion is copyright of Cyber Security Challenge UK
