@@ -1,4 +1,4 @@
-﻿//  CSSS - Cyber Security Scoring System
+﻿//  CSSS - CyberSecurity Scoring System
 //  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -12,17 +12,47 @@
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
-//  along with this program. If not, see<http://www.gnu.org/licenses/>.
+//  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using NLog;
 using System;
 
 namespace CSSS
 {
     class MainClass
     {
-        public static void Main(string[] args)
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        public static int Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            // Performing bootstrap checks to see if the program should load
+            // normally, or perform a specific task
+            var bootstrapChecks = new Bootstrap();
+            bool canStart = bootstrapChecks.CheckArguments(args);
+
+            if (!canStart)
+            {
+                // We can't go any further, so we can return early
+                return 1;
+            }
+
+            // Setting up any environment options, such as the OS
+            // CSSS is running on
+            // Should any errors occur, an exception is thrown and
+            // program execution will stop
+            try
+            {
+                var init = new Init();
+            }
+            catch (NotImplementedException e)
+            {
+                logger.Fatal("An error occurred trying to start CSSS: {0}", e.Message);
+                return 10;
+            }
+
+            // Goodbye
+            Console.ReadLine();
+            return 0;
         }
     }
 }
