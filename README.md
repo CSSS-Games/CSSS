@@ -40,6 +40,29 @@ These arguments have been chosen to spell 'COPS', as competitors are 'policing' 
 
 Under normal image building, the 'o' option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
 
+## To-Do
+These are the tasks planned for each release version. Please note that these can change without warning, depending on how features are progressing.
+
+### Version 0.2
+* Create checker system engine and initial check template files (to check the Operating System version, for example)
+* Show notifications should points be gained or lost
+* Generate a scoring report
+
+### Version 0.3
+* Create a "guardian" service that can run CSSS when the computer starts (service should be set as disabled when installed, but when the '-p' option is passed it would be set up automatic)
+
+### Version 0.4
+* Allow check files to be encrypted when '-p' is passed, so that images can be released but competitors can not find out what "issues" need to be fixed
+
+### Version 0.5
+* Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)
+* Install additional software when CSSS is being installed to make sure all items are available for it to use
+* Create build scripts that install software that can be used when testing the checker system engine
+
+### Versions 0.6 onward
+* Create more check template files and relevant classes for the checker system engine to use (a new version for each check "category")
+* Create some example checker files with instructions to create images based around them with pre-made questions and scenarios
+
 ## Copyright
 CyberPatriot is copyright of US Air Force Association
 CyberCentrurion is copyright of Cyber Security Challenge UK
