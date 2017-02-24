@@ -39,21 +39,22 @@ namespace CSSS
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:CSSS.Init"/> class
+        /// and performs any needed tasks prior to CSSS starting fully
         /// </summary>
         public Init()
         {
             // Setting the current Operating System type
             SetOperatingSystemType();
 
-            // Setting the name of the Operating System, or
-            // throw an error if not possible to be found
+            // Setting the name of the Operating System, or throw an 
+            // error if not possible to be found
             if (!SetOperatingSystemName())
             {
                 throw new NotImplementedException("CSSS was not able to identify the name of the Operating System");
             }
 
-            // Setting the version of the Operating System, or
-            // throw an error if not possible to be found
+            // Setting the version of the Operating System, or throw an 
+            // error if not possible to be found
             if (!SetOperatingSystemVersion())
             {
                 throw new NotImplementedException("CSSS was not able to identify the version of the Operating System");
@@ -61,6 +62,10 @@ namespace CSSS
 
             // Setting the runtime environment
             SetRuntimeEnvironment();
+
+            // All tasks have been completed, so let the config class know
+            // so that the CSSS kernel can start performing tasks
+            config.InitTasksCompleted = true;
         }
 
         /// <summary>

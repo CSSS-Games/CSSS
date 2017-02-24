@@ -44,8 +44,17 @@ namespace CSSS
         /// </summary>
         private static Config config = Config.GetCurrentConfig;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:CSSS.Kernel"/> class
+        /// if the <see cref="T:CSSS.Init"/> init checks have been completed,
+        /// or throws and exception if not
+        /// </summary>
         public Kernel()
         {
+            if (!config.InitTasksCompleted)
+            {
+                throw new InvalidOperationException("The CSSS kernel can not run before init tasks have been completed");
+            }
         }
     }
 }

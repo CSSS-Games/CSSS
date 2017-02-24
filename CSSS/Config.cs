@@ -60,6 +60,24 @@ namespace CSSS
 
 
         // **********************************************************
+        //   Init Checks
+        // **********************************************************
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="T:CSSS.Init"/> init
+        /// tasks have been completed, used by the <see cref="T:CSSS.Kernel"/> kernel
+        /// to see if it should start
+        /// 
+        /// <para>It is advised to set this value only via the <see cref="T:CSSS.Init"/> init
+        /// class to prevent any unexpected functionality</para>
+        /// </summary>
+        /// <value><c>true</c> if init tasks completed; otherwise, <c>false</c>.</value>
+        public bool InitTasksCompleted { get; set; }
+
+
+
+
+        // **********************************************************
         //   Operating System
         // **********************************************************
 

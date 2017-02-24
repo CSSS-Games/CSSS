@@ -50,6 +50,19 @@ namespace CSSS
                 return 10;
             }
 
+            // Creating an instance of the CSSS kernel so that tasks
+            // can be co-ordinated. The constructor will throw an
+            // error if the init class tasks have not been performed
+            try
+            {
+                var kernel = new Kernel();
+            }
+            catch (InvalidOperationException e)
+            {
+                logger.Fatal("An error occurred trying to run CSSS: {0}", e.Message);
+                return 20;
+            }
+
             // Goodbye
             Console.ReadLine();
             return 0;
