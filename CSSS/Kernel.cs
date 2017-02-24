@@ -56,5 +56,48 @@ namespace CSSS
                 throw new InvalidOperationException("The CSSS kernel can not run before init tasks have been completed");
             }
         }
+
+        /// <summary>
+        /// Performs and co-ordinates the main tasks for CSSS
+        /// 
+        /// <para>To clarify the return status of this function, it should
+        /// be set to true when CSSS should exit, as all of the tasks that
+        /// the kernel needs to do have been completed. This will be true
+        /// when the CSSSProgramMode is '-c' or '-p', as it will either
+        /// lint the check files to make sure everything is in place or
+        /// encrypt the check files and set the guardian service to start.
+        /// This function will return false if it has been passed the '-o'
+        /// or '-s' arguments as checks need to be continually run, so the
+        /// calling loop can sleep then recall this function to perform the
+        /// next round of tasks</para>
+        /// </summary>
+        /// <returns><c>true</c>, if tasks have been completed, <c>false</c> otherwise</returns>
+        public bool PerformTasks()
+        {
+            logger.Debug("Performing kernel tasks");
+            bool shouldExit = false;
+
+            switch (config.CSSSProgramMode)
+            {
+                case Config.CSSSModes.Check:
+                    shouldExit = true;
+                    break;
+                    
+                case Config.CSSSModes.Observe:
+                    shouldExit = false;
+                    break;
+                    
+                case Config.CSSSModes.Prepare:
+                    shouldExit = true;
+                    break;
+                    
+                case Config.CSSSModes.Start:
+                    shouldExit = false;
+                    break;
+            }
+
+            logger.Debug("CSSS should exit: {0}", shouldExit);
+            return shouldExit;
+        }
     }
 }

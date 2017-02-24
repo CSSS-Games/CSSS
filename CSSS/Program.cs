@@ -16,6 +16,7 @@
 
 using NLog;
 using System;
+using System.Threading;
 
 namespace CSSS
 {
@@ -56,6 +57,18 @@ namespace CSSS
             try
             {
                 var kernel = new Kernel();
+
+                // Starting the main run loop to keep the kernel performing
+                // tasks, or if the response from the function is true,
+                // break out of the loop. After performing the kernel tasks,
+                // the thread sleeps for a minute to prevent the checks
+                // being run constantly
+                bool shouldExit = false;
+                while (!shouldExit)
+                {
+                    shouldExit = kernel.PerformTasks();
+                    Thread.Sleep(60000);
+                }
             }
             catch (InvalidOperationException e)
             {
@@ -64,6 +77,7 @@ namespace CSSS
             }
 
             // Goodbye
+            logger.Info("CSSS has finished performing any needed tasks");
             Console.ReadLine();
             return 0;
         }
