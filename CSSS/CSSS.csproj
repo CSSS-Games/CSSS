@@ -36,6 +36,7 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Init.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Kernel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
