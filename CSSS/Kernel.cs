@@ -60,6 +60,13 @@ namespace CSSS
         /// <summary>
         /// Performs and co-ordinates the main tasks for CSSS
         /// 
+        /// <para>If the '-c' option was passed to CSSS, then the check
+        /// files will be linted and then the function will return. If
+        /// other arguments have been passed, then the 'Check' option will
+        /// be removed from the CSSSProgramMode variable, and further
+        /// relevant code will be run before exiting this function, to
+        /// prevent the user having to wait for the thread to stop sleeping</para>
+        /// 
         /// <para>To clarify the return status of this function, it should
         /// be set to true when CSSS should exit, as all of the tasks that
         /// the kernel needs to do have been completed. This will be true
@@ -77,23 +84,52 @@ namespace CSSS
             logger.Debug("Performing kernel tasks");
             bool shouldExit = false;
 
-            switch (config.CSSSProgramMode)
+            // Seeing if the check files need to be linted
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Check))
             {
-                case Config.CSSSModes.Check:
+                logger.Info("Performing linting on check files");
+                // TODO: Create and perform relevant lint checks
+
+                // Removing the 'Check' option from the CSSSProgramMode
+                // variable, so that on the next call of this function
+                // the above linting isn't performed
+                config.CSSSProgramMode = config.CSSSProgramMode ^ Config.CSSSModes.Check;
+
+                // Seeing if the '-o' or '-p' arguments were passed to
+                // CSSS. If they were, then don't return now and continue
+                // running the relevant sections
+                if (!(config.CSSSProgramMode.HasFlag(Config.CSSSModes.Observe) ||
+                      config.CSSSProgramMode.HasFlag(Config.CSSSModes.Prepare))
+                   )
+                {
+                    // All of the asked-for tasks have been completed,
+                    // so return 'true' from this function to let the
+                    // calling main run loop know it can exit
                     shouldExit = true;
-                    break;
-                    
-                case Config.CSSSModes.Observe:
-                    shouldExit = false;
-                    break;
-                    
-                case Config.CSSSModes.Prepare:
-                    shouldExit = true;
-                    break;
-                    
-                case Config.CSSSModes.Start:
-                    shouldExit = false;
-                    break;
+                }
+            }
+
+            // Seeing if CSSS should run in observation mode
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Observe))
+            {
+                logger.Info("Performing checks");
+            }
+
+            // Seeing if CSSS should prepare for image release
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Prepare))
+            {
+                logger.Info("Preparing for image release");
+
+                // All of the asked-for tasks have been completed,
+                // so return 'true' from this function to let the
+                // calling main run loop know it can exit
+                shouldExit = true;
+            }
+
+            // Seeing if CSSS should start and run normally
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Start))
+            {
+                logger.Info("Running CSSS normally");
             }
 
             logger.Debug("CSSS should exit: {0}", shouldExit);

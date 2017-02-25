@@ -64,10 +64,18 @@ namespace CSSS
                 // the thread sleeps for a minute to prevent the checks
                 // being run constantly
                 bool shouldExit = false;
+                logger.Debug("Starting main run loop");
                 while (!shouldExit)
                 {
                     shouldExit = kernel.PerformTasks();
-                    Thread.Sleep(60000);
+
+                    // This loop should sleep for a minute if the kernel
+                    // tasks have not been finished
+                    if (!shouldExit)
+                    {
+                        logger.Debug("Sleeping main run loop before re-running kernel tasks");
+                        Thread.Sleep(60000);
+                    }
                 }
             }
             catch (InvalidOperationException e)
@@ -78,7 +86,7 @@ namespace CSSS
 
             // Goodbye
             logger.Info("CSSS has finished performing any needed tasks");
-            Console.ReadLine();
+            //Console.ReadLine();
             return 0;
         }
     }
