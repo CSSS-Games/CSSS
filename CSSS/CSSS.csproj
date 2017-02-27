@@ -35,7 +35,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Init.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="Kernel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +45,10 @@
     <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
       <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
       <Name>CSSSSupportLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
+      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
+      <Name>CSSSConfig</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

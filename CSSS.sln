@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSSupportLibrary", "CSSSS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngine", "CSSSCheckerEngine\CSSSCheckerEngine.csproj", "{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSConfig", "CSSSConfig\CSSSConfig.csproj", "{2B005BD2-677F-4646-BB17-673AD50DF07D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +42,9 @@ Global
 		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B005BD2-677F-4646-BB17-673AD50DF07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B005BD2-677F-4646-BB17-673AD50DF07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B005BD2-677F-4646-BB17-673AD50DF07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B005BD2-677F-4646-BB17-673AD50DF07D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

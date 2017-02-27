@@ -44,6 +44,10 @@
       <Project>{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}</Project>
       <Name>CSSS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
+      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
+      <Name>CSSSConfig</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
