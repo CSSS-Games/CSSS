@@ -60,6 +60,53 @@ namespace CSSS
 
 
         // **********************************************************
+        //   CSSS Modes
+        // **********************************************************
+
+        /// <summary>
+        /// CSSS can perform a variety of tasks depending on what options
+        /// are passed to it. The valid program modes are set in the
+        /// <see cref="T:CSSS.Bootstrap"/> bootstrap class and used by
+        /// the <see cref="T:CSSS.Kernel"/> kernel
+        /// </summary>
+        [Flags]
+        public enum CSSSModes
+        {
+            Help = 0x0,
+            Check = 0x1,
+            Prepare = 0x2,
+            Observe = 0x4,
+            Start = 0x8
+        }
+
+        /// <summary>
+        /// The result of the bootstrap argument checks, used to decide what
+        /// mode CSSS is going to be running in
+        /// </summary>
+        public CSSSModes CSSSProgramMode { get; set; }
+
+
+
+
+        // **********************************************************
+        //   Init Checks
+        // **********************************************************
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="T:CSSS.Init"/> init
+        /// tasks have been completed, used by the <see cref="T:CSSS.Kernel"/> kernel
+        /// to see if it should start
+        /// 
+        /// <para>It is advised to set this value only via the <see cref="T:CSSS.Init"/> init
+        /// class to prevent any unexpected functionality</para>
+        /// </summary>
+        /// <value><c>true</c> if init tasks completed; otherwise, <c>false</c>.</value>
+        public bool InitTasksCompleted { get; set; }
+
+
+
+
+        // **********************************************************
         //   Operating System
         // **********************************************************
 
