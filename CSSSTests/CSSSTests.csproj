@@ -34,6 +34,7 @@
     <Compile Include="Test.cs" />
     <Compile Include="BootstrapTests.cs" />
     <Compile Include="InitTests.cs" />
+    <Compile Include="KernelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
