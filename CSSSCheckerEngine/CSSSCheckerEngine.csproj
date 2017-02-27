@@ -35,9 +35,21 @@
   <ItemGroup>
     <Compile Include="CheckerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Checker\System\Version.System.Checker.cs" />
+    <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
+    <Compile Include="OS\WinNT\System\Version.System.WinNT.OS.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Checker\" />
+    <Folder Include="Checker\System\" />
+    <Folder Include="OS\" />
+    <Folder Include="OS\Linux\" />
+    <Folder Include="OS\Linux\System\" />
+    <Folder Include="OS\WinNT\" />
+    <Folder Include="OS\WinNT\System\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
