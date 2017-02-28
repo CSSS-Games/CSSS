@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Issues\System\Version.System.Issues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Checker\" />
@@ -53,6 +56,8 @@
     <Folder Include="OS\WinNT\System\" />
     <Folder Include="CheckAPI\" />
     <Folder Include="CheckAPI\System\" />
+    <Folder Include="Issues\" />
+    <Folder Include="Issues\System\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
