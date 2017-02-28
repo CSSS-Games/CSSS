@@ -38,6 +38,7 @@
     <Compile Include="Checker\System\Version.System.Checker.cs" />
     <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
     <Compile Include="OS\WinNT\System\Version.System.WinNT.OS.cs" />
+    <Compile Include="CheckAPI\System\Version.System.CheckAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -50,6 +51,8 @@
     <Folder Include="OS\Linux\System\" />
     <Folder Include="OS\WinNT\" />
     <Folder Include="OS\WinNT\System\" />
+    <Folder Include="CheckAPI\" />
+    <Folder Include="CheckAPI\System\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
