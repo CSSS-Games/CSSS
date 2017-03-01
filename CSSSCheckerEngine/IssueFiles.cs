@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NLog;
 using System;
 using System.IO;
@@ -52,7 +53,6 @@ namespace CSSSCheckerEngine
 
                 if (!LintFile(IssueFilePath))
                 {
-                    logger.Error("The issue file at \"{0}\" could not be linted correctly", IssueFilePath);
                     FilesLintedSuccessfully = false;
                 }
             }
@@ -71,16 +71,43 @@ namespace CSSSCheckerEngine
         {
             try
             {
-                dynamic IssueFileJSON = JsonConvert.DeserializeObject(IssueFilePath);
+                dynamic IssueFileJSON = JsonConvert.DeserializeObject(IssueFilePath, new JsonSerializerSettings
+                                        {
+                                            Error = HandleDeserializationError
+                                        });
             }
-            catch
+            catch (JsonSerializationException e)
             {
                 // There was a problem parsing the JSON file
+                logger.Error("The issue file at \"{0}\" could not be linted correctly", IssueFilePath);
+                logger.Error("The error message is: {0}", e.Message);
                 return false;
             }
 
             // The JSON format of this file is fine
+            logger.Debug("The issue file at \"{0}\" was linted correctly", IssueFilePath);
             return true;
+        }
+
+        /// <summary>
+        /// A handler for any deserialization errors that occur when
+        /// linting the issue files, so that the error location can
+        /// be shown to the user for them to fix the problem
+        /// 
+        /// <para>This function throws an exception if there was a
+        /// problem deserialising the JSON file, and the error message
+        /// is contained in the exception message. This should be
+        /// caught by the calling function</para>
+        /// 
+        /// See: http://stackoverflow.com/a/26108527
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="errorArgs">Error arguments</param>
+        private void HandleDeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
+        {
+            var currentError = errorArgs.ErrorContext.Error.Message;
+            errorArgs.ErrorContext.Handled = true;
+            throw new JsonSerializationException(currentError);
         }
 
         /// <summary>
