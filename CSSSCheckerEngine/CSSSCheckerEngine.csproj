@@ -42,6 +42,7 @@
     <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
     <Compile Include="OS\WinNT\System\Version.System.WinNT.OS.cs" />
     <Compile Include="CheckAPI\System\Version.System.CheckAPI.cs" />
+    <Compile Include="IssueFiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
