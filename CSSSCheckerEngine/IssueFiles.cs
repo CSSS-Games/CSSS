@@ -19,6 +19,7 @@ using Newtonsoft.Json.Serialization;
 using NLog;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace CSSSCheckerEngine
 {
@@ -114,11 +115,15 @@ namespace CSSSCheckerEngine
 
         /// <summary>
         /// Gets all of the issue files in the issue directory
+        /// 
+        /// See: https://stackoverflow.com/a/18562036
+        /// See: https://social.msdn.microsoft.com/Forums/en-US/7d8798db-32eb-4886-9531-31b3decba018/#25e02b75-16d1-44e6-a04c-a6ab5ad88403
         /// </summary>
         /// <returns>A path array to all of the issue files</returns>
         public string[] GetAllIssueFiles()
         {
-            return Directory.GetFiles(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Issues",
+            string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+            return Directory.GetFiles(CSSSDirectory + Path.DirectorySeparatorChar + "Issues",
                                       "*.json",
                                       SearchOption.AllDirectories);
         }
