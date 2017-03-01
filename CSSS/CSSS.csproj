@@ -50,6 +50,10 @@
       <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
       <Name>CSSSConfig</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
+      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
+      <Name>CSSSCheckerEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

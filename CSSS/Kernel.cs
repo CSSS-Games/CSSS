@@ -14,6 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using CSSSCheckerEngine;
 using CSSSConfig;
 using NLog;
 using System;
@@ -89,7 +90,19 @@ namespace CSSS
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Check))
             {
                 logger.Info("Performing linting on check files");
-                // TODO: Create and perform relevant lint checks
+
+                // Linting all of the issue files. If there was a problem
+                // linting any of them, the function result will be false,
+                // so return early to let the user know there was a problem
+                // with one or more issue files
+                var issueFiles = new IssueFiles();
+                if (!issueFiles.LintAllFiles())
+                {
+                    logger.Error("There was one or more problems linting the issue files");
+                    logger.Error("Please check them and try running CSSS again");
+                    shouldExit = true;
+                    return shouldExit;
+                }
 
                 // Removing the 'Check' option from the CSSSProgramMode
                 // variable, so that on the next call of this function
