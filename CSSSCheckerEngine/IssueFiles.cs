@@ -69,9 +69,11 @@ namespace CSSSCheckerEngine
         /// <param name="IssueFilePath">The full path to the issue file</param>
         public bool LintFile(string IssueFilePath)
         {
+            var issueFileContent = File.ReadAllText(IssueFilePath);
+
             try
             {
-                dynamic IssueFileJSON = JsonConvert.DeserializeObject(IssueFilePath, new JsonSerializerSettings
+                dynamic IssueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
                                         {
                                             Error = HandleDeserializationError
                                         });
