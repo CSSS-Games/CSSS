@@ -26,4 +26,4 @@ build:
 #---------------------------------#
 test: off
 
-test_script: nunit3-console.exe .\CSSSTests\bin\Release\CSSSTests.dll --result=myresults.xml;format=AppVeyor
+test_script: nunit3-console.exe .\CSSS.sln --result=myresults.xml;format=AppVeyor
