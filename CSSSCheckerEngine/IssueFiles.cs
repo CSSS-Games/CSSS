@@ -40,7 +40,7 @@ namespace CSSSCheckerEngine
         /// Attempts to lint all of the issue files in the issue directory,
         /// </summary>
         /// <returns><c>true</c>, if all files were successfully linted, <c>false</c> otherwise</returns>
-        public bool LintAllFiles()
+        public bool LintAllIssueFiles()
         {
             logger.Info("Preparing to lint all issue files");
 
@@ -52,7 +52,7 @@ namespace CSSSCheckerEngine
             {
                 logger.Debug("Preparing to lint issue file located at: {0}", IssueFilePath);
 
-                if (!LintFile(IssueFilePath))
+                if (!LintIssueFile(IssueFilePath))
                 {
                     FilesLintedSuccessfully = false;
                 }
@@ -68,7 +68,7 @@ namespace CSSSCheckerEngine
         /// </summary>
         /// <returns><c>true</c>, if file was successfully linted, <c>false</c> otherwise</returns>
         /// <param name="IssueFilePath">The full path to the issue file</param>
-        public bool LintFile(string IssueFilePath)
+        public bool LintIssueFile(string IssueFilePath)
         {
             var issueFileContent = File.ReadAllText(IssueFilePath);
 

@@ -96,7 +96,7 @@ namespace CSSS
                 // so return early to let the user know there was a problem
                 // with one or more issue files
                 var issueFiles = new IssueFiles();
-                if (!issueFiles.LintAllFiles())
+                if (!issueFiles.LintAllIssueFiles())
                 {
                     logger.Error("There was one or more problems linting the issue files");
                     logger.Error("Please check them and try running CSSS again");

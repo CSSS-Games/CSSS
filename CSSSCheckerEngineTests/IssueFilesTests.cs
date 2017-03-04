@@ -96,7 +96,7 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllIssueFilesCanBeLinted()
         {
-            Assert.IsTrue(issueFilesChecks.LintAllFiles(),
+            Assert.IsTrue(issueFilesChecks.LintAllIssueFiles(),
                           "All issue files included with CSSS should be valid JSON objects and should lint without errors");
         }
 
@@ -116,7 +116,7 @@ namespace CSSSCheckerEngineTests
             for (int issueFile = 0; issueFile < issueFiles.Length; issueFile++)
             {
                 currentIssueFile = issueFiles[issueFile];
-                Assert.IsTrue(issueFilesChecks.LintFile(currentIssueFile),
+                Assert.IsTrue(issueFilesChecks.LintIssueFile(currentIssueFile),
                               "The issue file located at \"" + currentIssueFile + "\" could not be linted properly");
             }
         }
