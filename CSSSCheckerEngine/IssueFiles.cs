@@ -93,6 +93,52 @@ namespace CSSSCheckerEngine
         }
 
         /// <summary>
+        /// Loads all of the issue files to the config class for them
+        /// to be used when performing the checks
+        /// </summary>
+        public void LoadAllIssueFiles()
+        {
+            logger.Info("Preparing to load all issue files");
+
+            string[] IssueFiles = GetAllIssueFiles();
+
+            foreach (string IssueFilePath in IssueFiles)
+            {
+                logger.Debug("Preparing to load issue file located at: {0}", IssueFilePath);
+                LoadIssueFile(IssueFilePath);
+            }
+
+            logger.Info("Finished loading all issue files");
+        }
+
+        /// <summary>
+        /// Loads an issue file and saves the JSON structure of it
+        /// in the CSSSConfig class
+        /// </summary>
+        /// <param name="IssueFilePath">The full path to the issue file</param>
+        private void LoadIssueFile(string IssueFilePath)
+        {
+            var issueFileContent = File.ReadAllText(IssueFilePath);
+
+            try
+            {
+                dynamic IssueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
+                {
+                    Error = HandleDeserializationError
+                });
+            }
+            catch (JsonSerializationException e)
+            {
+                // There was a problem loading the JSON file
+                logger.Error("The issue file at \"{0}\" could not be loaded correctly", IssueFilePath);
+                throw new Exception("An unknown problem occurred when trying to load an issue file: " + e.Message);
+            }
+
+            // The JSON format of this file is fine
+            logger.Debug("The issue file at \"{0}\" has been loaded", IssueFilePath);
+        }
+
+        /// <summary>
         /// A handler for any deserialization errors that occur when
         /// linting the issue files, so that the error location can
         /// be shown to the user for them to fix the problem
