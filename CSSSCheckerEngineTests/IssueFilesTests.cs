@@ -52,28 +52,11 @@ namespace CSSSCheckerEngineTests
         }
 
         /// <summary>
-        /// All of the issue files included in the checker engine
-        /// project should be correctly formatted JSON files and can
-        /// be linted without any problems. This is testing that
-        /// a valid JSON object is in the file, not the contents of
-        /// the JSON files e.g. false isn't spelt flase
+        /// All known issue files are listed here, to see if the
+        /// JSON files returned from the issues directory match
         /// </summary>
-        [Test()]
-        public void TestAllFilesCanBeLinted()
-        {
-            Assert.IsTrue(issueFilesChecks.LintAllFiles(),
-                          "All issue files included with CSSS should be valid JSON objects and should lint without errors");
-        }
-
-        /// <summary>
-        /// Any file in the issues directory with a JSON extension
-        /// is assumed to be an issue file. All known issue files
-        /// are kept in a string array in this test and compared
-        /// to the array that is collected from the checker engine
-        /// issue files class
-        /// </summary>
-        [Test()]
-        public void TestAllIssueFilesAreCollected()
+        /// <returns>An array of paths to the issue files</returns>
+        private string[] IssueFilesList()
         {
             // Only the directory under the Issues directory and
             // the name of the JSON file are needed tobe included
@@ -100,7 +83,54 @@ namespace CSSSCheckerEngineTests
                                           + issueFilesList[issueFile].Replace("+", Path.DirectorySeparatorChar.ToString());
             }
 
-            Assert.AreEqual(issueFilesList,
+            return issueFilesList;
+        }
+
+        /// <summary>
+        /// All of the issue files included in the checker engine
+        /// project should be correctly formatted JSON files and can
+        /// be linted without any problems. This is testing that
+        /// a valid JSON object is in the file, not the contents of
+        /// the JSON files e.g. false isn't spelt flase
+        /// </summary>
+        [Test()]
+        public void TestAllIssueFilesCanBeLinted()
+        {
+            Assert.IsTrue(issueFilesChecks.LintAllFiles(),
+                          "All issue files included with CSSS should be valid JSON objects and should lint without errors");
+        }
+
+        /// <summary>
+        /// Tests if each individual issue file can be linted properly
+        /// and doesn't return false. This test can be used in conjunction
+        /// with the TestAllIssueFilesCanBeLinted to see what issue JSON
+        /// file may be at fault
+        /// </summary>
+        /// <see cref="TestAllIssueFilesCanBeLinted()"/>
+        [Test()]
+        public void TestIndividualIssueFileCanBeLinted()
+        {
+            string[] issueFiles = IssueFilesList();
+            string currentIssueFile = "";
+
+            for (int issueFile = 0; issueFile < issueFiles.Length; issueFile++)
+            {
+                currentIssueFile = issueFiles[issueFile];
+                Assert.IsTrue(issueFilesChecks.LintFile(currentIssueFile),
+                              "The issue file located at \"" + currentIssueFile + "\" could not be linted properly");
+            }
+        }
+
+        /// <summary>
+        /// Any file in the issues directory with a JSON extension
+        /// is assumed to be an issue file. All known issue files
+        /// are compared to the array that is collected from the
+        /// checker engine issue files class
+        /// </summary>
+        [Test()]
+        public void TestAllIssueFilesAreCollected()
+        {
+            Assert.AreEqual(IssueFilesList(),
                             issueFilesChecks.GetAllIssueFiles(),
                             "All JSON files in the issues directory should be a known issue check file");
         }
