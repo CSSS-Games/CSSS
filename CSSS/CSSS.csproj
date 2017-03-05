@@ -29,6 +29,7 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -36,6 +37,8 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Init.cs" />
     <Compile Include="Kernel.cs" />
+    <Compile Include="IssueChecks\System.IssueChecks.cs" />
+    <Compile Include="IssueChecks\IssueChecks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -54,6 +57,9 @@
       <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
       <Name>CSSSCheckerEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IssueChecks\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

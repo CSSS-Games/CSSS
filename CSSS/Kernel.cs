@@ -16,6 +16,7 @@
 
 using CSSSCheckerEngine;
 using CSSSConfig;
+using IssueChecks;
 using NLog;
 using System;
 
@@ -175,6 +176,10 @@ namespace CSSS
                 issueFiles.LoadAllIssueFiles();
                 IssueFilesLoaded = true;
             }
+
+            // Perofrming any checks under the "issues.system" category
+            var systemIssueChecks = new IssueChecks.System();
+            systemIssueChecks.PerformAllSystemChecks();
         }
     }
 }
