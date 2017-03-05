@@ -32,6 +32,17 @@ namespace CSSSCheckerEngine
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// Sees if the issue files have been linted or are being
+        /// loaded directly without any initil checks. This is set
+        /// to true during the LintAllIssueFiles function, and will
+        /// display a warning when LoadAllIssueFiles is called if it
+        /// is still set to false
+        /// </summary>
+        /// <see cref="LintAllIssueFiles"/>
+        /// <see cref="LoadAllIssueFiles"/>
+        private bool IssueFilesHaveBeenLinted = false;
+
         public IssueFiles()
         {
         }
@@ -60,6 +71,7 @@ namespace CSSSCheckerEngine
 
             logger.Info("Finished linting all issue files");
             logger.Debug("Successful linting of all issue files: {0}", FilesLintedSuccessfully);
+            IssueFilesHaveBeenLinted = FilesLintedSuccessfully;
             return FilesLintedSuccessfully;
         }
 
@@ -99,6 +111,11 @@ namespace CSSSCheckerEngine
         public void LoadAllIssueFiles()
         {
             logger.Info("Preparing to load all issue files");
+
+            if (!IssueFilesHaveBeenLinted)
+            {
+                logger.Warn("Issue files have not been linted, there may be problems loading them");
+            }
 
             string[] IssueFiles = GetAllIssueFiles();
 

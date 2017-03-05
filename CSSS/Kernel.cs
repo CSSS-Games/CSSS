@@ -47,6 +47,22 @@ namespace CSSS
         private static Config config = Config.GetCurrentConfig;
 
         /// <summary>
+        /// A reference to the <see cref="T:CSSSCheckerEngine.IssueFiles"/>
+        /// IssueFiles class, used when linting or loading the
+        /// relevant issue files
+        /// </summary>
+        private IssueFiles issueFiles = new IssueFiles();
+
+        /// <summary>
+        /// On first run of this function, when CSSS is in Observe or
+        /// Start modes, the issue files need to be loaded. To
+        /// prevent continously loading the issue files from disk when
+        /// they won't change, this boolean is used to see if they
+        /// need to be loaded or are already available in the config class
+        /// </summary>
+        private bool IssueFilesLoaded = false;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:CSSS.Kernel"/> class
         /// if the <see cref="T:CSSS.Init"/> init checks have been completed,
         /// or throws and exception if not
@@ -95,7 +111,6 @@ namespace CSSS
                 // linting any of them, the function result will be false,
                 // so return early to let the user know there was a problem
                 // with one or more issue files
-                var issueFiles = new IssueFiles();
                 if (!issueFiles.LintAllIssueFiles())
                 {
                     logger.Error("There was one or more problems linting the issue files");
@@ -127,6 +142,7 @@ namespace CSSS
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Observe))
             {
                 logger.Info("Performing checks");
+                PerformChecks();
             }
 
             // Seeing if CSSS should prepare for image release
@@ -148,6 +164,16 @@ namespace CSSS
 
             logger.Debug("CSSS should exit: {0}", shouldExit);
             return shouldExit;
+        }
+
+        private void PerformChecks()
+        {
+            // Seeing if the issue files need to be loaded into the
+            // config class
+            if (!IssueFilesLoaded)
+            {
+                issueFiles.LoadAllIssueFiles();
+            }
         }
     }
 }
