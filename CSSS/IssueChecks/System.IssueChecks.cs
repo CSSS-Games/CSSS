@@ -14,7 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSSCheckerEngine;
+using CheckAPI;
 using Newtonsoft.Json;
 using System;
 
@@ -52,9 +52,39 @@ namespace IssueChecks
             // at checking it can be bypassed. This is indicated by
             // a boolean value being returned when trying to load
             // the relevant issue file
-            if (!(LoadIssueFile(issueCategory) is bool))
+            dynamic issueFile = LoadIssueFile(issueCategory);
+            if (!(issueFile is bool))
             {
-                // Todo: Perform checks
+                logger.Debug("Performing checks for the category: {0}", issueCategory);
+
+                var versionCheck = new CheckAPI.System.Version();
+
+                // Checking each issue in the file to see if the values
+                // listed match with what is expected
+                for (int issue = 0; issue < issueFile.Issues.Count; issue++)
+                {
+                    var operatingSystemVerion = (string)issueFile.Issues[issue].Expected;
+
+                    try
+                    {
+                        if (versionCheck.ExpectedOSVersion(operatingSystemVerion))
+                        {
+                            // Todo: Score points, mark as triggered
+                        }
+                    }
+                    catch (NotImplementedException e)
+                    {
+                        // If the check is attempted on an Operating System that
+                        // doesn't support it, it will throw an exception which
+                        // will be caught here. This function is returned from here
+                        // instead of looping through each possible issue on the basis
+                        // of "if it can't be completed once, there's no point retrying"
+                        logger.Warn("Unable to perform {0} check: {1}", issueCategory, e.Message);
+                        return;
+                    }
+                }
+
+                logger.Debug("Finished performing checks for the category: {0}", issueCategory);
             }
         }
     }

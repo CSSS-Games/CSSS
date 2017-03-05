@@ -33,7 +33,8 @@ namespace Checker.System
         /// Gets a value indicating whether the OS version currently
         /// installed matches what is expected in the issue json file
         /// </summary>
+        /// <param name="OperatingSystemVersion">The Operating System version to compare with the one running</param>
         /// <value><c>true</c> if expected OS Version; otherwise, <c>false</c></value>
-        public abstract bool ExpectedOSVersion { get; }
+        public abstract bool ExpectedOSVersion(string OperatingSystemVersion);
     }
 }

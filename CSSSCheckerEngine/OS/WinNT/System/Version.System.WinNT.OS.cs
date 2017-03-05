@@ -21,12 +21,9 @@ namespace OS.WinNT.System
 {
     internal class VersionSystemWinNT : Checker.System.Version
     {
-        public override bool ExpectedOSVersion
+        public override bool ExpectedOSVersion(string OperatingSystemVersion)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            throw new NotImplementedException();
         }
     }
 }
