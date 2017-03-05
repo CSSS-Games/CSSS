@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
 namespace CSSSConfig
 {
@@ -161,5 +162,60 @@ namespace CSSSConfig
         /// </summary>
         /// <value>The runtime environment</value>
         public RuntimeEnvironment runtimeEnvironment { get; set; }
+
+
+
+
+        // **********************************************************
+        //   Issue Files
+        // **********************************************************
+
+        /// <summary>
+        /// A dictionary of the issues from the JSON files
+        /// 
+        /// <para>The first value in the dictionary is the category
+        /// that the issue is from, which should be unique and included
+        /// in each JSON file. The second value is dynamic, which holds
+        /// the actual contents of the JSON file, that is used by CSSS
+        /// to check the current state of the computer against what is
+        /// to be expected</para>
+        /// </summary>
+        private Dictionary<string, dynamic> IssueFileList = new Dictionary<string, dynamic>();
+
+        /// <summary>
+        /// Adds an issue file to the dictionary of available issues,
+        /// so it can be accessed when performing checks
+        /// </summary>
+        /// <param name="IssueFileCategory">The category the issue file is for</param>
+        /// <param name="IssueFileJSON">The JSON contents of the whole issue file</param>
+        public void AddIssueFile(string IssueFileCategory, dynamic IssueFileJSON)
+        {
+            try
+            {
+                IssueFileList.Add(IssueFileCategory, IssueFileJSON);
+            }
+            catch (ArgumentException)
+            {
+                throw new OperationCanceledException("An issue file with a category of \"" + IssueFileCategory + "\" already exists");
+            }
+        }
+
+        /// <summary>
+        /// Gets the issue file JSON of the issue category
+        /// </summary>
+        /// <returns>The issue file JSON object</returns>
+        /// <param name="IssueFileCategory">The category of the issue file</param>
+        public dynamic GetIssueFile(string IssueFileCategory)
+        {
+            dynamic IssueFileJSON;
+            if (IssueFileList.TryGetValue(IssueFileCategory, out IssueFileJSON))
+            {
+                return IssueFileJSON;
+            }
+            else
+            {
+                throw new KeyNotFoundException("An issue file with a category of \"" + IssueFileCategory + "\" could not be found");
+            }
+        }
     }
 }
