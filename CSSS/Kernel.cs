@@ -173,6 +173,7 @@ namespace CSSS
             if (!IssueFilesLoaded)
             {
                 issueFiles.LoadAllIssueFiles();
+                IssueFilesLoaded = true;
             }
         }
     }

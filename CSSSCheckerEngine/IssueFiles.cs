@@ -14,6 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using CSSSConfig;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NLog;
@@ -31,6 +32,12 @@ namespace CSSSCheckerEngine
     public class IssueFiles
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Creating an instance of the CSSS config class, to be
+        /// able to read and set values for it
+        /// </summary>
+        private static Config config = Config.GetCurrentConfig;
 
         /// <summary>
         /// Sees if the issue files have been linted or are being
@@ -143,12 +150,20 @@ namespace CSSSCheckerEngine
                 {
                     Error = HandleDeserializationError
                 });
+
+                logger.Debug("Issue file category: {0}", IssueFileJSON.Category);
+                config.AddIssueFile((string)IssueFileJSON.Category, IssueFileJSON);
             }
             catch (JsonSerializationException e)
             {
                 // There was a problem loading the JSON file
                 logger.Error("The issue file at \"{0}\" could not be loaded correctly", IssueFilePath);
                 throw new Exception("An unknown problem occurred when trying to load an issue file: " + e.Message);
+            }
+            catch (OperationCanceledException e)
+            {
+                // The issue category already exists
+                logger.Error("There was a problem adding the issue file: {0}", e.Message);
             }
 
             // The JSON format of this file is fine

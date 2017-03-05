@@ -196,7 +196,7 @@ namespace CSSSConfig
             }
             catch (ArgumentException)
             {
-                throw new OperationCanceledException("An issue file with a category of \"" + IssueFileCategory + "\" already exists");
+                throw new OperationCanceledException("An issue file with a category of \"" + IssueFileCategory + "\" already exists... skipping adding");
             }
         }
 
