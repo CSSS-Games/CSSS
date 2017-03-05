@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using CSSSCheckerEngine;
+using Newtonsoft.Json;
 using System;
 
 namespace IssueChecks
@@ -48,8 +49,10 @@ namespace IssueChecks
             const string issueCategory = "issues.system.version";
 
             // If the issue file is not available then any attempts
-            // at checking it can be bypassed 
-            if (!LoadIssueFile(issueCategory))
+            // at checking it can be bypassed. This is indicated by
+            // a boolean value being returned when trying to load
+            // the relevant issue file
+            if (!(LoadIssueFile(issueCategory) is bool))
             {
                 // Todo: Perform checks
             }
