@@ -67,9 +67,38 @@ namespace IssueChecks
 
                     try
                     {
+                        // Checking the current version of the Operating System
+                        // against what it is expected to be from the issue file
                         if (versionCheck.ExpectedOSVersion(operatingSystemVerion))
                         {
-                            // Todo: Score points, mark as triggered
+                            // Todo: Alert user
+                            if (issueFile.Issues[issue].Triggered == false)
+                            {
+                                logger.Info("{0} point(s) gained: {1}",
+                                        issueFile.Issues[issue].Points,
+                                        issueFile.Issues[issue].Description);
+                            }
+
+                            // Todo: Score points
+
+                            // The check for this issue has been triggered,
+                            // so update the JSON to reflect this
+                            issueFile.Issues[issue].Triggered = true;
+                        }
+                        else
+                        {
+                            // Seeing if the issue was already resolved and has
+                            // been broken again, as the check returned false
+                            if (issueFile.Issues[issue].Triggered == true)
+                            {
+                                // Todo: Alert user
+                                logger.Info("{0} point(s) lost: {1}",
+                                            issueFile.Issues[issue].Points,
+                                            issueFile.Issues[issue].Description);
+                                // Todo: Loose points
+
+                                issueFile.Issues[issue].Triggered = false;
+                            }
                         }
                     }
                     catch (NotImplementedException e)
