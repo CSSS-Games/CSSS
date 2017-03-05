@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using CSSS;
+using CSSSConfig;
 using NUnit.Framework;
 using System;
 

@@ -1,4 +1,4 @@
-﻿//  CSSS - CyberSecurity Scoring System
+﻿//  CSSS - CyberSecurity Scoring System Config
 //  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -14,10 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using NLog;
 using System;
+using System.Collections.Generic;
 
-namespace CSSS
+namespace CSSSConfig
 {
     /// <summary>
     /// The main config class for the whole CSSS project
@@ -29,7 +29,7 @@ namespace CSSS
     /// has been chosen as the model</para>
     /// 
     /// <para>All public functions are created as getters and setters
-    /// so that a correcponding private member does not need to be
+    /// so that a corresponding private member does not need to be
     /// created to store the values</para>
     /// </summary>
     public sealed class Config
@@ -162,5 +162,60 @@ namespace CSSS
         /// </summary>
         /// <value>The runtime environment</value>
         public RuntimeEnvironment runtimeEnvironment { get; set; }
+
+
+
+
+        // **********************************************************
+        //   Issue Files
+        // **********************************************************
+
+        /// <summary>
+        /// A dictionary of the issues from the JSON files
+        /// 
+        /// <para>The first value in the dictionary is the category
+        /// that the issue is from, which should be unique and included
+        /// in each JSON file. The second value is dynamic, which holds
+        /// the actual contents of the JSON file, that is used by CSSS
+        /// to check the current state of the computer against what is
+        /// to be expected</para>
+        /// </summary>
+        private Dictionary<string, dynamic> IssueFileList = new Dictionary<string, dynamic>();
+
+        /// <summary>
+        /// Adds an issue file to the dictionary of available issues,
+        /// so it can be accessed when performing checks
+        /// </summary>
+        /// <param name="IssueFileCategory">The category the issue file is for</param>
+        /// <param name="IssueFileJSON">The JSON contents of the whole issue file</param>
+        public void AddIssueFile(string IssueFileCategory, dynamic IssueFileJSON)
+        {
+            try
+            {
+                IssueFileList.Add(IssueFileCategory, IssueFileJSON);
+            }
+            catch (ArgumentException)
+            {
+                throw new OperationCanceledException("An issue file with a category of \"" + IssueFileCategory + "\" already exists... skipping adding");
+            }
+        }
+
+        /// <summary>
+        /// Gets the issue file JSON of the issue category
+        /// </summary>
+        /// <returns>The issue file JSON object</returns>
+        /// <param name="IssueFileCategory">The category of the issue file</param>
+        public dynamic GetIssueFile(string IssueFileCategory)
+        {
+            dynamic IssueFileJSON;
+            if (IssueFileList.TryGetValue(IssueFileCategory, out IssueFileJSON))
+            {
+                return IssueFileJSON;
+            }
+            else
+            {
+                throw new KeyNotFoundException("An issue file with a category of \"" + IssueFileCategory + "\" could not be found");
+            }
+        }
     }
 }

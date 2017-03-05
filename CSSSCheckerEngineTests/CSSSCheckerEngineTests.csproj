@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>CSSS</RootNamespace>
-    <AssemblyName>CSSS</AssemblyName>
+    <ProjectGuid>{40A0EAD2-7A6B-4C02-9315-5AEF401AFD24}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CSSSCheckerEngineTests</RootNamespace>
+    <AssemblyName>CSSSCheckerEngineTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -26,43 +26,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.3.6.1\lib\net40\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Bootstrap.cs" />
-    <Compile Include="Init.cs" />
-    <Compile Include="Kernel.cs" />
-    <Compile Include="IssueChecks\System.IssueChecks.cs" />
-    <Compile Include="IssueChecks\IssueChecks.cs" />
+    <Compile Include="IssueFilesTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
-      <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
-      <Name>CSSSSupportLibrary</Name>
+    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
+      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
+      <Name>CSSSCheckerEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
       <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
       <Name>CSSSConfig</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
-      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
-      <Name>CSSSCheckerEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IssueChecks\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
