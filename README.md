@@ -44,7 +44,7 @@ Under normal image building, the 'o' option should be passed, as this allows CSS
 These are the tasks planned for each release version. Please note that these can change without warning, depending on how features are progressing.
 
 ### Version 0.2
-* Create checker system engine and initial check template files (to check the Operating System version, for example)
+* ~~Create checker system engine and initial check template files (to check the Operating System version, for example)~~
 * Show notifications should points be gained or lost
 * Generate a scoring report
 
