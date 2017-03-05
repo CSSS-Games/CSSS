@@ -14,6 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using CSSSConfig;
 using NLog;
 using System;
 
@@ -28,6 +29,12 @@ namespace Checker.System
     abstract class Version
     {
         protected static Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Creating an instance of the CSSS config class, to be
+        /// able to read and set values for it
+        /// </summary>
+        protected static Config config = Config.GetCurrentConfig;
 
         /// <summary>
         /// Gets a value indicating whether the OS version currently
