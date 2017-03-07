@@ -143,7 +143,7 @@ namespace CSSS
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Observe))
             {
                 logger.Info("Performing checks");
-                PerformChecks();
+                PerformIssueCheckTasks();
             }
 
             // Seeing if CSSS should prepare for image release
@@ -167,7 +167,11 @@ namespace CSSS
             return shouldExit;
         }
 
-        private void PerformChecks()
+        /// <summary>
+        /// Performs any tasks that should be undertaken before checks
+        /// for issues can take place, such as loading the issue files
+        /// </summary>
+        private void PerformPreIssueTasks()
         {
             // Seeing if the issue files need to be loaded into the
             // config class
@@ -176,10 +180,36 @@ namespace CSSS
                 issueFiles.LoadAllIssueFiles();
                 IssueFilesLoaded = true;
             }
+        }
 
-            // Perofrming any checks under the "issues.system" category
+        /// <summary>
+        /// Performs the issue check tasks. This also calls the
+        /// <see cref="PerformPreIssueTasks"/> function before
+        /// and <see cref="PerformPostIssueTasks"/> function after
+        /// checking the issue files to see if they have been fixed
+        /// </summary>
+        private void PerformIssueCheckTasks()
+        {
+            // Completing any tasks required before issue checks
+            // can be completed
+            PerformPreIssueTasks();
+
+            // Performing any checks under the "issues.system" category
             var systemIssueChecks = new IssueChecks.System();
             systemIssueChecks.PerformAllSystemChecks();
+
+            // Completing any tasks after the issue checks have
+            // been completed
+            PerformPostIssueTasks();
+        }
+
+        /// <summary>
+        /// Performs any tasks that should be completed after the issue
+        /// checks have taken place, such as updating the scoring report
+        /// </summary>
+        private void PerformPostIssueTasks()
+        {
+            
         }
     }
 }
