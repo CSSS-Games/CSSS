@@ -10,7 +10,21 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
         <!-- Scoring report styles -->
         <style>
+            /* HTML tags */
+            body {
+                background-color: #e9e9e9;
+            }
+
+            /* Cards */
+            .card {
+                border-radius: 4px;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+
+            /* Overview section */
             .overview {
+                margin-top: 16px;
+                padding-bottom: 16px;
                 text-align: center;
             }
             .overview-number {
@@ -27,51 +41,55 @@
             <div class="row overview">
                 <!-- Points -->
                 <div class="col col-md-9">
-                    <div class="row">
-                        <!-- Scored -->
-                        <div class="col">
-                            <!-- Scored number -->
-                            <div class="row overview-number">
+                    <div class="card">
+                        <div class="card-block">
+                            <div class="row">
+                                <!-- Scored -->
                                 <div class="col">
-                                    45
+                                    <!-- Scored number -->
+                                    <div class="row overview-number">
+                                        <div class="col">
+                                            45
+                                        </div>
+                                    </div>
+                                    <!-- Scored text -->
+                                    <div class="row overview-text">
+                                        <div class="col">
+                                            Scored
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Scored text -->
-                            <div class="row overview-text">
+                                
+                                <!-- Lost -->
                                 <div class="col">
-                                    Scored
+                                    <!-- Lost number -->
+                                    <div class="row overview-number">
+                                        <div class="col">
+                                            20
+                                        </div>
+                                    </div>
+                                    <!-- Lost text -->
+                                    <div class="row overview-text">
+                                        <div class="col">
+                                            Lost
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Lost -->
-                        <div class="col">
-                            <!-- Lost number -->
-                            <div class="row overview-number">
+                                
+                                <!-- Total -->
                                 <div class="col">
-                                    20
-                                </div>
-                            </div>
-                            <!-- Lost text -->
-                            <div class="row overview-text">
-                                <div class="col">
-                                    Lost
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Total -->
-                        <div class="col">
-                            <!-- Total number -->
-                            <div class="row overview-number">
-                                <div class="col">
-                                    25
-                                </div>
-                            </div>
-                            <!-- Total text -->
-                            <div class="row overview-text">
-                                <div class="col">
-                                    Total
+                                    <!-- Total number -->
+                                    <div class="row overview-number">
+                                        <div class="col">
+                                            25
+                                        </div>
+                                    </div>
+                                    <!-- Total text -->
+                                    <div class="row overview-text">
+                                        <div class="col">
+                                            Total
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -80,18 +98,22 @@
 
                 <!-- Runtime -->
                 <div class="col-3 col-md-3">
-                    <div class="row">
-                        <div class="col">
-                            <!-- Runtime number -->
-                            <div class="row overview-number">
+                    <div class="card">
+                        <div class="card-block">
+                            <div class="row">
                                 <div class="col">
-                                    1:34
-                                </div>
-                            </div>
-                            <!-- Runtime text -->
-                            <div class="row overview-text">
-                                <div class="col">
-                                    Running Time
+                                    <!-- Runtime number -->
+                                    <div class="row overview-number">
+                                        <div class="col">
+                                            1:34
+                                        </div>
+                                    </div>
+                                    <!-- Runtime text -->
+                                    <div class="row overview-text">
+                                        <div class="col">
+                                            Running Time
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
