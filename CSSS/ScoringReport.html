@@ -28,16 +28,21 @@
                 text-align: center;
             }
             .overview-number {
-                font-size: 64px;
+                font-size: 72px;
             }
             .overview-text {
                 color: #999;
             }
+
+            /* Score information */
+            .score-information {
+                margin-top: 16px;
+            }
         </style>
     </head>
     <body>
-        <!-- Overview -->
         <div class="container-fluid">
+            <!-- Overview -->
             <div class="row overview">
                 <!-- Points -->
                 <div class="col col-md-9">
@@ -116,6 +121,37 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score information -->
+            <div class="row score-information">
+                <!-- Points scored -->
+                <div class="col">
+                    <div class="card">
+                        <div class="card-block">
+                            <h3 class="card-title">4 issues scored out of 20</h3>
+                            <p class="card-text">
+                                Operating system has been updated - 10 points<br>
+                                Telnet is not running - 5 points<br>
+                                Bad program has been removed - 6 points<br>
+                                User has been disabled - 4 points<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Points lost -->
+                <div class="col">
+                    <div class="card">
+                        <div class="card-block">
+                            <h3 class="card-title">2 penalties have been triggered</h3>
+                            <p class="card-text">
+                                User account has been removed - 10 points<br>
+                                Important file has been deleted - 5 points<br>
+                            </p>
                         </div>
                     </div>
                 </div>
