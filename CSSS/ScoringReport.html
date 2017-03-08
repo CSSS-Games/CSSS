@@ -14,12 +14,58 @@
             /* HTML tags */
             body {
                 background-color: #e9e9e9;
+                color: #292b2c;
+                font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+            h3 {
+                font-size: 30px;
+            }
+
+            /* Bootstrap 4 stylings */
+            .col {
+                -webkit-flex-basis: 0;
+                -ms-flex-preferred-size: 0;
+                flex-basis: 0;
+                -webkit-box-flex: 1;
+                -webkit-flex-grow: 1;
+                -ms-flex-positive: 1;
+                flex-grow: 1;
+                max-width: 100%;
+                position: relative;
+                width: 100%;
+                min-height: 1px;
             }
 
             /* Cards */
             .card {
                 border-radius: 4px;
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			    position: relative;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                background-color: #fff;
+                border: 1px solid rgba(0,0,0,.125);
+                border-radius: .25rem;
+            }
+            .card-block {
+                -webkit-box-flex: 1;
+                -webkit-flex: 1 1 auto;
+                -ms-flex: 1 1 auto;
+                flex: 1 1 auto;
+                padding: 16px;
+            }
+            .card-title {
+                margin-top: 0;
             }
 
             /* Overview section */
@@ -54,12 +100,12 @@
             <!-- Overview -->
             <div class="row overview">
                 <!-- Points -->
-                <div class="col col-md-9">
+                <div class="col-md-9">
                     <div class="card">
                         <div class="card-block">
                             <div class="row">
                                 <!-- Scored -->
-                                <div class="col">
+                                <div class="col-md-4">
                                     <!-- Scored number -->
                                     <div class="row overview-number overview-number-faded">
                                         <div class="col">
@@ -75,7 +121,7 @@
                                 </div>
                                 
                                 <!-- Lost -->
-                                <div class="col">
+                                <div class="col-md-4">
                                     <!-- Lost number -->
                                     <div class="row overview-number overview-number-faded">
                                         <div class="col">
@@ -91,7 +137,7 @@
                                 </div>
                                 
                                 <!-- Total -->
-                                <div class="col">
+                                <div class="col-md-4">
                                     <!-- Total number -->
                                     <div class="row overview-number">
                                         <div class="col">
@@ -111,7 +157,7 @@
                 </div>
 
                 <!-- Runtime -->
-                <div class="col-3 col-md-3">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-block">
                             <div class="row">
@@ -138,7 +184,7 @@
             <!-- Score information -->
             <div class="row score-information">
                 <!-- Points scored -->
-                <div class="col">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-block">
                             <h3 class="card-title">4 issues scored out of 20</h3>
@@ -153,7 +199,7 @@
                 </div>
 
                 <!-- Points lost -->
-                <div class="col">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-block">
                             <h3 class="card-title">2 penalties have been triggered</h3>
