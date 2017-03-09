@@ -264,7 +264,7 @@ namespace CSSSConfig
         /// A list of the issues that have been fixed, including the
         /// description and points value
         /// </summary>
-        private List<string> PointsGainedDescriptions = new List<string>();
+        public List<string> PointsGainedDescriptions = new List<string>();
 
         /// <summary>
         /// Adds a description and point amount to the points gained
@@ -290,7 +290,7 @@ namespace CSSSConfig
         /// A list of the penalties that have been given, including the
         /// description and points value
         /// </summary>
-        private List<string> PointsLostDescriptions = new List<string>();
+        public List<string> PointsLostDescriptions = new List<string>();
 
         /// <summary>
         /// Adds a description and point amount to the points lost
