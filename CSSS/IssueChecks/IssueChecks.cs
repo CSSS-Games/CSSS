@@ -141,5 +141,49 @@ namespace IssueChecks
                 config.UpdatePointsGained(Points, Description);
             }
         }
+
+        /// <summary>
+        /// Sets variables to inform the user that points have been lost,
+        /// from breaking an issue they fixed, or fixing a penalty
+        /// 
+        /// <para>As with the <see cref="PointsScored"/> function, this
+        /// involves some double negatives. If the penalty has been fixed,
+        /// then points have been gained, while breaking an issue that was
+        /// fixed actually looses points</para>
+        /// 
+        /// <para>This function does not actually update any values in
+        /// the Config class, as by not calling the <see cref="PointsScored"/>
+        /// when the issue check takes place, there are no points needing
+        /// to be removed</para>
+        /// </summary>
+        /// <param name="Points">The amount of points that have been lost</param>
+        /// <param name="Description">The description of the issue</param>
+        public void PointsLost(int Points, string Description)
+        {
+            var pointsStatus = new Config.PointsStatus();
+
+            // If the points are less that 0 then points have actually
+            // been gained (fixed a penalty), otherwise it's a loss
+            if (Points < 0)
+            {
+                pointsStatus = Config.PointsStatus.Gained;
+            }
+            else
+            {
+                pointsStatus = Config.PointsStatus.Lost;
+            }
+
+            config.pointsStatus = config.pointsStatus | pointsStatus;
+
+            // The '-' is replaced from the points so negative scores
+            // look correct
+            // The pointsStatus is set to lowercase as it's capitalised
+            // in the enum, so looks out of place in the comment
+            // e.g. "5 points lost: <description>" vs "-5 points Lost: <description>"
+            logger.Info("{0} points have been {1}: {2}",
+                        Points.ToString().Replace("-", ""),
+                        pointsStatus.ToString().ToLower(),
+                        Description);
+        }
     }
 }

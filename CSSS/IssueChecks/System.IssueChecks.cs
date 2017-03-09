@@ -87,11 +87,8 @@ namespace IssueChecks
                             // been broken again, as the check returned false
                             if (issueFile.Issues[issue].Triggered == true)
                             {
-                                // Todo: Alert user
-                                logger.Info("{0} point(s) lost: {1}",
-                                            issueFile.Issues[issue].Points,
-                                            issueFile.Issues[issue].Description);
-                                // Todo: Loose points
+                                PointsLost((int)issueFile.Issues[issue].Points,
+                                           (string)issueFile.Issues[issue].Description);
 
                                 issueFile.Issues[issue].Triggered = false;
                             }
