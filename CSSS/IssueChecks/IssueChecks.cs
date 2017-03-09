@@ -129,6 +129,17 @@ namespace IssueChecks
                             pointsStatus.ToString().ToLower(),
                             Description);
             }
+
+            // Update the gained or lost points total in the config
+            // class, along with the description for it
+            if (Points < 0)
+            {
+                config.UpdatePointsLost(Points, Description);
+            }
+            else
+            {
+                config.UpdatePointsGained(Points, Description);
+            }
         }
     }
 }
