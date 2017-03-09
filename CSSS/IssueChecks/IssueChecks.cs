@@ -55,5 +55,80 @@ namespace IssueChecks
                 return false;
             }
         }
+
+        /// <summary>
+        /// Adds the points from the current issue to the total score
+        /// 
+        /// <para>When an issue check returns a 'true' result, this function
+        /// is called to update the current total score. The triggered parameter
+        /// is passed as this function will always be called when an issue check
+        /// is valid, but we don't want to continously inform the user that
+        /// points have been scored if it has been scored in a previous
+        /// run check from the Kernel</para>
+        /// 
+        /// <para>Double negatives apply here. If the points scored are a
+        /// positive value, then the total score increases. If the points
+        /// are a negative, then points have been lost from the total. The
+        /// reasoning for this is that if a issue check returns true for
+        /// an issue that should cause a penalty, it will still call this
+        /// function to add to the score, but it should be removed instead</para>
+        /// 
+        /// <para>There doesn't seem to be a 'nice' way to perform this function
+        /// without performing one of the checks twice (triggered or points).
+        /// Either we see if the user should be notified of a gain or loss, and
+        /// then update the scores in the config file of gains or losses, or the
+        /// score is updated of a gain or loss, but a notification check needs
+        /// to be done for each option:
+        /// <code>
+        /// if (!triggered)
+        ///     notify if gain or loss
+        /// end if
+        /// score points for gain or loss
+        /// 
+        /// --- or ---
+        /// if (gain)
+        ///     notify user and score points
+        /// else
+        ///     notify user and lose points
+        /// end if
+        /// </code>
+        /// </para>
+        /// </summary>
+        /// <param name="Points">The points to add to the current total score</param>
+        /// <param name="Description">The description of the issue</param>
+        /// <param name="Triggered">If set to <c>true</c> then the user doesn't need to be notified</param>
+        public void PointsScored(int Points, string Description, bool Triggered)
+        {
+            // Seeing if the user should be notified about the points
+            // being scored. They should be if the issue has not been
+            // triggered before
+            if (!Triggered)
+            {
+                var pointsStatus = new Config.PointsStatus();
+
+                // If the points are less that 0 then points have actually
+                // been lost (a penalty), otherwise it's a gain
+                if (Points < 0)
+                {
+                    pointsStatus = Config.PointsStatus.Lost;
+                }
+                else
+                {
+                    pointsStatus = Config.PointsStatus.Gained;
+                }
+
+                config.pointsStatus = config.pointsStatus | pointsStatus;
+
+                // The '-' is replaced from the points so negative scores
+                // look correct
+                // The pointsStatus is set to lowercase as it's capitalised
+                // in the enum, so looks out of place in the comment
+                // e.g. "5 points lost: <description>" vs "-5 points Lost: <description>"
+                logger.Info("{0} points have been {1}: {2}",
+                            Points.ToString().Replace("-", ""),
+                            pointsStatus.ToString().ToLower(),
+                            Description);
+            }
+        }
     }
 }

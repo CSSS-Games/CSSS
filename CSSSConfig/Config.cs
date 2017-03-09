@@ -217,5 +217,40 @@ namespace CSSSConfig
                 throw new KeyNotFoundException("An issue file with a category of \"" + IssueFileCategory + "\" could not be found");
             }
         }
+
+
+
+
+        // **********************************************************
+        //   Scoring
+        // **********************************************************
+
+        /// <summary>
+        /// The current status of the points gained during the current
+        /// issue check run, used to notify the user of any changes:
+        ///   * Unchanged: The amount of points scored is the same as last run
+        ///   * Gained: 
+        /// 
+        /// <para>Enum flags are used here rather than a stright enum so
+        /// that it can be used if points have both been gained and lost
+        /// during the issue checks without needing to check the status
+        /// of this each time, but is instead checked before the user
+        /// is notified. Points can be scored and lost in the same issue
+        /// check run, so both options can be active at the same time</para>
+        /// </summary>
+        [Flags]
+        public enum PointsStatus
+        {
+            Unchanged = 0x1,
+            Gained = 0x2,
+            Lost = 0x4
+        }
+
+        /// <summary>
+        /// Gets or sets the points status so the correct notification
+        /// can be shown if needed
+        /// </summary>
+        /// <value>The points status</value>
+        public PointsStatus pointsStatus { get; set; }
     }
 }

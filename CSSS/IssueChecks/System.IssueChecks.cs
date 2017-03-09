@@ -71,15 +71,11 @@ namespace IssueChecks
                         // against what it is expected to be from the issue file
                         if (versionCheck.ExpectedOSVersion(operatingSystemVerion))
                         {
-                            // Todo: Alert user
-                            if (issueFile.Issues[issue].Triggered == false)
-                            {
-                                logger.Info("{0} point(s) gained: {1}",
-                                        issueFile.Issues[issue].Points,
-                                        issueFile.Issues[issue].Description);
-                            }
-
-                            // Todo: Score points
+                            // The issue check matches with the current system state,
+                            // so include the points in the total score
+                            PointsScored((int)issueFile.Issues[issue].Points,
+                                         (string)issueFile.Issues[issue].Description,
+                                         (bool)issueFile.Issues[issue].Triggered);
 
                             // The check for this issue has been triggered,
                             // so update the JSON to reflect this
