@@ -235,12 +235,21 @@ namespace CSSSConfig
             pointsStatus = pointsStatus ^ PointsStatus.Gained;
             pointsStatus = pointsStatus ^ PointsStatus.Lost;
 
+            TotalIssues = 0;
+
             PointsGainedTotal = 0;
             PointsGainedDescriptions.Clear();
 
             PointsLostTotal = 0;
             PointsLostDescriptions.Clear();
         }
+
+        /// <summary>
+        /// Gets or sets the total number of issues that need to
+        /// be fixed
+        /// </summary>
+        /// <value>The total number of issues</value>
+        public int TotalIssues { get; set; }
 
         /// <summary>
         /// The current status of the points gained during the current

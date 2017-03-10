@@ -63,6 +63,8 @@ namespace IssueChecks
                 // listed match with what is expected
                 for (int issue = 0; issue < issueFile.Issues.Count; issue++)
                 {
+                    config.TotalIssues += 1;
+
                     var operatingSystemVerion = (string)issueFile.Issues[issue].Expected;
 
                     try

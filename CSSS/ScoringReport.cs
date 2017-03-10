@@ -19,6 +19,7 @@ using HtmlAgilityPack;
 using NLog;
 using System;
 using System.IO;
+using System.Text;
 
 namespace CSSS
 {
@@ -90,6 +91,9 @@ namespace CSSS
             UpdatePointsLost();
             UpdatePointsTotal();
 
+            UpdateGainedPointsTitle();
+            UpdateGainedPointsDetails();
+
             SaveScoringReport();
         }
 
@@ -132,6 +136,33 @@ namespace CSSS
 
             var pointsTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-total']");
             pointsTotal.InnerHtml = (pointsLost + pointsGained).ToString();
+        }
+
+        /// <summary>
+        /// Updates the gained points title in the HTML file
+        /// </summary>
+        private void UpdateGainedPointsTitle()
+        {
+            var issuesSolved = config.PointsGainedDescriptions.Count;
+
+            var gainedPointsTitle = ScoringReportHTML.DocumentNode.SelectSingleNode("//h3[@id='score-information-title-scored']");
+            gainedPointsTitle.InnerHtml = issuesSolved + " issues scored out of " + config.TotalIssues;
+        }
+
+        /// <summary>
+        /// Updates the gained points details in the HTML file
+        /// </summary>
+        private void UpdateGainedPointsDetails()
+        {
+            StringBuilder issueDescriptions = new StringBuilder();
+
+            foreach (var issueSolved in config.PointsGainedDescriptions)
+            {
+                issueDescriptions.AppendLine(issueSolved + "<br>");
+            }
+
+            var detailScored = ScoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-scored']");
+            detailScored.InnerHtml = issueDescriptions.ToString();
         }
     }
 }
