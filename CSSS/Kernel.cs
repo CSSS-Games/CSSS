@@ -218,6 +218,7 @@ namespace CSSS
             try
             {
                 var scoringReport = new ScoringReport();
+                scoringReport.UpdateScoringReport();
             }
             catch (System.IO.FileNotFoundException e)
             {

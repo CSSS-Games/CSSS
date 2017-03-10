@@ -38,6 +38,14 @@ namespace CSSS
     /// </summary>
     public class ScoringReport
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Creating an instance of the CSSS config class, to be
+        /// able to read and set values for it
+        /// </summary>
+        private static Config config = Config.GetCurrentConfig;
+
         /// <summary>
         /// The scoring report HTML, to be modified and saved
         /// </summary>
@@ -68,6 +76,36 @@ namespace CSSS
             {
                 throw new FileNotFoundException("The \"" + ScoringReportHTMLFilename + "\" file could not be found");
             }
+        }
+
+        /// <summary>
+        /// Updates the scoring report HTML file
+        /// 
+        /// <para>This function calls other functions to update
+        /// the relevant sections of the scoring report</para>
+        /// </summary>
+        public void UpdateScoringReport()
+        {
+            UpdatePointsGained();
+
+            SaveScoringReport();
+        }
+
+        /// <summary>
+        /// Saves the scoring report to disk
+        /// </summary>
+        private void SaveScoringReport()
+        {
+            ScoringReportHTML.Save(ScoringReportHTMLFilename);
+        }
+
+        /// <summary>
+        /// Updates the points gained value on the scoring report
+        /// </summary>
+        private void UpdatePointsGained()
+        {
+            var pointsGained = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-scored']");
+            pointsGained.InnerHtml = config.PointsGainedTotal.ToString();
         }
     }
 }
