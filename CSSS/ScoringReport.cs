@@ -88,6 +88,7 @@ namespace CSSS
         {
             UpdatePointsGained();
             UpdatePointsLost();
+            UpdatePointsTotal();
 
             SaveScoringReport();
         }
@@ -118,6 +119,19 @@ namespace CSSS
         {
             var pointsLost = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-lost']");
             pointsLost.InnerHtml = config.PointsLostTotal.ToString().Replace("-", "");
+        }
+
+        /// <summary>
+        /// Updates the total number of points the competitor currently has,
+        /// after lost points from penalties are taken away from those gained
+        /// </summary>
+        private void UpdatePointsTotal()
+        {
+            var pointsGained = config.PointsGainedTotal;
+            var pointsLost = config.PointsLostTotal;
+
+            var pointsTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-total']");
+            pointsTotal.InnerHtml = (pointsLost + pointsGained).ToString();
         }
     }
 }
