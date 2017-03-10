@@ -174,5 +174,39 @@ namespace IssueChecks
                             "The 'Lost' pointsStatus enum should be set if the penalty has not been triggered before");
             });
         }
+
+        /// <summary>
+        /// When the points passed to PointsScored are positive, only the
+        /// points scored description list in the config should be updated,
+        /// along with the pointsStatus enum being set to Lost
+        /// </summary>
+        [Test]
+        public void TestPointsLostPositivePoints()
+        {
+            int points = 5;
+            string description = "TestPointsLostPositivePoints";
+
+            IssueChecksChecks.PointsLost(points, description);
+
+            Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Lost),
+                        "The 'Lost' pointsStatus enum should be set if the issue has been solved but broken again");
+        }
+
+        /// <summary>
+        /// When the points passed to PointsScored are negative, only the
+        /// points lost description list in the config should be updated,
+        /// along with the pointsStatus enum being set to Gained
+        /// </summary>
+        [Test]
+        public void TestPointsLostNegativePoints()
+        {
+            int points = -5;
+            string description = "TestPointsLostNegativePoints";
+
+            IssueChecksChecks.PointsLost(points, description);
+
+            Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
+                        "The 'Gained' pointsStatus enum should be set if the penalty has been resolved");
+        }
     }
 }
