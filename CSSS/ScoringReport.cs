@@ -15,15 +15,59 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using CSSSConfig;
+using HtmlAgilityPack;
 using NLog;
 using System;
+using System.IO;
 
 namespace CSSS
 {
+    /// <summary>
+    /// The scoring report is a HTML file that is shown to the
+    /// competitor to let them know some information about the
+    /// current state of the computer
+    /// 
+    /// <para>Information that is shown on the scoring report:
+    ///   * Points gained
+    ///   * Points lost
+    ///   * Total points
+    ///   * Running time
+    ///   * Gained points descriptions
+    ///   * Lost points (penalties) descriptions
+    /// </para>
+    /// </summary>
     public class ScoringReport
     {
+        /// <summary>
+        /// The scoring report HTML, to be modified and saved
+        /// </summary>
+        private HtmlDocument ScoringReportHTML;
+
+        /// <summary>
+        /// The filename of the ScoringReport.html file, set as a
+        /// constant to prevent any accidental typos when using it
+        /// in this class
+        /// </summary>
+        private const string ScoringReportHTMLFilename = "ScoringReport.html";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:CSSS.ScoringReport"/> class,
+        /// or throws an exception if the ScoringReport.html file can't be found
+        /// </summary>
         public ScoringReport()
         {
+            // While it is unlikely the scoring report goes missing,
+            // it's best to check it's still there before making any
+            // changes
+            try
+            {
+                ScoringReportHTML = new HtmlDocument();
+                ScoringReportHTML.Load(ScoringReportHTMLFilename);
+            }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("The \"" + ScoringReportHTMLFilename + "\" file could not be found");
+            }
         }
     }
 }
