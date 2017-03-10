@@ -87,6 +87,7 @@ namespace CSSS
         public void UpdateScoringReport()
         {
             UpdatePointsGained();
+            UpdatePointsLost();
 
             SaveScoringReport();
         }
@@ -106,6 +107,17 @@ namespace CSSS
         {
             var pointsGained = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-scored']");
             pointsGained.InnerHtml = config.PointsGainedTotal.ToString();
+        }
+
+        /// <summary>
+        /// Updates the points lost (penalties) value on the scoring report.
+        /// The '-' symbol is removed before adding to the report so it
+        /// doesn't read '-5 penalty points'
+        /// </summary>
+        private void UpdatePointsLost()
+        {
+            var pointsLost = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-lost']");
+            pointsLost.InnerHtml = config.PointsLostTotal.ToString().Replace("-", "");
         }
     }
 }
