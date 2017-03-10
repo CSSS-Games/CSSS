@@ -41,11 +41,7 @@ namespace IssueChecks
             IssueChecksChecks = new IssueChecks();
             config = Config.GetCurrentConfig;
 
-            config.PointsGainedTotal = 0;
-            config.PointsLostTotal = 0;
-
-            config.PointsGainedDescriptions.Clear();
-            config.PointsLostDescriptions.Clear();
+            config.ResetScoringData();
         }
 
         /// <summary>
@@ -54,9 +50,6 @@ namespace IssueChecks
         [TearDown]
         protected void TearDown()
         {
-            config.pointsStatus = config.pointsStatus ^ Config.PointsStatus.Gained;
-            config.pointsStatus = config.pointsStatus ^ Config.PointsStatus.Lost;
-
             IssueChecksChecks = null;
             config = null;
         }

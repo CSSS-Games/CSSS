@@ -180,6 +180,8 @@ namespace CSSS
                 issueFiles.LoadAllIssueFiles();
                 IssueFilesLoaded = true;
             }
+
+            config.ResetScoringData();
         }
 
         /// <summary>

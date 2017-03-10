@@ -226,6 +226,23 @@ namespace CSSSConfig
         // **********************************************************
 
         /// <summary>
+        /// Resets the points scores and descriptions that are stored
+        /// so that the information presented in the scoring report
+        /// is a valid representation of the current status
+        /// </summary>
+        public void ResetScoringData()
+        {
+            pointsStatus = pointsStatus ^ PointsStatus.Gained;
+            pointsStatus = pointsStatus ^ PointsStatus.Lost;
+
+            PointsGainedTotal = 0;
+            PointsGainedDescriptions.Clear();
+
+            PointsLostTotal = 0;
+            PointsLostDescriptions.Clear();
+        }
+
+        /// <summary>
         /// The current status of the points gained during the current
         /// issue check run, used to notify the user of any changes:
         ///   * Unchanged: The amount of points scored is the same as last run
