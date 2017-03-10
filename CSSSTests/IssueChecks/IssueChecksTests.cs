@@ -18,6 +18,7 @@ using CSSS;
 using CSSSConfig;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace IssueChecks
 {
@@ -42,6 +43,9 @@ namespace IssueChecks
 
             config.PointsGainedTotal = 0;
             config.PointsLostTotal = 0;
+
+            config.PointsGainedDescriptions.Clear();
+            config.PointsLostDescriptions.Clear();
         }
 
         /// <summary>
@@ -207,6 +211,117 @@ namespace IssueChecks
 
             Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
                         "The 'Gained' pointsStatus enum should be set if the penalty has been resolved");
+        }
+
+        /// <summary>
+        /// When multiple positive points have been scored, the points and
+        /// points scored description list in the config should be updated
+        /// </summary>
+        [Test]
+        public void TestMultiplePointsScoredPositivePoints()
+        {
+            int pointsOne = 5;
+            string descriptionOne = "TestMultiplePointsScoredPositivePointsIssueOne";
+            bool triggeredOne = true;
+
+            IssueChecksChecks.PointsScored(pointsOne, descriptionOne, triggeredOne);
+
+            int pointsTwo = 10;
+            string descriptionTwo = "TestMultiplePointsScoredPositivePointsIssueTwo";
+            bool triggeredTwo = true;
+
+            IssueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
+
+            List<string> descriptionList = new List<string>();
+            descriptionList.Add(descriptionOne + " - " + pointsOne + " points");
+            descriptionList.Add(descriptionTwo + " - " + pointsTwo + " points");
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(pointsOne + pointsTwo,
+                                config.PointsGainedTotal,
+                                "The points scored should be added to the PointsGainedTotal integer");
+                Assert.AreEqual(0,
+                                config.PointsLostTotal,
+                                "Points should not be added to the PointsLostTotal when positive");
+                Assert.AreEqual(descriptionList,
+                                config.PointsGainedDescriptions,
+                                "The description and number of points should be added to the PointsGainedDescriptions list");
+            });
+        }
+
+        /// <summary>
+        /// When multiple negative points have been scored, the points and
+        /// points lost description list in the config should be updated
+        /// </summary>
+        [Test]
+        public void TestMultiplePointsScoredNegativePoints()
+        {
+            int pointsOne = -5;
+            string descriptionOne = "TestMultiplePointsScoredNegativePointsIssueOne";
+            bool triggeredOne = true;
+
+            IssueChecksChecks.PointsScored(pointsOne, descriptionOne, triggeredOne);
+
+            int pointsTwo = -10;
+            string descriptionTwo = "TestMultiplePointsScoredNegativePointsIssueTwo";
+            bool triggeredTwo = true;
+
+            IssueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
+
+            List<string> descriptionList = new List<string>();
+            descriptionList.Add(descriptionOne + " - " + pointsOne + " points");
+            descriptionList.Add(descriptionTwo + " - " + pointsTwo + " points");
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(pointsOne + pointsTwo,
+                                config.PointsLostTotal,
+                                "The points scored should be added to the PointsLostTotal integer");
+                Assert.AreEqual(0,
+                                config.PointsGainedTotal,
+                                "Points should not be added to the PointsGainedTotal when negative");
+                Assert.AreEqual(descriptionList,
+                                config.PointsLostDescriptions,
+                                "The description and number of points should be added to the PointsLostDescriptions list");
+            });
+        }
+
+        /// <summary>
+        /// When both positive and negative points have been scored, the points
+        /// gained and points lost, along with the relevant description lists
+        /// in the config should be updated
+        /// </summary>
+        [Test]
+        public void TestMultiplePointsScoredPositiveNegativePoints()
+        {
+            int pointsPositive = 5;
+            string descriptionPositive = "TestMultiplePointsScoredPositivePointsIssueOne";
+            bool triggeredPositive = true;
+
+            IssueChecksChecks.PointsScored(pointsPositive, descriptionPositive, triggeredPositive);
+
+            int pointsNegative = -10;
+            string descriptionNegative = "TestMultiplePointsScoredNegativePointsIssueTwo";
+            bool triggeredNegative = true;
+
+            IssueChecksChecks.PointsScored(pointsNegative, descriptionNegative, triggeredNegative);
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(pointsPositive,
+                                config.PointsGainedTotal,
+                                "The points gained should be added to the PointsGainedTotal integer");
+                Assert.AreEqual(pointsNegative,
+                                config.PointsLostTotal,
+                                "The points lost should be added to the PointsLostTotal integer");
+                Assert.Contains(descriptionPositive + " - " + pointsPositive + " points",
+                                config.PointsGainedDescriptions,
+                                "The description and number of points should be added to the PointsGainedDescriptions list");
+                Assert.Contains(descriptionNegative + " - " + pointsNegative + " points",
+                                config.PointsLostDescriptions,
+                                "The description and number of points should be added to the PointsLostDescriptions list");
+            });
         }
     }
 }
