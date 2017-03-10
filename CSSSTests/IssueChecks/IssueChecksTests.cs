@@ -90,15 +90,9 @@ namespace IssueChecks
         /// the issue has not been triggered, the points and points
         /// scored description list in the config should be updated,
         /// along with the pointsStatus enum being set to Gained
-        /// 
-        /// <para>For some unknown reason, this test sometimes fails.
-        /// I'm assuming it's a race condition of some sort with the
-        /// config class being a singleton, so it is prefixed with
-        /// 'z' to make it run last, where the problem doesn't seem
-        /// to happen</para>
         /// </summary>
         [Test]
-        public void zTestPointsScoredPositivePointsNotTriggered()
+        public void TestPointsScoredPositivePointsNotTriggered()
         {
             int points = 5;
             string description = "TestPointsScoredPositivePointsNotTriggered";
@@ -117,9 +111,8 @@ namespace IssueChecks
                 Assert.Contains(description + " - " + points + " points",
                                 config.PointsGainedDescriptions,
                                 "The description and number of points should be added to the PointsGainedDescriptions list");
-                Assert.AreEqual(Config.PointsStatus.Gained,
-                                config.pointsStatus,
-                                "The 'Gained' pointsStatus enum should be set if the issue has not been solved before");
+                Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
+                            "The 'Gained' pointsStatus enum should be set if the issue has not been solved before");
             });
         }
 
@@ -177,9 +170,8 @@ namespace IssueChecks
                 Assert.Contains(description + " - " + points + " points",
                                 config.PointsLostDescriptions,
                                 "The description and number of points should be added to the PointsLostDescriptions list");
-                Assert.AreEqual(Config.PointsStatus.Lost,
-                                config.pointsStatus,
-                                "The 'Lost' pointsStatus enum should be set if the penalty has not been triggered before");
+                Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Lost),
+                            "The 'Lost' pointsStatus enum should be set if the penalty has not been triggered before");
             });
         }
     }
