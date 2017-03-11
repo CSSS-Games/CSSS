@@ -65,6 +65,7 @@ These are the tasks planned for each release version. Please note that these can
 
 ## Copyright
 CyberPatriot is copyright of US Air Force Association
+
 CyberCentrurion is copyright of Cyber Security Challenge UK
 
 ## Disclaimer
