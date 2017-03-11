@@ -63,6 +63,13 @@ namespace IssueChecks
                 // listed match with what is expected
                 for (int issue = 0; issue < issueFile.Issues.Count; issue++)
                 {
+                    // Adding to the total number of issue to find, but
+                    // only if the points available are more than 0
+                    if ((int)issueFile.Issues[issue].Points > 0)
+                    {
+                        config.TotalIssues += 1;
+                    }
+
                     var operatingSystemVerion = (string)issueFile.Issues[issue].Expected;
 
                     try
@@ -71,15 +78,11 @@ namespace IssueChecks
                         // against what it is expected to be from the issue file
                         if (versionCheck.ExpectedOSVersion(operatingSystemVerion))
                         {
-                            // Todo: Alert user
-                            if (issueFile.Issues[issue].Triggered == false)
-                            {
-                                logger.Info("{0} point(s) gained: {1}",
-                                        issueFile.Issues[issue].Points,
-                                        issueFile.Issues[issue].Description);
-                            }
-
-                            // Todo: Score points
+                            // The issue check matches with the current system state,
+                            // so include the points in the total score
+                            PointsScored((int)issueFile.Issues[issue].Points,
+                                         (string)issueFile.Issues[issue].Description,
+                                         (bool)issueFile.Issues[issue].Triggered);
 
                             // The check for this issue has been triggered,
                             // so update the JSON to reflect this
@@ -91,11 +94,8 @@ namespace IssueChecks
                             // been broken again, as the check returned false
                             if (issueFile.Issues[issue].Triggered == true)
                             {
-                                // Todo: Alert user
-                                logger.Info("{0} point(s) lost: {1}",
-                                            issueFile.Issues[issue].Points,
-                                            issueFile.Issues[issue].Description);
-                                // Todo: Loose points
+                                PointsLost((int)issueFile.Issues[issue].Points,
+                                           (string)issueFile.Issues[issue].Description);
 
                                 issueFile.Issues[issue].Triggered = false;
                             }

@@ -35,6 +35,7 @@
     <Compile Include="BootstrapTests.cs" />
     <Compile Include="InitTests.cs" />
     <Compile Include="KernelTests.cs" />
+    <Compile Include="IssueChecks\IssueChecksTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -52,6 +53,9 @@
       <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
       <Name>CSSSCheckerEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IssueChecks\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

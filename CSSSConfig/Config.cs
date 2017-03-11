@@ -217,5 +217,118 @@ namespace CSSSConfig
                 throw new KeyNotFoundException("An issue file with a category of \"" + IssueFileCategory + "\" could not be found");
             }
         }
+
+
+
+
+        // **********************************************************
+        //   Scoring
+        // **********************************************************
+
+        /// <summary>
+        /// Resets the points scores and descriptions that are stored
+        /// so that the information presented in the scoring report
+        /// is a valid representation of the current status
+        /// </summary>
+        public void ResetScoringData()
+        {
+            pointsStatus = pointsStatus ^ PointsStatus.Gained;
+            pointsStatus = pointsStatus ^ PointsStatus.Lost;
+
+            TotalIssues = 0;
+
+            PointsGainedTotal = 0;
+            PointsGainedDescriptions.Clear();
+
+            PointsLostTotal = 0;
+            PointsLostDescriptions.Clear();
+        }
+
+        /// <summary>
+        /// Gets or sets the total number of issues that need to
+        /// be fixed
+        /// </summary>
+        /// <value>The total number of issues</value>
+        public int TotalIssues { get; set; }
+
+        /// <summary>
+        /// The current status of the points gained during the current
+        /// issue check run, used to notify the user of any changes:
+        ///   * Unchanged: The amount of points scored is the same as last run
+        ///   * Gained: 
+        /// 
+        /// <para>Enum flags are used here rather than a stright enum so
+        /// that it can be used if points have both been gained and lost
+        /// during the issue checks without needing to check the status
+        /// of this each time, but is instead checked before the user
+        /// is notified. Points can be scored and lost in the same issue
+        /// check run, so both options can be active at the same time</para>
+        /// </summary>
+        [Flags]
+        public enum PointsStatus
+        {
+            Unchanged = 0x1,
+            Gained = 0x2,
+            Lost = 0x4
+        }
+
+        /// <summary>
+        /// Gets or sets the points status so the correct notification
+        /// can be shown if needed
+        /// </summary>
+        /// <value>The points status</value>
+        public PointsStatus pointsStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current amount of points gained during this
+        /// issue check run
+        /// </summary>
+        /// <value>The points gained total</value>
+        public int PointsGainedTotal { get; set; }
+
+        /// <summary>
+        /// A list of the issues that have been fixed, including the
+        /// description and points value
+        /// </summary>
+        public List<string> PointsGainedDescriptions = new List<string>();
+
+        /// <summary>
+        /// Adds a description and point amount to the points gained
+        /// descriptions array, and increases the points gained total
+        /// value with amount scored
+        /// </summary>
+        /// <param name="Points">The amount of points gained for the issue</param>
+        /// <param name="Description">The description of the issue</param>
+        public void UpdatePointsGained(int Points, string Description)
+        {
+            PointsGainedTotal += Points;
+            PointsGainedDescriptions.Add(Description + " - " + Points + " points");
+        }
+
+        /// <summary>
+        /// Gets or sets the current amount of points lost during this
+        /// issue check run from penalties
+        /// </summary>
+        /// <value>The points lost total</value>
+        public int PointsLostTotal { get; set; }
+
+        /// <summary>
+        /// A list of the penalties that have been given, including the
+        /// description and points value
+        /// </summary>
+        public List<string> PointsLostDescriptions = new List<string>();
+
+        /// <summary>
+        /// Adds a description and point amount to the points lost
+        /// descriptions array, and increases the points lost total
+        /// value with amount penalised
+        /// </summary>
+        /// <param name="Points">The amount of points lost for the penalty</param>
+        /// <param name="Description">The description of the penalty</param>
+        public void UpdatePointsLost(int Points, string Description)
+        {
+            PointsLostTotal += Points;
+            PointsLostDescriptions.Add(Description + " - " + Points.ToString().Replace("-", "") + " points");
+        }
     }
 }

@@ -180,6 +180,8 @@ namespace CSSS
                 issueFiles.LoadAllIssueFiles();
                 IssueFilesLoaded = true;
             }
+
+            config.ResetScoringData();
         }
 
         /// <summary>
@@ -209,7 +211,19 @@ namespace CSSS
         /// </summary>
         private void PerformPostIssueTasks()
         {
-            
+            // Processing the scoring report to fill in any information.
+            // A FileNotFoundException could be thrown if the scoring report
+            // HTML file is missing (e.g. has been deleted) when creating
+            // this class
+            try
+            {
+                var scoringReport = new ScoringReport();
+                scoringReport.UpdateScoringReport();
+            }
+            catch (System.IO.FileNotFoundException e)
+            {
+                logger.Warn("There was a problem loading the scoring report: {0}", e.Message);
+            }
         }
     }
 }
