@@ -232,8 +232,12 @@ namespace CSSSConfig
         /// </summary>
         public void ResetScoringData()
         {
-            pointsStatus = pointsStatus ^ PointsStatus.Gained;
-            pointsStatus = pointsStatus ^ PointsStatus.Lost;
+            // Enums can't just be bitwise not against an empty
+            // value, as if the flag isn't set it will be.
+            // Therefore, the and-not bitwise operation should be used
+            // See: http://stackoverflow.com/a/11011051
+            pointsStatus &= ~PointsStatus.Gained;
+            pointsStatus &= ~PointsStatus.Lost;
 
             TotalIssues = 0;
 

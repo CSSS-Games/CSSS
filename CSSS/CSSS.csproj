@@ -47,6 +47,7 @@
     <Compile Include="IssueChecks\System.IssueChecks.cs" />
     <Compile Include="IssueChecks\IssueChecks.cs" />
     <Compile Include="ScoringReport.cs" />
+    <Compile Include="Notifications.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

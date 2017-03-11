@@ -224,6 +224,11 @@ namespace CSSS
             {
                 logger.Warn("There was a problem loading the scoring report: {0}", e.Message);
             }
+
+            // Showing a notification of any points changes, if applicable
+            // Note: This should be the last post issue check task
+            var notifications = new Notifications();
+            notifications.ShowNotification();
         }
     }
 }
