@@ -328,7 +328,7 @@ namespace CSSSConfig
         public void UpdatePointsLost(int Points, string Description)
         {
             PointsLostTotal += Points;
-            PointsLostDescriptions.Add(Description + " - " + Points + " points");
+            PointsLostDescriptions.Add(Description + " - " + Points.ToString().Replace("-", "") + " points");
         }
     }
 }

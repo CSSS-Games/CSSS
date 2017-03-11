@@ -135,7 +135,7 @@ namespace IssueChecks
                 Assert.AreEqual(0,
                                 config.PointsGainedTotal,
                                 "Points should not be added to the PointsGainedTotal when negative");
-                Assert.Contains(description + " - " + points + " points",
+                Assert.Contains(description + " - " + points.ToString().Replace("-", "") + " points",
                                 config.PointsLostDescriptions,
                                 "The description and number of points should be added to the PointsLostDescriptions list");
             });
@@ -164,7 +164,7 @@ namespace IssueChecks
                 Assert.AreEqual(0,
                                 config.PointsGainedTotal,
                                 "Points should not be added to the PointsGainedTotal when negative");
-                Assert.Contains(description + " - " + points + " points",
+                Assert.Contains(description + " - " + points.ToString().Replace("-", "") + " points",
                                 config.PointsLostDescriptions,
                                 "The description and number of points should be added to the PointsLostDescriptions list");
                 Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Lost),
@@ -263,8 +263,8 @@ namespace IssueChecks
             IssueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
 
             List<string> descriptionList = new List<string>();
-            descriptionList.Add(descriptionOne + " - " + pointsOne + " points");
-            descriptionList.Add(descriptionTwo + " - " + pointsTwo + " points");
+            descriptionList.Add(descriptionOne + " - " + pointsOne.ToString().Replace("-", "") + " points");
+            descriptionList.Add(descriptionTwo + " - " + pointsTwo.ToString().Replace("-", "") + " points");
 
             Assert.Multiple(() =>
             {
@@ -311,7 +311,7 @@ namespace IssueChecks
                 Assert.Contains(descriptionPositive + " - " + pointsPositive + " points",
                                 config.PointsGainedDescriptions,
                                 "The description and number of points should be added to the PointsGainedDescriptions list");
-                Assert.Contains(descriptionNegative + " - " + pointsNegative + " points",
+                Assert.Contains(descriptionNegative + " - " + pointsNegative.ToString().Replace("-", "") + " points",
                                 config.PointsLostDescriptions,
                                 "The description and number of points should be added to the PointsLostDescriptions list");
             });
