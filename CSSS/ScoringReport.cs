@@ -91,6 +91,8 @@ namespace CSSS
             UpdatePointsLost();
             UpdatePointsTotal();
 
+            UpdateRunningTime();
+
             UpdateGainedPointsTitle();
             UpdateGainedPointsDetails();
 
@@ -139,6 +141,38 @@ namespace CSSS
 
             var pointsTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-total']");
             pointsTotal.InnerHtml = (pointsLost + pointsGained).ToString();
+        }
+
+        /// <summary>
+        /// Updates the amount of time since CSSS was initially started
+        /// 
+        /// <para>To get around reboots, where CSSS will have it's running
+        /// time reset, on the very first time this function is called a
+        /// hidden value is updated with the time it was updated at. From
+        /// then onwards, this value can be compared to the current time to
+        /// see the overall running time of the image</para>
+        /// </summary>
+        private void UpdateRunningTime()
+        {
+            var startTime = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='image-start-time']");
+
+            // If the saved start time is empty then CSSS is running on a
+            // fresh image (e.g. only just started) and not from a restart
+            // of the computer image
+            if (string.IsNullOrEmpty(startTime.InnerHtml))
+            {
+                // Save the current time to the HTML node for future use
+                startTime.InnerHtml = DateTime.UtcNow.ToString();
+            }
+
+            // Seeing the timespan between the image start and now
+            // See: http://stackoverflow.com/a/9017567
+            DateTime currentTime = DateTime.UtcNow;
+
+            TimeSpan runningTime = currentTime.Subtract(Convert.ToDateTime(startTime.InnerHtml));
+
+            var runtimeOverview = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-runtime']");
+            runtimeOverview.InnerHtml = runningTime.Hours + ":" + runningTime.Minutes.ToString("00");
         }
 
         /// <summary>
