@@ -87,6 +87,9 @@ namespace CSSS
         /// </summary>
         public void UpdateScoringReport()
         {
+            logger.Info("Scoring Report");
+            logger.Info("--------------");
+
             UpdatePointsGained();
             UpdatePointsLost();
             UpdatePointsTotal();
@@ -117,6 +120,7 @@ namespace CSSS
         {
             var pointsGained = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-scored']");
             pointsGained.InnerHtml = config.PointsGainedTotal.ToString();
+            logger.Info("  Points gained: {0}", pointsGained.InnerHtml);
         }
 
         /// <summary>
@@ -128,6 +132,7 @@ namespace CSSS
         {
             var pointsLost = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-lost']");
             pointsLost.InnerHtml = config.PointsLostTotal.ToString().Replace("-", "");
+            logger.Info("  Penalty points: {0}", pointsLost.InnerHtml);
         }
 
         /// <summary>
@@ -141,6 +146,7 @@ namespace CSSS
 
             var pointsTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-total']");
             pointsTotal.InnerHtml = (pointsLost + pointsGained).ToString();
+            logger.Info("  Total score: {0}", pointsTotal.InnerHtml);
         }
 
         /// <summary>
@@ -173,6 +179,7 @@ namespace CSSS
 
             var runtimeOverview = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-runtime']");
             runtimeOverview.InnerHtml = runningTime.Hours + ":" + runningTime.Minutes.ToString("00");
+            logger.Info("  Running time: {0}", runtimeOverview.InnerHtml);
         }
 
         /// <summary>
