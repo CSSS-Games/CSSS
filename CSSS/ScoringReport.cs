@@ -94,6 +94,9 @@ namespace CSSS
             UpdateGainedPointsTitle();
             UpdateGainedPointsDetails();
 
+            UpdatePenaltyPointsTitle();
+            UpdatePenaltyPointsDetails();
+
             SaveScoringReport();
         }
 
@@ -163,6 +166,33 @@ namespace CSSS
 
             var detailScored = ScoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-scored']");
             detailScored.InnerHtml = issueDescriptions.ToString();
+        }
+
+        /// <summary>
+        /// Updates the lost points (penalties) title in the HTML file
+        /// </summary>
+        private void UpdatePenaltyPointsTitle()
+        {
+            var penaltiesIssued = config.PointsLostDescriptions.Count;
+
+            var lostPointsTitle = ScoringReportHTML.DocumentNode.SelectSingleNode("//h3[@id='score-information-title-penalties']");
+            lostPointsTitle.InnerHtml = penaltiesIssued + " penalties have been triggered";
+        }
+
+        /// <summary>
+        /// Updates the lost points (penalties) details in the HTML file
+        /// </summary>
+        private void UpdatePenaltyPointsDetails()
+        {
+            StringBuilder penaltyDescriptions = new StringBuilder();
+
+            foreach (var penalties in config.PointsLostDescriptions)
+            {
+                penaltyDescriptions.AppendLine(penalties + "<br>");
+            }
+
+            var detailPenalties = ScoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-penalties']");
+            detailPenalties.InnerHtml = penaltyDescriptions.ToString();
         }
     }
 }
