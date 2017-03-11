@@ -146,10 +146,11 @@ namespace CSSS
         /// </summary>
         private void UpdateGainedPointsTitle()
         {
-            var issuesSolved = config.PointsGainedDescriptions.Count;
+            var issuesSolved = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-scored-total']");
+            issuesSolved.InnerHtml = config.PointsGainedDescriptions.Count.ToString();
 
-            var gainedPointsTitle = ScoringReportHTML.DocumentNode.SelectSingleNode("//h3[@id='score-information-title-scored']");
-            gainedPointsTitle.InnerHtml = issuesSolved + " issues scored out of " + config.TotalIssues;
+            var issuesTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-scored-total-issues']");
+            issuesTotal.InnerHtml = config.TotalIssues.ToString();
         }
 
         /// <summary>
@@ -175,8 +176,8 @@ namespace CSSS
         {
             var penaltiesIssued = config.PointsLostDescriptions.Count;
 
-            var lostPointsTitle = ScoringReportHTML.DocumentNode.SelectSingleNode("//h3[@id='score-information-title-penalties']");
-            lostPointsTitle.InnerHtml = penaltiesIssued + " penalties have been triggered";
+            var penaltiesTitleCount = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-penalties-total']");
+            penaltiesTitleCount.InnerHtml = penaltiesIssued.ToString();
         }
 
         /// <summary>
