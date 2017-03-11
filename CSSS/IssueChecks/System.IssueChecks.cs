@@ -63,7 +63,12 @@ namespace IssueChecks
                 // listed match with what is expected
                 for (int issue = 0; issue < issueFile.Issues.Count; issue++)
                 {
-                    config.TotalIssues += 1;
+                    // Adding to the total number of issue to find, but
+                    // only if the points available are more than 0
+                    if ((int)issueFile.Issues[issue].Points > 0)
+                    {
+                        config.TotalIssues += 1;
+                    }
 
                     var operatingSystemVerion = (string)issueFile.Issues[issue].Expected;
 
