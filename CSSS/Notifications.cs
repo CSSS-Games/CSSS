@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using CSSSConfig;
+using CSSSNotifications;
 using NLog;
 using System;
 
@@ -40,6 +41,12 @@ namespace CSSS
         private static Config config = Config.GetCurrentConfig;
 
         /// <summary>
+        /// Creating an instance of the notifications class, so the
+        /// relevant notification can be shown
+        /// </summary>
+        private static NotificationAPI notification = new NotificationAPI();
+
+        /// <summary>
         /// Generates and shows a desktop notification if one
         /// should be displayed
         /// 
@@ -60,6 +67,33 @@ namespace CSSS
             {
                 // Return early as there's nothing left to do in this class
                 logger.Debug("No points have been gained or lost, so not showing a notification");
+                return;
+            }
+
+            // Points have been gained
+            if ((config.pointsStatus.HasFlag(Config.PointsStatus.Gained)) &&
+                (!config.pointsStatus.HasFlag(Config.PointsStatus.Lost)))
+            {
+                logger.Debug("Points have been gained on this check run, so showing a 'gained' notification");
+                notification.PointsGained();
+                return;
+            }
+
+            // Points have been lost
+            if ((!config.pointsStatus.HasFlag(Config.PointsStatus.Gained)) &&
+                (config.pointsStatus.HasFlag(Config.PointsStatus.Lost)))
+            {
+                logger.Debug("Points have been lost on this check run, so showing a 'lost' notification");
+                notification.PointsLost();
+                return;
+            }
+
+            // Points have been changed
+            if ((config.pointsStatus.HasFlag(Config.PointsStatus.Gained)) &&
+                (config.pointsStatus.HasFlag(Config.PointsStatus.Lost)))
+            {
+                logger.Debug("Points have been gained and lost on this check run, so showing a 'changed' notification");
+                notification.PointsChanged();
                 return;
             }
         }
