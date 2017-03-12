@@ -16,6 +16,7 @@
 
 using CSSSNotifications;
 using System;
+using System.Drawing;
 
 namespace OS.WinNT
 {
@@ -27,7 +28,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsGained()
         {
-
+            ShowNotification("Points Gained", SystemIcons.Information);
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsLost()
         {
-
+            ShowNotification("Points Lost", SystemIcons.Error);
         }
 
         /// <summary>
@@ -45,7 +46,30 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsChanged()
         {
+            ShowNotification("Points Changed", SystemIcons.Warning);
+        }
 
+        /// <summary>
+        /// Shows the notification
+        /// 
+        /// See: http://stackoverflow.com/a/34956412
+        /// </summary>
+        /// <param name="TitleText">The text to display in the notification title</param>
+        /// <param name="NotificationIcon">The icon to show, see: https://msdn.microsoft.com/en-us/library/system.drawing.systemicons.aspx</param>
+        private void ShowNotification(string TitleText, Icon NotificationIcon)
+        {
+            var notification = new System.Windows.Forms.NotifyIcon()
+            {
+                Visible = true,
+                Icon = NotificationIcon,
+                BalloonTipText = TitleText
+            };
+
+            // Display for 5 seconds
+            notification.ShowBalloonTip(5000);
+
+            // The notification should be disposed when you don't need it anymore
+            notification.Dispose();
         }
     }
 }
