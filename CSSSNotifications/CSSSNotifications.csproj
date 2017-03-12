@@ -34,6 +34,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Notification.cs" />
+    <Compile Include="OS\Linux\Notification.Linux.cs" />
+    <Compile Include="OS\WinNT\Notification.WinNT.cs" />
+    <Compile Include="NotificationAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
@@ -43,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="OS\" />
+    <Folder Include="OS\Linux\" />
+    <Folder Include="OS\WinNT\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
