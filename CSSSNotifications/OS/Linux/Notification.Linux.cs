@@ -16,6 +16,7 @@
 
 using CSSSNotifications;
 using System;
+using System.Diagnostics;
 
 namespace OS.Linux
 {
@@ -55,21 +56,21 @@ namespace OS.Linux
         /// <param name="NotificationIcon">The icon to show, see: https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html</param>
         private void ShowNotification(string TitleText, string NotificationIcon)
         {
+            // For Linux, the program is called notify-send (libnotify-bin package)
+            var notificationProgram = "notify-send";
             var notificationParameters = "-t 5 \"" + TitleText + "\" --icon=" + NotificationIcon;
 
             try
             {
-                // For Linux, the program is called notify-send (libnotify-bin package)
-                System.Diagnostics.Process.Start("notify-send", notificationParameters);
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.Arguments = " " + notificationParameters;
+                p.StartInfo.FileName = notificationProgram;
+                p.Start();
             }
-            catch (Exception e)
+            catch (System.ComponentModel.Win32Exception)
             {
-                // It's probably not possible to get here, as trying
-                // to display the notification without 'libnotify-bin'
-                // installed shows a message of (at least for Debian):
-                //   xdg-open: unexpected option 't'
-                //   Try 'xdg-open --help' for more information
-                logger.Debug("Exception thrown when trying to display desktop notification: {0}", e.Message);
                 logger.Warn("Unable to show desktop notification. Is the 'libnotify-bin' package installed?");
             }
         }
