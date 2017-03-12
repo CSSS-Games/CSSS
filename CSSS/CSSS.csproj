@@ -69,6 +69,10 @@
       <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
       <Name>CSSSCheckerEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSSSNotifications\CSSSNotifications.csproj">
+      <Project>{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}</Project>
+      <Name>CSSSNotifications</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IssueChecks\" />
