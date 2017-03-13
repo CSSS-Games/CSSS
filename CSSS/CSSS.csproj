@@ -26,9 +26,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -37,6 +34,9 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.4.4.4\lib\net40\NLog.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -47,6 +47,7 @@
     <Compile Include="IssueChecks\System.IssueChecks.cs" />
     <Compile Include="IssueChecks\IssueChecks.cs" />
     <Compile Include="ScoringReport.cs" />
+    <Compile Include="Notifications.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
       <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
       <Name>CSSSCheckerEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSSSNotifications\CSSSNotifications.csproj">
+      <Project>{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}</Project>
+      <Name>CSSSNotifications</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
