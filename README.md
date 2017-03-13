@@ -38,28 +38,48 @@ Double-clicking on CSSS will cause it to quickly show the usage window, then clo
 
 These arguments have been chosen to spell 'COPS', as competitors are 'policing' the security of the computer.
 
-Under normal image building, the 'o' option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+Under normal image building, the '-o' option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+
+## Contributing
+Thanks for your interest in contributing to this project. You can contribute or report issues in the following ways:
+
+### Pull Requests
+If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
+
+The current development environment is with Xamarin Studio Community 6.2 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
+
+## License Terms
+CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
+
+### NuGet Packages
+This project uses NuGet packages. Their project source code pages and licenses can be found below:
+* [HtmlAgilityPack](https://htmlagilitypack.codeplex.com/)
+* [Newtonsoft.Json](http://www.newtonsoft.com/json)
+* [NLog](http://nlog-project.org/)
+* [NUnit](https://www.nunit.org/)
+
+### Other Projects
+The following projects and source code are included in CSSS. Their licenses project pages can be found below:
+* [OSVersionInfo](https://www.codeproject.com/Articles/73000/Getting-Operating-System-Version-Info-Even-for-Win)
 
 ## To-Do
 These are the tasks planned for each release version. Please note that these can change without warning, depending on how features are progressing.
 
-### Version 0.2
-* ~~Create checker system engine and initial check template files (to check the Operating System version, for example)~~
-* Show notifications should points be gained or lost
-* ~~Generate a scoring report~~
-
 ### Version 0.3
-* Create a "guardian" service that can run CSSS when the computer starts (service should be set as disabled when installed, but when the '-p' option is passed it would be set up automatic)
+* Perform various tasks when the '-p' argument is passed:
+  * Set issue check files to be encrypted, so that images can be released but competitors can not find out what "issues" need to be fixed
+  * Add files to the relevant Operating System startup folders, so that CSSS will start automatically:
+    * [Windows shortcut](http://stackoverflow.com/a/19914018) in [Programdata startup folder](https://www.kiloroot.com/all-users-or-common-startup-folder-locations-launch-programs-at-window-login-windows-server-2008-r2-2012-2012-r2/)
+    * [Linux](http://raspberrypi.stackexchange.com/a/5159)
+  * Shutdown the computer to allow an image to be taken
+* Comment and coding style tidy-up
 
 ### Version 0.4
-* Allow check files to be encrypted when '-p' is passed, so that images can be released but competitors can not find out what "issues" need to be fixed
-
-### Version 0.5
 * Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)
 * Install additional software when CSSS is being installed to make sure all items are available for it to use
 * Create build scripts that install software that can be used when testing the checker system engine
 
-### Versions 0.6 onward
+### Versions 0.5 onward
 * Create more check template files and relevant classes for the checker system engine to use (a new version for each check "category")
 * Create some example checker files with instructions to create images based around them with pre-made questions and scenarios
 
