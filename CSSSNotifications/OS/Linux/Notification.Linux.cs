@@ -28,7 +28,7 @@ namespace OS.Linux
         /// </summary>
         public override void PointsGained()
         {
-            ShowNotification("Points Gained", "dialog-information");
+            ShowNotification(NotificationMessageTextPointsGained, "dialog-information");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace OS.Linux
         /// </summary>
         public override void PointsLost()
         {
-            ShowNotification("Points Lost", "dialog-error");
+            ShowNotification(NotificationMessageTextPointsLost, "dialog-error");
         }
 
         /// <summary>
@@ -46,19 +46,22 @@ namespace OS.Linux
         /// </summary>
         public override void PointsChanged()
         {
-            ShowNotification("Points Changed", "dialog-warning");
+            ShowNotification(NotificationMessageTextPointsChanged, "dialog-warning");
         }
 
         /// <summary>
         /// Shows the notification
+        /// 
+        /// See: https://wiki.archlinux.org/index.php/Desktop_notifications
         /// </summary>
-        /// <param name="TitleText">The text to display in the notification title</param>
+        /// <param name="NotificationMessage">The message to show to the competitor</param>
         /// <param name="NotificationIcon">The icon to show, see: https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html</param>
-        private void ShowNotification(string TitleText, string NotificationIcon)
+        /// <param name="NotificationTitle">The text to display in the notification title</param>
+        private void ShowNotification(string NotificationMessage, string NotificationIcon, string NotificationTitle = NotificationTitleText)
         {
             // For Linux, the program is called notify-send (libnotify-bin package)
             var notificationProgram = "notify-send";
-            var notificationParameters = "-t 5 \"" + TitleText + "\" --icon=" + NotificationIcon;
+            var notificationParameters = "-t 5 \"" + NotificationTitle + "\" \"" + NotificationMessage + "\" --icon=" + NotificationIcon;
 
             try
             {

@@ -28,7 +28,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsGained()
         {
-            ShowNotification("Points Gained", SystemIcons.Information);
+            ShowNotification(NotificationMessageTextPointsGained, SystemIcons.Information);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsLost()
         {
-            ShowNotification("Points Lost", SystemIcons.Error);
+            ShowNotification(NotificationMessageTextPointsLost, SystemIcons.Error);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsChanged()
         {
-            ShowNotification("Points Changed", SystemIcons.Warning);
+            ShowNotification(NotificationMessageTextPointsChanged, SystemIcons.Warning);
         }
 
         /// <summary>
@@ -54,15 +54,17 @@ namespace OS.WinNT
         /// 
         /// See: http://stackoverflow.com/a/34956412
         /// </summary>
-        /// <param name="TitleText">The text to display in the notification title</param>
+        /// <param name="NotificationMessage">The message to show to the competitor</param>
         /// <param name="NotificationIcon">The icon to show, see: https://msdn.microsoft.com/en-us/library/system.drawing.systemicons.aspx</param>
-        private void ShowNotification(string TitleText, Icon NotificationIcon)
+        /// <param name="NotificationTitle">The text to display in the notification title</param>
+        private void ShowNotification(string NotificationMessage, Icon NotificationIcon, string NotificationTitle = NotificationTitleText)
         {
             var notification = new System.Windows.Forms.NotifyIcon()
             {
                 Visible = true,
                 Icon = NotificationIcon,
-                BalloonTipText = TitleText
+                BalloonTipText = NotificationMessage,
+                BalloonTipTitle = NotificationTitle
             };
 
             // Display for 5 seconds
