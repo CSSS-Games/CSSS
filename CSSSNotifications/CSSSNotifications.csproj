@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4FEAF488-4BAB-47C0-A4BC-BA850512D34A}</ProjectGuid>
+    <ProjectGuid>{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CSSSTests</RootNamespace>
-    <AssemblyName>CSSSTests</AssemblyName>
+    <RootNamespace>CSSSNotifications</RootNamespace>
+    <AssemblyName>CSSSNotifications</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,45 +17,43 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.3.6.1\lib\net40\nunit.framework.dll</HintPath>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.4.4.4\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.cs" />
-    <Compile Include="BootstrapTests.cs" />
-    <Compile Include="InitTests.cs" />
-    <Compile Include="KernelTests.cs" />
-    <Compile Include="IssueChecks\IssueChecksTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Notification.cs" />
+    <Compile Include="OS\Linux\Notification.Linux.cs" />
+    <Compile Include="OS\WinNT\Notification.WinNT.cs" />
+    <Compile Include="NotificationAPI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
+      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
+      <Name>CSSSConfig</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSSS\CSSS.csproj">
-      <Project>{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}</Project>
-      <Name>CSSS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
-      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
-      <Name>CSSSConfig</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
-      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
-      <Name>CSSSCheckerEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IssueChecks\" />
+    <Folder Include="OS\" />
+    <Folder Include="OS\Linux\" />
+    <Folder Include="OS\WinNT\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,13 +8,14 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using CSSS;
+using CSSSConfig;
 using NUnit.Framework;
 using System;
 
@@ -28,6 +29,8 @@ namespace CSSSTests
     {
         private Bootstrap bootstrapChecks;
 
+        private static Config config;
+
         /// <summary>
         /// Creates an instance of the bootstrap class
         /// </summary>
@@ -35,6 +38,7 @@ namespace CSSSTests
         protected void SetUp()
         {
             bootstrapChecks = new Bootstrap();
+            config = Config.GetCurrentConfig;
         }
 
         /// <summary>
@@ -44,6 +48,7 @@ namespace CSSSTests
         protected void TearDown()
         {
             bootstrapChecks = null;
+            config = null;
         }
 
         /// <summary>
@@ -55,16 +60,9 @@ namespace CSSSTests
         {
             string[] emptyArguments = new string[0];
 
-            Assert.Multiple(() =>
-            {
-                Assert.IsFalse(bootstrapChecks.CheckArguments(emptyArguments),
-                               "Empty arguments to CSSS should not continue execution"
-                              );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Help,
-                                bootstrapChecks.bootstrapResult,
-                                "Mode for CSSS should be 'Help' if no arguments are passed"
-                               );
-            });
+            Assert.IsFalse(bootstrapChecks.CheckArguments(emptyArguments),
+                           "Empty arguments to CSSS should not continue execution"
+                          );
         }
 
         /// <summary>
@@ -81,8 +79,8 @@ namespace CSSSTests
                 Assert.IsFalse(bootstrapChecks.CheckArguments(helpShortArgument),
                                "'-h' argument passed to CSSS should not continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Help,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Help,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Help' if '-h' argument is passed"
                                );
             });
@@ -102,8 +100,8 @@ namespace CSSSTests
                 Assert.IsFalse(bootstrapChecks.CheckArguments(helpLongArgument),
                                "'--help' argument passed to CSSS should not continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Help,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Help,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Help' if '--help' argument is passed"
                                );
             });
@@ -123,8 +121,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(checkShortArgument),
                                "'-c' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Check,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Check,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Check' if '-c' argument is passed"
                                );
             });
@@ -144,8 +142,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(checkLongArgument),
                                "'--check' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Check,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Check,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Check' if '--check' argument is passed"
                                );
             });
@@ -165,8 +163,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(observeShortArgument),
                                "'-o' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual((Bootstrap.BootstrapOptions.Check | Bootstrap.BootstrapOptions.Observe),
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Observe),
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Check, Observe' if '-o' argument is passed"
                                );
             });
@@ -186,8 +184,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(observeLongArgument),
                                "'--observe' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual((Bootstrap.BootstrapOptions.Check | Bootstrap.BootstrapOptions.Observe),
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Observe),
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Check, Observe' if '--observe' argument is passed"
                                );
             });
@@ -207,8 +205,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(prepareShortArgument),
                                "'-p' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual((Bootstrap.BootstrapOptions.Check | Bootstrap.BootstrapOptions.Prepare),
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Prepare),
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Check, Prepare' if '-p' argument is passed"
                                );
             });
@@ -228,8 +226,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(prepareLongArgument),
                                "'--prepare' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual((Bootstrap.BootstrapOptions.Check | Bootstrap.BootstrapOptions.Prepare),
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Prepare),
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Check, Prepare' if '--prepare' argument is passed"
                                );
             });
@@ -249,8 +247,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(startShortArgument),
                                "'-s' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Start,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Start,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Start' if '-s' argument is passed"
                                );
             });
@@ -270,8 +268,8 @@ namespace CSSSTests
                 Assert.IsTrue(bootstrapChecks.CheckArguments(startLongArgument),
                                "'--start' argument passed to CSSS should continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Start,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Start,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Start' if '--start' argument is passed"
                                );
             });
@@ -294,8 +292,8 @@ namespace CSSSTests
                 Assert.IsFalse(bootstrapChecks.CheckArguments(unknownArgument),
                                "Unknown argument passed to CSSS should not continue execution"
                               );
-                Assert.AreEqual(Bootstrap.BootstrapOptions.Help,
-                                bootstrapChecks.bootstrapResult,
+                Assert.AreEqual(Config.CSSSModes.Help,
+                                config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Help' if an unknown argument is passed"
                                );
             });

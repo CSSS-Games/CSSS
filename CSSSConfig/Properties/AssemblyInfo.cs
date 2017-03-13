@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("CSSSSupportLibrary")]
-[assembly: AssemblyDescription("Cyber Security Scoring System - Support Library")]
+[assembly: AssemblyTitle("CSSSConfig")]
+[assembly: AssemblyDescription("Cyber Security Scoring System - Config")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]

@@ -1,0 +1,12 @@
+﻿{
+    "Category": "issues.system.version",
+    "SupportedOS": "all",
+    "Issues": [
+        {
+            "Description": "The Operating System has been updated to the latest version",
+            "Points": 5,
+            "Triggered": false,
+            "Expected": "14.04.5"
+        }
+    ]
+}

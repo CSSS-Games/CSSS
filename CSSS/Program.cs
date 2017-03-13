@@ -8,7 +8,7 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
@@ -16,6 +16,7 @@
 
 using NLog;
 using System;
+using System.Threading;
 
 namespace CSSS
 {
@@ -50,8 +51,42 @@ namespace CSSS
                 return 10;
             }
 
+            // Creating an instance of the CSSS kernel so that tasks
+            // can be co-ordinated. The constructor will throw an
+            // error if the init class tasks have not been performed
+            try
+            {
+                var kernel = new Kernel();
+
+                // Starting the main run loop to keep the kernel performing
+                // tasks, or if the response from the function is true,
+                // break out of the loop. After performing the kernel tasks,
+                // the thread sleeps for a minute to prevent the checks
+                // being run constantly
+                bool shouldExit = false;
+                logger.Debug("Starting main run loop");
+                while (!shouldExit)
+                {
+                    shouldExit = kernel.PerformTasks();
+
+                    // This loop should sleep for a minute if the kernel
+                    // tasks have not been finished
+                    if (!shouldExit)
+                    {
+                        logger.Debug("Sleeping main run loop before re-running kernel tasks");
+                        Thread.Sleep(60000);
+                    }
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                logger.Fatal("An error occurred trying to run CSSS: {0}", e.Message);
+                return 20;
+            }
+
             // Goodbye
-            Console.ReadLine();
+            logger.Info("CSSS has finished performing any needed tasks");
+            //Console.ReadLine();
             return 0;
         }
     }

@@ -1,4 +1,4 @@
-﻿//  CSSSTests - CyberSecurity Scoring System Tests
+﻿//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
 //  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -14,15 +14,18 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using NUnit.Framework;
+using NLog;
 using System;
-namespace CSSSTests
+
+namespace CSSSCheckerEngine
 {
-    [TestFixture()]
-    public class Test
+    /// <summary>
+    /// The main interface to the checker engine to call the various
+    /// checks against the "issues" to see if they have been fixed
+    /// </summary>
+    public class CSSSCheckerEngine
     {
-        [Test()]
-        public void TestCase()
+        public CSSSCheckerEngine()
         {
         }
     }

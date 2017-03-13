@@ -8,12 +8,13 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using CSSSConfig;
 using NLog;
 using System;
 
@@ -29,24 +30,10 @@ namespace CSSS
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// The values that can be returned from this class, once the
-        /// argument checks have been carried out
+        /// Creating an instance of the CSSS config class, to be
+        /// able to read and set values for it
         /// </summary>
-        [Flags]
-        public enum BootstrapOptions
-        {
-            Help = 0x0,
-            Check = 0x1,
-            Prepare = 0x2,
-            Observe = 0x4,
-            Start = 0x8
-        }
-
-        /// <summary>
-        /// The result of the argument checks, used to decide the next
-        /// step CSSS should take
-        /// </summary>
-        public BootstrapOptions bootstrapResult { get; set; }
+        private static Config config = Config.GetCurrentConfig;
 
         public Bootstrap()
         {
@@ -105,38 +92,38 @@ namespace CSSS
                 {
                     case "c":
                     case "check":
-                        bootstrapResult = BootstrapOptions.Check;
+                        config.CSSSProgramMode = Config.CSSSModes.Check;
                         canStart = true;
                         break;
 
                     case "o":
                     case "observe":
-                        bootstrapResult = BootstrapOptions.Check | BootstrapOptions.Observe;
+                        config.CSSSProgramMode = Config.CSSSModes.Check | Config.CSSSModes.Observe;
                         canStart = true;
                         break;
 
                     case "p":
                     case "prepare":
-                        bootstrapResult = BootstrapOptions.Check | BootstrapOptions.Prepare;
+                        config.CSSSProgramMode = Config.CSSSModes.Check | Config.CSSSModes.Prepare;
                         canStart = true;
                         break;
 
                     case "s":
                     case "start":
-                        bootstrapResult = BootstrapOptions.Start;
+                        config.CSSSProgramMode = Config.CSSSModes.Start;
                         canStart = true;
                         break;
 
                     case "h":
                     case "help":
                     default:
-                        bootstrapResult = BootstrapOptions.Help;
+                        config.CSSSProgramMode = Config.CSSSModes.Help;
                         ShowUsage();
                         break;
                 }
             }
 
-            logger.Debug("Actions to perform: {0}", bootstrapResult);
+            logger.Debug("Actions to perform: {0}", config.CSSSProgramMode);
             logger.Debug("CSSS can continue: {0}", canStart);
 
             return canStart;

@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>CSSS</RootNamespace>
-    <AssemblyName>CSSS</AssemblyName>
+    <ProjectGuid>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CSSSCheckerEngine</RootNamespace>
+    <AssemblyName>CSSSCheckerEngine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,65 +17,58 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net40\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.4.4.4\lib\net40\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="CheckerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Bootstrap.cs" />
-    <Compile Include="Init.cs" />
-    <Compile Include="Kernel.cs" />
-    <Compile Include="IssueChecks\System.IssueChecks.cs" />
-    <Compile Include="IssueChecks\IssueChecks.cs" />
-    <Compile Include="ScoringReport.cs" />
-    <Compile Include="Notifications.cs" />
+    <Compile Include="Checker\System\Version.System.Checker.cs" />
+    <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
+    <Compile Include="OS\WinNT\System\Version.System.WinNT.OS.cs" />
+    <Compile Include="CheckAPI\System\Version.System.CheckAPI.cs" />
+    <Compile Include="IssueFiles.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="ScoringReport.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="Issues\System\Version.System.Issues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
-      <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
-      <Name>CSSSSupportLibrary</Name>
-    </ProjectReference>
+    <Folder Include="Checker\" />
+    <Folder Include="Checker\System\" />
+    <Folder Include="OS\" />
+    <Folder Include="OS\Linux\" />
+    <Folder Include="OS\Linux\System\" />
+    <Folder Include="OS\WinNT\" />
+    <Folder Include="OS\WinNT\System\" />
+    <Folder Include="CheckAPI\" />
+    <Folder Include="CheckAPI\System\" />
+    <Folder Include="Issues\" />
+    <Folder Include="Issues\System\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
       <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
       <Name>CSSSConfig</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
-      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
-      <Name>CSSSCheckerEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSSSNotifications\CSSSNotifications.csproj">
-      <Project>{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}</Project>
-      <Name>CSSSNotifications</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IssueChecks\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
