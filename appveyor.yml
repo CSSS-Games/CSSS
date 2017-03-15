@@ -1,7 +1,7 @@
 #---------------------------------#
 #      general configuration      #
 #---------------------------------#
-version: 0.2.{build}-{branch}
+version: 0.3.{build}-{branch}
 
 #---------------------------------#
 #    environment configuration    #
