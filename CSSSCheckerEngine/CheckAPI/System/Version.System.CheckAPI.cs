@@ -41,11 +41,11 @@ namespace CheckAPI.System
         /// Compares the current running Operating System version against
         /// the expected number in the issue check file
         /// </summary>
-        /// <param name="OperatingSystemVersion">The Operating System version to compare with the one running</param>
+        /// <param name="operatingSystemVersion">The Operating System version to compare with the one running</param>
         /// <returns><c>true</c>, if OS version matches what is expecteded, <c>false</c> otherwise</returns>
-        public bool ExpectedOSVersion(string OperatingSystemVersion)
+        public bool ExpectedOSVersion(string operatingSystemVersion)
         {
-            return VersionSystemFactory.GetCurrentOperatingSystemClass().ExpectedOSVersion(OperatingSystemVersion);
+            return VersionSystemFactory.GetCurrentOperatingSystemClass().ExpectedOSVersion(operatingSystemVersion);
         }
     }
 }

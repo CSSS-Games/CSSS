@@ -25,14 +25,14 @@ namespace OS.WinNT.System
         /// Gets a value indicating whether the OS version currently
         /// installed matches what is expected in the issue json file
         /// </summary>
-        /// <param name="OperatingSystemVersion">The Operating System version to compare with the one running</param>
+        /// <param name="operatingSystemVersion">The Operating System version to compare with the one running</param>
         /// <value><c>true</c> if expected OS Version; otherwise, <c>false</c></value>
-        public override bool ExpectedOSVersion(string OperatingSystemVersion)
+        public override bool ExpectedOSVersion(string operatingSystemVersion)
         {
             // The current Operating System version is stored in the
             // config class when the init class is run, so the value
             // from there can be checked against what is expected
-            if (config.OperatingSystemVersion == OperatingSystemVersion)
+            if (config.OperatingSystemVersion == operatingSystemVersion)
             {
                 return true;
             }
