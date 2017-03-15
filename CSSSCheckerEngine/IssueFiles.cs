@@ -48,7 +48,7 @@ namespace CSSSCheckerEngine
         /// </summary>
         /// <see cref="LintAllIssueFiles"/>
         /// <see cref="LoadAllIssueFiles"/>
-        private bool IssueFilesHaveBeenLinted = false;
+        private bool issueFilesHaveBeenLinted = false;
 
         public IssueFiles()
         {
@@ -62,38 +62,38 @@ namespace CSSSCheckerEngine
         {
             logger.Info("Preparing to lint all issue files");
 
-            bool FilesLintedSuccessfully = true;
+            bool filesLintedSuccessfully = true;
 
-            string[] IssueFiles = GetAllIssueFiles();
+            string[] issueFiles = GetAllIssueFiles();
 
-            foreach (string IssueFilePath in IssueFiles)
+            foreach (string issueFilePath in issueFiles)
             {
-                logger.Debug("Preparing to lint issue file located at: {0}", IssueFilePath);
+                logger.Debug("Preparing to lint issue file located at: {0}", issueFilePath);
 
-                if (!LintIssueFile(IssueFilePath))
+                if (!LintIssueFile(issueFilePath))
                 {
-                    FilesLintedSuccessfully = false;
+                    filesLintedSuccessfully = false;
                 }
             }
 
             logger.Info("Finished linting all issue files");
-            logger.Debug("Successful linting of all issue files: {0}", FilesLintedSuccessfully);
-            IssueFilesHaveBeenLinted = FilesLintedSuccessfully;
-            return FilesLintedSuccessfully;
+            logger.Debug("Successful linting of all issue files: {0}", filesLintedSuccessfully);
+            issueFilesHaveBeenLinted = filesLintedSuccessfully;
+            return filesLintedSuccessfully;
         }
 
         /// <summary>
         /// Lints the issue file passed to the function
         /// </summary>
         /// <returns><c>true</c>, if file was successfully linted, <c>false</c> otherwise</returns>
-        /// <param name="IssueFilePath">The full path to the issue file</param>
-        public bool LintIssueFile(string IssueFilePath)
+        /// <param name="issueFilePath">The full path to the issue file</param>
+        public bool LintIssueFile(string issueFilePath)
         {
-            var issueFileContent = File.ReadAllText(IssueFilePath);
+            var issueFileContent = File.ReadAllText(issueFilePath);
 
             try
             {
-                dynamic IssueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
+                dynamic issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
                                         {
                                             Error = HandleDeserializationError
                                         });
@@ -101,13 +101,13 @@ namespace CSSSCheckerEngine
             catch (JsonSerializationException e)
             {
                 // There was a problem parsing the JSON file
-                logger.Error("The issue file at \"{0}\" could not be linted correctly", IssueFilePath);
+                logger.Error("The issue file at \"{0}\" could not be linted correctly", issueFilePath);
                 logger.Error("The error message is: {0}", e.Message);
                 return false;
             }
 
             // The JSON format of this file is fine
-            logger.Debug("The issue file at \"{0}\" was linted correctly", IssueFilePath);
+            logger.Debug("The issue file at \"{0}\" was linted correctly", issueFilePath);
             return true;
         }
 
@@ -119,17 +119,17 @@ namespace CSSSCheckerEngine
         {
             logger.Info("Preparing to load all issue files");
 
-            if (!IssueFilesHaveBeenLinted)
+            if (!issueFilesHaveBeenLinted)
             {
                 logger.Warn("Issue files have not been linted, there may be problems loading them");
             }
 
-            string[] IssueFiles = GetAllIssueFiles();
+            string[] issueFiles = GetAllIssueFiles();
 
-            foreach (string IssueFilePath in IssueFiles)
+            foreach (string issueFilePath in issueFiles)
             {
-                logger.Debug("Preparing to load issue file located at: {0}", IssueFilePath);
-                LoadIssueFile(IssueFilePath);
+                logger.Debug("Preparing to load issue file located at: {0}", issueFilePath);
+                LoadIssueFile(issueFilePath);
             }
 
             logger.Info("Finished loading all issue files");
@@ -139,25 +139,25 @@ namespace CSSSCheckerEngine
         /// Loads an issue file and saves the JSON structure of it
         /// in the CSSSConfig class
         /// </summary>
-        /// <param name="IssueFilePath">The full path to the issue file</param>
-        private void LoadIssueFile(string IssueFilePath)
+        /// <param name="issueFilePath">The full path to the issue file</param>
+        private void LoadIssueFile(string issueFilePath)
         {
-            var issueFileContent = File.ReadAllText(IssueFilePath);
+            var issueFileContent = File.ReadAllText(issueFilePath);
 
             try
             {
-                dynamic IssueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
+                dynamic issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
                 {
                     Error = HandleDeserializationError
                 });
 
-                logger.Debug("Issue file category: {0}", IssueFileJSON.Category);
-                config.AddIssueFile((string)IssueFileJSON.Category, IssueFileJSON);
+                logger.Debug("Issue file category: {0}", issueFileJSON.Category);
+                config.AddIssueFile((string)issueFileJSON.Category, issueFileJSON);
             }
             catch (JsonSerializationException e)
             {
                 // There was a problem loading the JSON file
-                logger.Error("The issue file at \"{0}\" could not be loaded correctly", IssueFilePath);
+                logger.Error("The issue file at \"{0}\" could not be loaded correctly", issueFilePath);
                 throw new Exception("An unknown problem occurred when trying to load an issue file: " + e.Message);
             }
             catch (OperationCanceledException e)
@@ -167,7 +167,7 @@ namespace CSSSCheckerEngine
             }
 
             // The JSON format of this file is fine
-            logger.Debug("The issue file at \"{0}\" has been loaded", IssueFilePath);
+            logger.Debug("The issue file at \"{0}\" has been loaded", issueFilePath);
         }
 
         /// <summary>

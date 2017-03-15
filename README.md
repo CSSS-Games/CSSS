@@ -72,7 +72,7 @@ These are the tasks planned for each release version. Please note that these can
     * [Windows shortcut](http://stackoverflow.com/a/19914018) in [Programdata startup folder](https://www.kiloroot.com/all-users-or-common-startup-folder-locations-launch-programs-at-window-login-windows-server-2008-r2-2012-2012-r2/)
     * [Linux](http://raspberrypi.stackexchange.com/a/5159)
   * Shutdown the computer to allow an image to be taken
-* Comment and coding style tidy-up
+* Comment ~~and coding style~~ tidy-up
 
 ### Version 0.4
 * Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)

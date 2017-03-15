@@ -28,7 +28,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsGained()
         {
-            ShowNotification(NotificationMessageTextPointsGained, SystemIcons.Information);
+            ShowNotification(notificationMessageTextPointsGained, SystemIcons.Information);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsLost()
         {
-            ShowNotification(NotificationMessageTextPointsLost, SystemIcons.Error);
+            ShowNotification(notificationMessageTextPointsLost, SystemIcons.Error);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsChanged()
         {
-            ShowNotification(NotificationMessageTextPointsChanged, SystemIcons.Warning);
+            ShowNotification(notificationMessageTextPointsChanged, SystemIcons.Warning);
         }
 
         /// <summary>
@@ -54,17 +54,17 @@ namespace OS.WinNT
         /// 
         /// See: http://stackoverflow.com/a/34956412
         /// </summary>
-        /// <param name="NotificationMessage">The message to show to the competitor</param>
-        /// <param name="NotificationIcon">The icon to show, see: https://msdn.microsoft.com/en-us/library/system.drawing.systemicons.aspx</param>
-        /// <param name="NotificationTitle">The text to display in the notification title</param>
-        private void ShowNotification(string NotificationMessage, Icon NotificationIcon, string NotificationTitle = NotificationTitleText)
+        /// <param name="message">The message to show to the competitor</param>
+        /// <param name="icon">The icon to show, see: https://msdn.microsoft.com/en-us/library/system.drawing.systemicons.aspx</param>
+        /// <param name="title">The text to display in the notification title</param>
+        private void ShowNotification(string message, Icon icon, string title = notificationTitleText)
         {
             var notification = new System.Windows.Forms.NotifyIcon()
             {
                 Visible = true,
-                Icon = NotificationIcon,
-                BalloonTipText = NotificationMessage,
-                BalloonTipTitle = NotificationTitle
+                Icon = icon,
+                BalloonTipText = message,
+                BalloonTipTitle = title
             };
 
             // Display for 5 seconds
