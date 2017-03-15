@@ -35,10 +35,10 @@ namespace CSSSNotifications
         protected static Config config = Config.GetCurrentConfig;
 
         // The notification message and title text to display
-        protected const string NotificationTitleText = "CyberSecurity Scoring System";
-        protected const string NotificationMessageTextPointsGained = "Points have been gained";
-        protected const string NotificationMessageTextPointsChanged = "Points have been changed";
-        protected const string NotificationMessageTextPointsLost = "Points have been lost";
+        protected const string notificationTitleText = "CyberSecurity Scoring System";
+        protected const string notificationMessageTextPointsGained = "Points have been gained";
+        protected const string notificationMessageTextPointsChanged = "Points have been changed";
+        protected const string notificationMessageTextPointsLost = "Points have been lost";
 
         /// <summary>
         /// Displays a positive notification to the competitor to

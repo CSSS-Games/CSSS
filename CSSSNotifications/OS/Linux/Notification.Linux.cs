@@ -28,7 +28,7 @@ namespace OS.Linux
         /// </summary>
         public override void PointsGained()
         {
-            ShowNotification(NotificationMessageTextPointsGained, "dialog-information");
+            ShowNotification(notificationMessageTextPointsGained, "dialog-information");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace OS.Linux
         /// </summary>
         public override void PointsLost()
         {
-            ShowNotification(NotificationMessageTextPointsLost, "dialog-error");
+            ShowNotification(notificationMessageTextPointsLost, "dialog-error");
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace OS.Linux
         /// </summary>
         public override void PointsChanged()
         {
-            ShowNotification(NotificationMessageTextPointsChanged, "dialog-warning");
+            ShowNotification(notificationMessageTextPointsChanged, "dialog-warning");
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace OS.Linux
         /// 
         /// See: https://wiki.archlinux.org/index.php/Desktop_notifications
         /// </summary>
-        /// <param name="NotificationMessage">The message to show to the competitor</param>
-        /// <param name="NotificationIcon">The icon to show, see: https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html</param>
-        /// <param name="NotificationTitle">The text to display in the notification title</param>
-        private void ShowNotification(string NotificationMessage, string NotificationIcon, string NotificationTitle = NotificationTitleText)
+        /// <param name="message">The message to show to the competitor</param>
+        /// <param name="icon">The icon to show, see: https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html</param>
+        /// <param name="title">The text to display in the notification title</param>
+        private void ShowNotification(string message, string icon, string title = notificationTitleText)
         {
             // For Linux, the program is called notify-send (libnotify-bin package)
             var notificationProgram = "notify-send";
-            var notificationParameters = "-t 5 \"" + NotificationTitle + "\" \"" + NotificationMessage + "\" --icon=" + NotificationIcon;
+            var notificationParameters = "-t 5 \"" + title + "\" \"" + message + "\" --icon=" + icon;
 
             try
             {
