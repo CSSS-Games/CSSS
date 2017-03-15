@@ -42,16 +42,16 @@ namespace IssueChecks
         /// class and return the JSON content to the calling function
         /// </summary>
         /// <returns>The issue file JSON contents, or <c>false</c> otherwise</returns>
-        /// <param name="IssueFileCategory">The category of the issue file</param>
-        public dynamic LoadIssueFile(string IssueFileCategory)
+        /// <param name="issueFileCategory">The category of the issue file</param>
+        public dynamic LoadIssueFile(string issueFileCategory)
         {
             try
             {
-                return config.GetIssueFile(IssueFileCategory);
+                return config.GetIssueFile(issueFileCategory);
             }
             catch (KeyNotFoundException e)
             {
-                logger.Debug("Not performing checks for category \"{0}\": {1}", IssueFileCategory, e.Message);
+                logger.Debug("Not performing checks for category \"{0}\": {1}", issueFileCategory, e.Message);
                 return false;
             }
         }
@@ -94,21 +94,21 @@ namespace IssueChecks
         /// </code>
         /// </para>
         /// </summary>
-        /// <param name="Points">The points to add to the current total score</param>
-        /// <param name="Description">The description of the issue</param>
-        /// <param name="Triggered">If set to <c>true</c> then the user doesn't need to be notified</param>
-        public void PointsScored(int Points, string Description, bool Triggered)
+        /// <param name="points">The points to add to the current total score</param>
+        /// <param name="description">The description of the issue</param>
+        /// <param name="triggered">If set to <c>true</c> then the user doesn't need to be notified</param>
+        public void PointsScored(int points, string description, bool triggered)
         {
             // Seeing if the user should be notified about the points
             // being scored. They should be if the issue has not been
             // triggered before
-            if (!Triggered)
+            if (!triggered)
             {
                 var pointsStatus = new Config.PointsStatus();
 
                 // If the points are less that 0 then points have actually
                 // been lost (a penalty), otherwise it's a gain
-                if (Points < 0)
+                if (points < 0)
                 {
                     pointsStatus = Config.PointsStatus.Lost;
                 }
@@ -125,20 +125,20 @@ namespace IssueChecks
                 // in the enum, so looks out of place in the comment
                 // e.g. "5 points lost: <description>" vs "-5 points Lost: <description>"
                 logger.Info("{0} points have been {1}: {2}",
-                            Points.ToString().Replace("-", ""),
+                            points.ToString().Replace("-", ""),
                             pointsStatus.ToString().ToLower(),
-                            Description);
+                            description);
             }
 
             // Update the gained or lost points total in the config
             // class, along with the description for it
-            if (Points < 0)
+            if (points < 0)
             {
-                config.UpdatePointsLost(Points, Description);
+                config.UpdatePointsLost(points, description);
             }
             else
             {
-                config.UpdatePointsGained(Points, Description);
+                config.UpdatePointsGained(points, description);
             }
         }
 
@@ -156,15 +156,15 @@ namespace IssueChecks
         /// when the issue check takes place, there are no points needing
         /// to be removed</para>
         /// </summary>
-        /// <param name="Points">The amount of points that have been lost</param>
-        /// <param name="Description">The description of the issue</param>
-        public void PointsLost(int Points, string Description)
+        /// <param name="points">The amount of points that have been lost</param>
+        /// <param name="description">The description of the issue</param>
+        public void PointsLost(int points, string description)
         {
             var pointsStatus = new Config.PointsStatus();
 
             // If the points are less that 0 then points have actually
             // been gained (fixed a penalty), otherwise it's a loss
-            if (Points < 0)
+            if (points < 0)
             {
                 pointsStatus = Config.PointsStatus.Gained;
             }
@@ -181,9 +181,9 @@ namespace IssueChecks
             // in the enum, so looks out of place in the comment
             // e.g. "5 points lost: <description>" vs "-5 points Lost: <description>"
             logger.Info("{0} points have been {1}: {2}",
-                        Points.ToString().Replace("-", ""),
+                        points.ToString().Replace("-", ""),
                         pointsStatus.ToString().ToLower(),
-                        Description);
+                        description);
         }
     }
 }
