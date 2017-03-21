@@ -157,6 +157,10 @@ namespace CSSS
         /// hidden value is updated with the time it was updated at. From
         /// then onwards, this value can be compared to the current time to
         /// see the overall running time of the image</para>
+        /// 
+        /// <para>The hidden value stored is encrypted to prevent competitors
+        /// changing it to decrease their running time. While this is unlikely
+        /// to happen, the precaution is there to make sure it can't</para>
         /// </summary>
         private void UpdateRunningTime()
         {
@@ -168,14 +172,14 @@ namespace CSSS
             if (string.IsNullOrEmpty(startTime.InnerHtml))
             {
                 // Save the current time to the HTML node for future use
-                startTime.InnerHtml = DateTime.UtcNow.ToString();
+                startTime.InnerHtml = SupportLibrary.Encryption.String.Encrypt(DateTime.UtcNow.ToString());
             }
 
             // Seeing the timespan between the image start and now
             // See: http://stackoverflow.com/a/9017567
             DateTime currentTime = DateTime.UtcNow;
 
-            TimeSpan runningTime = currentTime.Subtract(Convert.ToDateTime(startTime.InnerHtml));
+            TimeSpan runningTime = currentTime.Subtract(Convert.ToDateTime(SupportLibrary.Encryption.String.Decrypt(startTime.InnerHtml)));
 
             var runtimeOverview = scoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-runtime']");
             runtimeOverview.InnerHtml = runningTime.Hours + ":" + runningTime.Minutes.ToString("00");
