@@ -33,14 +33,17 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportLibrary\OSVersionInfo\WinNTVersionInfo.OSVersionInfo.SupportLibrary.cs" />
+    <Compile Include="SupportLibrary\Encryption\String.Encryption.SupportLibrary.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SupportLibrary\" />
     <Folder Include="SupportLibrary\OSVersionInfo\" />
+    <Folder Include="SupportLibrary\Encryption\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SupportLibrary\OSVersionInfo\LICENSE.md" />
     <None Include="README.md" />
+    <None Include="SupportLibrary\Encryption\String.LICENSE.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
