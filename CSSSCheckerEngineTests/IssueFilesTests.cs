@@ -242,5 +242,25 @@ namespace CSSSCheckerEngineTests
                                issueFilesChecks.GetAllIssueFiles(),
                                "All JSON files in the issues directory should be removed once prepared");
         }
+
+        /// <summary>
+        /// Tests all prepared issue files can be decrypted
+        /// </summary>
+        [Test()]
+        public void TestAllPreparedIssueFilesCanBeDecrypted()
+        {
+            issueFilesChecks.PrepareAllIssueFiles();
+
+            // The issue files are only decrypted when CSSS
+            // is in "start" mode
+            config.CSSSProgramMode = config.CSSSProgramMode | Config.CSSSModes.Start;
+
+            issueFilesChecks.LoadAllIssueFiles();
+
+            // If the issue files were loaded, then it should
+            // be possible to get the JSON from it
+            Assert.IsInstanceOf<dynamic>(config.GetIssueFile("issues.system.version"),
+                                         "Issue files should be able to be decrypted once they have been prepared");
+        }
     }
 }
