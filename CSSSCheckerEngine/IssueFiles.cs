@@ -21,6 +21,7 @@ using NLog;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace CSSSCheckerEngine
 {
@@ -138,6 +139,11 @@ namespace CSSSCheckerEngine
         /// <summary>
         /// Loads an issue file and saves the JSON structure of it
         /// in the CSSSConfig class
+        /// 
+        /// <para>If there are any problems loading the issue files,
+        /// depending on the severity of the problem, either this
+        /// function will throw an exception to halt execution or
+        /// just warn the user there is a problem</para>
         /// </summary>
         /// <param name="issueFilePath">The full path to the issue file</param>
         private void LoadIssueFile(string issueFilePath)
@@ -146,13 +152,30 @@ namespace CSSSCheckerEngine
 
             try
             {
+                // If CSSS is in "start" mode, then the JSON file
+                // needs to be decrypted before it can be used
+                if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Start))
+                {
+                    issueFileContent = SupportLibrary.Encryption.String.Decrypt(issueFileContent);
+                }
+
                 dynamic issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
                 {
                     Error = HandleDeserializationError
                 });
 
-                logger.Debug("Issue file category: {0}", issueFileJSON.Category);
                 config.AddIssueFile((string)issueFileJSON.Category, issueFileJSON);
+                logger.Debug("Added issue category: {0}", issueFileJSON.Category);
+            }
+            catch (CryptographicException e)
+            {
+                // There was a problem decrypting the issue file contents
+                logger.Warn("Unable to decrypt the issue file \"{0}\": {1}", issueFilePath, e.Message);
+            }
+            catch (FormatException e)
+            {
+                // There was a problem decrypting the issue file contents
+                logger.Warn("Unable to decrypt the issue file \"{0}\": {1}", issueFilePath, e.Message);
             }
             catch (JsonSerializationException e)
             {
@@ -163,7 +186,7 @@ namespace CSSSCheckerEngine
             catch (OperationCanceledException e)
             {
                 // The issue category already exists
-                logger.Error("There was a problem adding the issue file: {0}", e.Message);
+                logger.Warn("There was a problem adding the issue file: {0}", e.Message);
             }
 
             // The JSON format of this file is fine
