@@ -198,6 +198,9 @@ namespace CSSSCheckerEngine
         /// of them and saving them under a new filename and
         /// location, so that competitors cannot discover what
         /// issue checks are being carried out
+        /// 
+        /// <para>If the issue files are all encrypted correctly,
+        /// then the plaintext JSON files are deleted</para>
         /// </summary>
         /// <returns><c>true</c>, if all issue files were prepared, <c>false</c> if there were problems</returns>
         public bool PrepareAllIssueFiles()
@@ -220,6 +223,24 @@ namespace CSSSCheckerEngine
 
             logger.Info("Finished encrypting all issue files");
             logger.Debug("Successful encryption of all issue files: {0}", filesPreparedSuccessfully);
+
+            // If all of the issue files have been prepared
+            // successfully, then the original plaintext JSON
+            // files can be deleted along with any now empty
+            // directories
+            if (filesPreparedSuccessfully)
+            {
+                logger.Info("Preparing to delete all plaintext issue files");
+                foreach (string issueFilePath in issueFiles)
+                {
+                    logger.Debug("Deleting plaintext file: {0}", issueFilePath);
+                    File.Delete(issueFilePath);
+                }
+
+                logger.Info("Removing any empty issue file directories");
+                removeEmptyIssueDirectories(GetIssueFilesDirectory());
+            }
+
             return filesPreparedSuccessfully;
         }
 
@@ -239,7 +260,7 @@ namespace CSSSCheckerEngine
             {
                 var preparedIssueFilename = GetIssueFilesDirectory() + Path.DirectorySeparatorChar + GenerateFileName() + ".issue";
                 File.WriteAllText(preparedIssueFilename, issueFileContent);
-                logger.Debug("The issue file at \"{0}\" has been saved as: {1}", issueFilePath, preparedIssueFilename);
+                logger.Debug("The issue file at \"{0}\" has been encrypted and saved as: {1}", issueFilePath, preparedIssueFilename);
             }
             catch (Exception e)
             {
@@ -286,14 +307,28 @@ namespace CSSSCheckerEngine
         /// <summary>
         /// Gets all of the issue files in the issue directory
         /// 
+        /// <para>If CSSS is in "Start" mode, then the issue files
+        /// have a ".issue" extension when they were prepared.
+        /// Otherwise, they have a normal ".json" extension</para>
+        /// 
         /// See: https://stackoverflow.com/a/18562036
         /// See: https://social.msdn.microsoft.com/Forums/en-US/7d8798db-32eb-4886-9531-31b3decba018/#25e02b75-16d1-44e6-a04c-a6ab5ad88403
         /// </summary>
         /// <returns>A path array to all of the issue files</returns>
         public string[] GetAllIssueFiles()
         {
+            var issueFileExtension = "";
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Start))
+            {
+                issueFileExtension = "*.issue";
+            }
+            else
+            {
+                issueFileExtension = "*.json";
+            }
+
             return Directory.GetFiles(GetIssueFilesDirectory(),
-                                      "*.json",
+                                      issueFileExtension,
                                       SearchOption.AllDirectories);
         }
 
@@ -315,6 +350,26 @@ namespace CSSSCheckerEngine
             }
 
             return new String(stringChars);
+        }
+
+        /// <summary>
+        /// Removes any empty issue directories once the issue files
+        /// have been prepared
+        /// 
+        /// See: http://stackoverflow.com/a/2811654
+        /// </summary>
+        /// <param name="startLocation">The location to search from</param>
+        private static void removeEmptyIssueDirectories(string startLocation)
+        {
+            foreach (var directory in Directory.GetDirectories(startLocation))
+            {
+                removeEmptyIssueDirectories(directory);
+                if (Directory.GetFiles(directory).Length == 0 &&
+                    Directory.GetDirectories(directory).Length == 0)
+                {
+                    Directory.Delete(directory, false);
+                }
+            }
         }
     }
 }

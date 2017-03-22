@@ -151,7 +151,8 @@ namespace CSSS
             {
                 logger.Info("Preparing for image release");
 
-                // Encrypting the issue files
+                // Encrypting the issue files and removing any plaintext
+                // files
                 issueFiles.PrepareAllIssueFiles();
 
                 // All of the asked-for tasks have been completed,
