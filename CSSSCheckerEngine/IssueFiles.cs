@@ -194,6 +194,65 @@ namespace CSSSCheckerEngine
         }
 
         /// <summary>
+        /// Prepares all issue files by encrypting the contents
+        /// of them and saving them under a new filename and
+        /// location, so that competitors cannot discover what
+        /// issue checks are being carried out
+        /// </summary>
+        /// <returns><c>true</c>, if all issue files were prepared, <c>false</c> if there were problems</returns>
+        public bool PrepareAllIssueFiles()
+        {
+            logger.Info("Preparing to encrypt all issue files");
+
+            bool filesPreparedSuccessfully = true;
+
+            string[] issueFiles = GetAllIssueFiles();
+
+            foreach (string issueFilePath in issueFiles)
+            {
+                logger.Debug("Preparing to encrypt issue file located at: {0}", issueFilePath);
+
+                if (!PrepareIssueFile(issueFilePath))
+                {
+                    filesPreparedSuccessfully = false;
+                }
+            }
+
+            logger.Info("Finished encrypting all issue files");
+            logger.Debug("Successful encryption of all issue files: {0}", filesPreparedSuccessfully);
+            return filesPreparedSuccessfully;
+        }
+
+        /// <summary>
+        /// Prepares the issue file by encrypting the contents of it
+        /// </summary>
+        /// <returns><c>true</c>, if issue file was encrypted, <c>false</c> otherwise</returns>
+        /// <param name="issueFilePath">The full path to the issue file</param>
+        private bool PrepareIssueFile(string issueFilePath)
+        {
+            var issueFilePrepared = true;
+
+            var issueFileContent = File.ReadAllText(issueFilePath);
+            issueFileContent = SupportLibrary.Encryption.String.Encrypt(issueFileContent);
+
+            try
+            {
+                var preparedIssueFilename = GetIssueFilesDirectory() + Path.DirectorySeparatorChar + GenerateFileName() + ".issue";
+                File.WriteAllText(preparedIssueFilename, issueFileContent);
+                logger.Debug("The issue file at \"{0}\" has been saved as: {1}", issueFilePath, preparedIssueFilename);
+            }
+            catch (Exception e)
+            {
+                // While not good to use a generic "exception", it should
+                // catch any problems when writing the issue file to disk
+                logger.Error("There was a problem saving the encrypted issue file: {0}", e.Message);
+                issueFilePrepared = false;
+            }
+
+            return issueFilePrepared;
+        }
+
+        /// <summary>
         /// A handler for any deserialization errors that occur when
         /// linting the issue files, so that the error location can
         /// be shown to the user for them to fix the problem
@@ -215,6 +274,16 @@ namespace CSSSCheckerEngine
         }
 
         /// <summary>
+        /// Gets the filesystem location of the issue file directory
+        /// </summary>
+        /// <returns>The issue file directory location</returns>
+        public string GetIssueFilesDirectory()
+        {
+            string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+            return CSSSDirectory + Path.DirectorySeparatorChar + "Issues";
+        }
+
+        /// <summary>
         /// Gets all of the issue files in the issue directory
         /// 
         /// See: https://stackoverflow.com/a/18562036
@@ -223,10 +292,29 @@ namespace CSSSCheckerEngine
         /// <returns>A path array to all of the issue files</returns>
         public string[] GetAllIssueFiles()
         {
-            string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
-            return Directory.GetFiles(CSSSDirectory + Path.DirectorySeparatorChar + "Issues",
+            return Directory.GetFiles(GetIssueFilesDirectory(),
                                       "*.json",
                                       SearchOption.AllDirectories);
+        }
+
+        /// <summary>
+        /// Generates a random name for the prepared issue file, so
+        /// the competitors cannot guess what issue checks are taking
+        /// place
+        /// </summary>
+        /// <returns>The file name for the new issue file</returns>
+        private string GenerateFileName()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[8];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new String(stringChars);
         }
     }
 }
