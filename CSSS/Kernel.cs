@@ -165,6 +165,7 @@ namespace CSSS
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Start))
             {
                 logger.Info("Running CSSS normally");
+                PerformIssueCheckTasks();
             }
 
             logger.Debug("CSSS should exit: {0}", shouldExit);

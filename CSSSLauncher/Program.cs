@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 
 namespace CSSSLauncher
 {
@@ -47,7 +48,22 @@ namespace CSSSLauncher
     {
         public static void Main(string[] args)
         {
-            
+            // Hiding the main CSSS console from displaying
+            // See: http://stackoverflow.com/a/836436
+            // See: http://stackoverflow.com/a/848343
+            // See: http://stackoverflow.com/a/29535211
+            Process CSSS = new Process();
+            ProcessStartInfo CSSSProcessInfo = new ProcessStartInfo();
+            CSSSProcessInfo.FileName = "CSSS.exe";
+            CSSSProcessInfo.Arguments = "--start";
+
+            CSSSProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            CSSSProcessInfo.CreateNoWindow = true;
+            CSSSProcessInfo.UseShellExecute = false;
+            CSSS.StartInfo = CSSSProcessInfo;
+
+            // Let's get things underway...
+            CSSS.Start();
         }
     }
 }
