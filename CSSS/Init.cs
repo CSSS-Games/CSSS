@@ -19,6 +19,8 @@ using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using SupportLibrary.OSVersionInfo;
 
@@ -44,6 +46,9 @@ namespace CSSS
         /// </summary>
         public Init()
         {
+            // Preventing more than once instance of CSSS from running
+            SetRuntimeLock();
+
             // Setting the current Operating System type
             SetOperatingSystemType();
 
@@ -67,6 +72,48 @@ namespace CSSS
             // All tasks have been completed, so let the config class know
             // so that the CSSS kernel can start performing tasks
             config.InitTasksCompleted = true;
+        }
+
+        /// <summary>
+        /// Prevents more than one running instance of CSSS
+        /// 
+        /// While CSSS can be run multiple times at once without causing
+        /// problems, this is not ideal as competitors will see multiple
+        /// notifications when points change, and the scoring report will
+        /// show the running time jumping around
+        /// 
+        /// To prevent this, only one instance of CSSS should be run at
+        /// once. Ideally a named mutex would be used, but since non-WinNT
+        /// Operating Systems do not support this, opening a port locally
+        /// is the next best way to do it. A lock file is not used as it
+        /// involves more work to see if the process that created it is
+        /// still alive (e.g. after a computer crash) and also requires
+        /// the lock file to be tidied up after use
+        /// 
+        /// Port number 55555 has been chosen, as it's above the well-known
+        /// ports which require administrator access to create, and is a
+        /// nice number to remember. Should there be a problem creating
+        /// this port, it is assumed that another instance of CSSS is
+        /// already running (and is caught in <see cref="T:Program.cs"/>)
+        /// </summary>
+        private void SetRuntimeLock()
+        {
+            // This is pretty much copy-pasted from Microsoft
+            // MSDN: https://msdn.microsoft.com/en-us/library/system.net.sockets.tcplistener(v=vs.110).aspx#Anchor_6
+            try
+            {
+                logger.Debug("Checking if CSSS is already running");
+                config.CSSSRuntimeLockServer = new TcpListener(IPAddress.Any, 55555);
+                config.CSSSRuntimeLockServer.Start();
+            }
+            catch (SocketException)
+            {
+                // It's not important to keep the error details, as it's
+                // a deliberate problem and CSSS is just going to exit
+                throw new SocketException();
+            }
+
+            logger.Debug("This is the only running instance of CSSS");
         }
 
         /// <summary>

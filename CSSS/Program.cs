@@ -50,6 +50,11 @@ namespace CSSS
                 logger.Fatal("An error occurred trying to start CSSS: {0}", e.Message);
                 return 10;
             }
+            catch (System.Net.Sockets.SocketException)
+            {
+                logger.Error("An instance of CSSS is probably already running... exiting");
+                return 11;
+            }
 
             // Creating an instance of the CSSS kernel so that tasks
             // can be co-ordinated. The constructor will throw an
