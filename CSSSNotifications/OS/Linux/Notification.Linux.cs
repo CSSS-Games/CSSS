@@ -17,6 +17,8 @@
 using CSSSNotifications;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 
 namespace OS.Linux
 {
@@ -52,16 +54,28 @@ namespace OS.Linux
         /// <summary>
         /// Shows the notification
         /// 
+        /// For Linux based Operating Systems, the "notify-send" program
+        /// (part of the libnotify-bin package) can be used to show desktop
+        /// notifications of any changes in points
+        /// 
+        /// However, as it's not possible to just call "notify-send" from
+        /// a background program, we need to run a script that can perform
+        /// a clever selection of calling programs and getting the right
+        /// information to display the notifications
+        /// 
         /// See: https://wiki.archlinux.org/index.php/Desktop_notifications
+        /// See: http://unix.stackexchange.com/questions/2881/show-a-notification-across-all-running-x-displays
         /// </summary>
         /// <param name="message">The message to show to the competitor</param>
         /// <param name="icon">The icon to show, see: https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html</param>
         /// <param name="title">The text to display in the notification title</param>
         private void ShowNotification(string message, string icon, string title = notificationTitleText)
         {
-            // For Linux, the program is called notify-send (libnotify-bin package)
-            var notificationProgram = "notify-send";
-            var notificationParameters = "-t 5 \"" + title + "\" \"" + message + "\" --icon=" + icon;
+            string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName + Path.DirectorySeparatorChar;
+            var CSSSDirectoryLinux = "OS" + Path.DirectorySeparatorChar + "Linux" + Path.DirectorySeparatorChar;
+
+            var notificationProgram = "/bin/bash";
+            var notificationParameters = CSSSDirectoryLinux + "NotifyAll.Linux.sh -t 5 \"'" + title + "'\" \"'" + message + "'\" --icon=" + icon;
 
             try
             {
