@@ -63,6 +63,9 @@ namespace OS.Linux
         /// a clever selection of calling programs and getting the right
         /// information to display the notifications
         /// 
+        /// The script expects the parameters to be sent in this order:
+        ///   NotifyAll.Linux.sh "[title]" "[message]" [icon]
+        /// 
         /// See: https://wiki.archlinux.org/index.php/Desktop_notifications
         /// See: http://unix.stackexchange.com/questions/2881/show-a-notification-across-all-running-x-displays
         /// </summary>
@@ -75,7 +78,7 @@ namespace OS.Linux
             var CSSSDirectoryLinux = "OS" + Path.DirectorySeparatorChar + "Linux" + Path.DirectorySeparatorChar;
 
             var notificationProgram = "/bin/bash";
-            var notificationParameters = CSSSDirectoryLinux + "NotifyAll.Linux.sh -t 5 \"'" + title + "'\" \"'" + message + "'\" --icon=" + icon;
+            var notificationParameters = CSSSDirectoryLinux + "NotifyAll.Linux.sh \"" + title + "\" \"" + message + "\" " + icon;
 
             try
             {
