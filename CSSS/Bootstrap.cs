@@ -95,15 +95,13 @@ namespace CSSS
 
                 switch (argument.ToLower().Replace("-", ""))
                 {
+                    // ******************
+                    // Required arguments
+                    // ******************
                     case "c":
                     case "check":
                         config.CSSSProgramMode |= Config.CSSSModes.Check;
                         canStart = true;
-                        break;
-
-                    case "m":
-                    case "multiple":
-                        config.CSSSProgramMode |= Config.CSSSModes.MultipleInstances;
                         break;
                         
                     case "o":
@@ -124,6 +122,19 @@ namespace CSSS
                         canStart = true;
                         break;
 
+
+                    // *******************
+                    // Developer arguments
+                    // *******************
+                    case "m":
+                    case "multiple":
+                        config.CSSSProgramMode |= Config.CSSSModes.MultipleInstances;
+                        break;
+
+
+                    // *******************
+                    // Optional arguments
+                    // *******************
                     case "h":
                     case "help":
                     default:
@@ -150,11 +161,24 @@ namespace CSSS
             Console.WriteLine("==========================================");
             Console.WriteLine();
 
-            // Valid parameter combinations to pass
+            // Argument combinations to pass
             Console.WriteLine("Usage:");
-            Console.WriteLine("  CSSS.exe -c | -o | -p | -s | -h");
+            Console.WriteLine("  CSSS.exe -c | -o | -p | -s | [-h] | [-m]");
             Console.WriteLine();
-            Console.WriteLine("Options (at least one is required):");
+            Console.WriteLine("Examples:");
+            Console.WriteLine("  CSSS.exe -c");
+            Console.WriteLine("  CSSS.exe -o -m");
+            Console.WriteLine("  CSSS.exe -p");
+            Console.WriteLine("  CSSS.exe -s");
+            Console.WriteLine("  CSSS.exe -h");
+
+
+            // ******************
+            // Required arguments
+            // ******************
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Required arguments (at least one is needed):");
 
             // Check config files
             Console.Write("  -c, --check:".PadRight(rightPadding));
@@ -172,13 +196,25 @@ namespace CSSS
             Console.Write("  -s, --start:".PadRight(rightPadding));
             Console.WriteLine("Starts the scoring system");
 
+
+            // ******************
+            // Optional arguments
+            // ******************
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Optional arguments:");
+
             // Help
             Console.Write("  -h, --help:".PadRight(rightPadding));
             Console.WriteLine("Shows this help message");
 
+
+            // *******************
+            // Developer arguments
+            // *******************
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("Developer Options (all optional):");
+            Console.WriteLine("Developer arguments (all optional):");
 
             // Multipile instances allowed to concurrently run
             Console.Write("  -m, --multiple:".PadRight(rightPadding));
