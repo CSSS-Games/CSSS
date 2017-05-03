@@ -77,7 +77,8 @@ namespace CSSSConfig
             Check = 0x1,
             Prepare = 0x2,
             Observe = 0x4,
-            Start = 0x8
+            Start = 0x8,
+            MultipleInstances = 0x10
         }
 
         /// <summary>

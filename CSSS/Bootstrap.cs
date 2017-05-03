@@ -50,19 +50,24 @@ namespace CSSS
         /// as the config files that are used are encrypted before the
         /// image is released, to prevent any cheating by competitors
         /// 
-        /// Valid arguments that CSSS accepts are:
+        /// Valid required arguments that CSSS accepts are:
         ///   * -c, --check:   Checks the config files for any problems
         ///   * -o, --observe: Observes CSSS running before preparing it (implies 'c')
         ///   * -p, --prepare: Prepares CSSS ready for image release (implies '-c')
         ///   * -s, --start:   Starts the scoring system
         ///   * -h, --help:    Shows the program usage
         /// 
+        /// Additional arguments that can be passed to CSSS are:
+        ///   * -m, --multiple: Allows multiple instances of CSSS to run concurently
+        /// 
         /// These arguments have been chosen to spell 'COPS', as competitors
         /// are 'policing' the security of the computer
         /// 
         /// Under normal debugging, the 'o' option should be passed, as
         /// this allows CSSS to run as it would for training, but without
-        /// affecting the files used to list the 'issues'
+        /// affecting the files used to list the 'issues'. The 'm' option
+        /// can also be used should an instance of CSSS be running in the
+        /// background
         /// </summary>
         /// <returns><c>true</c>, if the main part of the program can start, <c>false</c> otherwise</returns>
         /// <param name="arguments">The arguments passed to the CSSS Main function</param>
@@ -92,25 +97,30 @@ namespace CSSS
                 {
                     case "c":
                     case "check":
-                        config.CSSSProgramMode = Config.CSSSModes.Check;
+                        config.CSSSProgramMode |= Config.CSSSModes.Check;
                         canStart = true;
                         break;
 
+                    case "m":
+                    case "multiple":
+                        config.CSSSProgramMode |= Config.CSSSModes.MultipleInstances;
+                        break;
+                        
                     case "o":
                     case "observe":
-                        config.CSSSProgramMode = Config.CSSSModes.Check | Config.CSSSModes.Observe;
+                        config.CSSSProgramMode |= Config.CSSSModes.Check | Config.CSSSModes.Observe;
                         canStart = true;
                         break;
 
                     case "p":
                     case "prepare":
-                        config.CSSSProgramMode = Config.CSSSModes.Check | Config.CSSSModes.Prepare;
+                        config.CSSSProgramMode |= Config.CSSSModes.Check | Config.CSSSModes.Prepare;
                         canStart = true;
                         break;
 
                     case "s":
                     case "start":
-                        config.CSSSProgramMode = Config.CSSSModes.Start;
+                        config.CSSSProgramMode |= Config.CSSSModes.Start;
                         canStart = true;
                         break;
 
@@ -144,7 +154,7 @@ namespace CSSS
             Console.WriteLine("Usage:");
             Console.WriteLine("  CSSS.exe -c | -o | -p | -s | -h");
             Console.WriteLine();
-            Console.WriteLine("Options:");
+            Console.WriteLine("Options (at least one is required):");
 
             // Check config files
             Console.Write("  -c, --check:".PadRight(rightPadding));
@@ -165,6 +175,14 @@ namespace CSSS
             // Help
             Console.Write("  -h, --help:".PadRight(rightPadding));
             Console.WriteLine("Shows this help message");
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Developer Options (all optional):");
+
+            // Multipile instances allowed to concurrently run
+            Console.Write("  -m, --multiple:".PadRight(rightPadding));
+            Console.WriteLine("Allows multiple instances of CSSS to run concurently");
         }
     }
 }

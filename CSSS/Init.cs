@@ -95,25 +95,38 @@ namespace CSSS
         /// nice number to remember. Should there be a problem creating
         /// this port, it is assumed that another instance of CSSS is
         /// already running (and is caught in <see cref="T:Program.cs"/>)
+        /// 
+        /// Note: The "-m" switch can be passed to CSSS to skip this check,
+        /// which should mainly be used when developing CSSS (or performing
+        /// unit testing)
         /// </summary>
         private void SetRuntimeLock()
         {
-            // This is pretty much copy-pasted from Microsoft
-            // MSDN: https://msdn.microsoft.com/en-us/library/system.net.sockets.tcplistener(v=vs.110).aspx#Anchor_6
-            try
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.MultipleInstances))
             {
-                logger.Debug("Checking if CSSS is already running");
-                config.CSSSRuntimeLockServer = new TcpListener(IPAddress.Any, 55555);
-                config.CSSSRuntimeLockServer.Start();
+                logger.Warn("Multiple instances of CSSS are allowed to be run concurently");
+                logger.Warn("While this is allowed, multiple notifications may be shown on points changing");
+                logger.Warn("or the scoring report may show the running time jumping around");
             }
-            catch (SocketException)
+            else
             {
-                // It's not important to keep the error details, as it's
-                // a deliberate problem and CSSS is just going to exit
-                throw new SocketException();
-            }
+                // This is pretty much copy-pasted from Microsoft
+                // MSDN: https://msdn.microsoft.com/en-us/library/system.net.sockets.tcplistener(v=vs.110).aspx#Anchor_6
+                try
+                {
+                    logger.Debug("Checking if CSSS is already running");
+                    config.CSSSRuntimeLockServer = new TcpListener(IPAddress.Any, 55555);
+                    config.CSSSRuntimeLockServer.Start();
+                }
+                catch (SocketException)
+                {
+                    // It's not important to keep the error details, as it's
+                    // a deliberate problem and CSSS is just going to exit
+                    throw new SocketException();
+                }
 
-            logger.Debug("This is the only running instance of CSSS");
+                logger.Debug("This is the only running instance of CSSS");
+            }
         }
 
         /// <summary>
