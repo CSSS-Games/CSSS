@@ -41,6 +41,10 @@ namespace CSSSTests
         {
             config = Config.GetCurrentConfig;
 
+            // Allowing multiple instances of tests to run at once,
+            // as the first test locks port 55555 from the init tests
+            config.CSSSProgramMode = Config.CSSSModes.MultipleInstances;
+
             init = new Init();
         }
 
@@ -50,6 +54,15 @@ namespace CSSSTests
         [TearDown]
         protected void TearDown()
         {
+            // Removing any set CSSS Mode flags
+            // There doesn't seem to be a tidy way to do this
+            config.CSSSProgramMode &= ~Config.CSSSModes.Check;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Help;
+            config.CSSSProgramMode &= ~Config.CSSSModes.MultipleInstances;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Observe;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Prepare;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Start;
+
             init = null;
             config = null;
             kernel = null;

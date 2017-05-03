@@ -37,6 +37,10 @@ namespace CSSSTests
         [SetUp]
         protected void SetUp()
         {
+            // Allowing multiple instances of tests to run at once,
+            // as the first test locks port 55555 from the init tests
+            config.CSSSProgramMode |= Config.CSSSModes.MultipleInstances;
+
             initTests = new Init();
         }
 
