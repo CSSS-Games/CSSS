@@ -35,6 +35,13 @@ namespace CSSS
         /// </summary>
         private static Config config = Config.GetCurrentConfig;
 
+        /// <summary>
+        /// If the usage screen has been shown, the user does not
+        /// need to see it again if a required argument hasn't been
+        /// passed to CSSS
+        /// </summary>
+        private bool usageScreenShown = false;
+
         public Bootstrap()
         {
         }
@@ -147,6 +154,13 @@ namespace CSSS
             logger.Debug("Actions to perform: {0}", config.CSSSProgramMode);
             logger.Debug("CSSS can continue: {0}", canStart);
 
+            // Showing the usage screen if no required arguments have been passed
+            if (!canStart)
+            {
+                logger.Warn("Required arguments have not been passed to CSSS... showing usage screen");
+                ShowUsage();
+            }
+
             return canStart;
         }
 
@@ -156,6 +170,15 @@ namespace CSSS
         private void ShowUsage()
         {
             int rightPadding = 18;
+
+            // Preventing the usage screen being shown multiple times if
+            // the "-h" argument is passed more than once to CSSS, or a
+            // required argument is missing and "-h" had been passed too
+            if (usageScreenShown)
+            {
+                return;
+            }
+            usageScreenShown = true;
 
             Console.WriteLine("CyberSecurity Scoring System (CSSS) Usage");
             Console.WriteLine("==========================================");
