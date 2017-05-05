@@ -74,6 +74,10 @@
       <Project>{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}</Project>
       <Name>CSSSNotifications</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSSSLauncher\CSSSLauncher.csproj">
+      <Project>{6264217F-7E32-462C-A1EC-74CBA7CD71A3}</Project>
+      <Name>CSSSLauncher</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IssueChecks\" />

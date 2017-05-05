@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace CSSSConfig
 {
@@ -76,7 +77,8 @@ namespace CSSSConfig
             Check = 0x1,
             Prepare = 0x2,
             Observe = 0x4,
-            Start = 0x8
+            Start = 0x8,
+            MultipleInstances = 0x10
         }
 
         /// <summary>
@@ -102,6 +104,15 @@ namespace CSSSConfig
         /// </summary>
         /// <value><c>true</c> if init tasks completed; otherwise, <c>false</c>.</value>
         public bool InitTasksCompleted { get; set; }
+
+        /// <summary>
+        /// To prevent multiple CSSS instances being run, a TCP port is
+        /// reserved when CSSS is run
+        /// 
+        /// When another instance of CSSS tries to run, it checks to see
+        /// if the port is in use, and if so, that instance of CSSS exits
+        /// </summary>
+        public TcpListener CSSSRuntimeLockServer;
 
 
 
