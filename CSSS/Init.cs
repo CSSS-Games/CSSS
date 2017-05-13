@@ -420,9 +420,14 @@ namespace CSSS
             checkProcessInfo.FileName = Program;
             checkProcessInfo.Arguments = Arguments;
 
+            // Hide any windows from showing
             checkProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
             checkProcessInfo.CreateNoWindow = true;
             checkProcessInfo.UseShellExecute = false;
+
+            // "Eat" the output, as on Linux it will echo out the file
+            checkProcessInfo.RedirectStandardOutput = true;
+
             checkProcess.StartInfo = checkProcessInfo;
 
             checkProcess.Start();
