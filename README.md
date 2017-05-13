@@ -60,7 +60,7 @@ The required arguments have been chosen to spell 'COPS', as competitors are 'pol
 Under normal image building, the `-o` option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
 
 When you are ready to release the image, __with administrative privileges__ (e.g. `sudo`, "Run as administrator") run CSSS with the `-p` option to prepare the necessary files and allow CSSS to start automatically on computer reboots.
-> :warning: Running CSSS with the `-p` argument will excrypt the issue files. Make sure that you have a snapshot of your image before you run this command, otherwise you will need to set everything up again should there be any problems.
+> :warning: Running CSSS with the `-p` argument will encrypt the issue files. Make sure that you have a snapshot of your image before you run this command, otherwise you will need to set everything up again should there be any problems.
 
 ## Contributing
 Thanks for your interest in contributing to this project. You can contribute or report issues in the following ways:
