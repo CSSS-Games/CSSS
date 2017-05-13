@@ -47,19 +47,26 @@ namespace CSSS
             }
             catch (NotImplementedException e)
             {
+                int exitCode = 10;
                 logger.Fatal("An error occurred trying to start CSSS: {0}", e.Message);
-                return 10;
+                logger.Fatal(GenerateExitCodeURLMessage(exitCode));
+                return exitCode;
             }
             catch (System.Net.Sockets.SocketException)
             {
+                int exitCode = 11;
                 logger.Error("An instance of CSSS is probably already running... exiting");
-                return 11;
+                logger.Error(GenerateExitCodeURLMessage(exitCode));
+                return exitCode;
             }
             catch (System.Security.SecurityException e)
             {
+                int exitCode = 12;
+
                 // CSSS is in "prepare" mode, but has not been run with administrative privileges
                 logger.Error(e.Message);
-                return 12;
+                logger.Error(GenerateExitCodeURLMessage(exitCode));
+                return exitCode;
             }
 
             // Creating an instance of the CSSS kernel so that tasks
@@ -91,14 +98,44 @@ namespace CSSS
             }
             catch (InvalidOperationException e)
             {
+                int exitCode = 20;
                 logger.Fatal("An error occurred trying to run CSSS: {0}", e.Message);
-                return 20;
+                logger.Fatal(GenerateExitCodeURLMessage(exitCode));
+                return exitCode;
             }
 
             // Goodbye
             logger.Info("CSSS has finished performing any needed tasks");
             //Console.ReadLine();
             return 0;
+        }
+
+        /// <summary>
+        /// Generates a URL message for the CSSS wiki for the exit code
+        /// 
+        /// Should CSSS need to return an exit code, this function
+        /// will generate a URL message to direct users to the revevant
+        /// wiki article and section
+        /// 
+        /// This is created as a function and not directly coded
+        /// into the Main function so the URL can easilly be changed
+        /// if needed in the future
+        /// 
+        /// The URLs are:
+        ///   Full: https://github.com/stuajnht/CSSS/wiki/CSSS-Exit-Codes
+        ///   Short: https://git.io/v9QbU
+        /// 
+        /// Note: If any additional exit codes are created, the
+        ///       wiki pages will also need to be updated to reflect
+        ///       the changes
+        /// </summary>
+        /// <returns>The exit code wiki URL message</returns>
+        /// <param name="exitCode">The CSSS exit code</param>
+        private static string GenerateExitCodeURLMessage(int exitCode)
+        {
+            return "See \"https://github.com/stuajnht/CSSS/wiki/CSSS-Exit-Codes#exit-code-" +
+                   exitCode +
+                   "\" for more information";
         }
     }
 }
