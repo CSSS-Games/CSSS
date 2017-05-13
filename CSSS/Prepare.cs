@@ -18,6 +18,8 @@ using CSSSCheckerEngine;
 using CSSSConfig;
 using NLog;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace CSSS
 {
@@ -48,12 +50,20 @@ namespace CSSS
         private IssueFiles issueFiles = new IssueFiles();
 
         /// <summary>
+        /// Getting the location where CSSS is stored, so that it can
+        /// be added to the startup files / settings
+        /// </summary>
+        private string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+
+        /// <summary>
         /// Performs all of the preparation steps needed to get CSSS
         /// ready for image capture
         /// </summary>
         public void PerformAllPreparationSteps()
         {
             PrepareAllIssueFiles();
+
+            AddToStartup();
         }
 
         /// <summary>
@@ -65,6 +75,65 @@ namespace CSSS
             // Encrypting the issue files and removing any plaintext
             // files
             issueFiles.PrepareAllIssueFiles();
+        }
+
+        /// <summary>
+        /// Adds CSSS to the various startup locations, so that it
+        /// can start automatically at computer startup / user login
+        /// </summary>
+        public void AddToStartup()
+        {
+            logger.Info("Setting CSSS to run automatically on computer startup / user login");
+
+            switch (config.operatingSystemType)
+            {
+                case Config.OperatingSystemType.WinNT:
+                    break;
+                    
+                case Config.OperatingSystemType.Linux:
+                    AddToStartupLinux();
+                    break;
+                    
+                default:
+                    break;
+            }
+
+            logger.Info("CSSS has been set to run automatically on computer startup / user login");
+        }
+
+        /// <summary>
+        /// Allows CSSS to start at user login to a Linux computer
+        /// 
+        /// A file is created in /etc/profile.d directory, which is
+        /// called whenever a user logs onto the computer. This file
+        /// changes the running directory to the location where CSSS
+        /// is stored, then if successful, starts CSSSLauncher.exe
+        /// 
+        /// See: http://www.linuxfromscratch.org/blfs/view/6.3/postlfs/profile.html
+        /// </summary>
+        private void AddToStartupLinux()
+        {
+            string fileLocation = @"/etc/profile.d/CSSS.sh";
+            string fileText = "cd " + CSSSDirectory + " && mono " + CSSSDirectory + "/CSSSLauncher.exe";
+
+            logger.Debug("Contents of CSSS.sh file: {0}", fileText);
+            logger.Debug("Attempting to create {0} file", fileLocation);
+
+            if (!File.Exists(fileLocation))
+            {
+                // Create a file to write to it
+                using (StreamWriter sw = File.CreateText(fileLocation))
+                {
+                    sw.WriteLine(fileText);
+                }
+
+                logger.Debug("The {0} file has been created", fileLocation);
+            }
+            else
+            {
+                logger.Error("Unable to create CSSS startup file {0} as it already exists, so it wasn't overwritten", fileLocation);
+                logger.Error("Please create this manually before taking an image. File contents: " + fileText);
+            }
         }
     }
 }
