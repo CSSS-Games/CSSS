@@ -16,6 +16,7 @@
 
 using CSSSCheckerEngine;
 using CSSSConfig;
+using Microsoft.Win32.TaskScheduler;
 using NLog;
 using System;
 using System.IO;
@@ -79,15 +80,16 @@ namespace CSSS
 
         /// <summary>
         /// Adds CSSS to the various startup locations, so that it
-        /// can start automatically at computer startup / user login
+        /// can start automatically at any user login
         /// </summary>
         public void AddToStartup()
         {
-            logger.Info("Setting CSSS to run automatically on computer startup / user login");
+            logger.Info("Setting CSSS to run automatically on any user login");
 
             switch (config.operatingSystemType)
             {
                 case Config.OperatingSystemType.WinNT:
+                    AddToStartupWinNT();
                     break;
                     
                 case Config.OperatingSystemType.Linux:
@@ -98,11 +100,11 @@ namespace CSSS
                     break;
             }
 
-            logger.Info("CSSS has been set to run automatically on computer startup / user login");
+            logger.Info("CSSS has been set to run automatically on any user login");
         }
 
         /// <summary>
-        /// Allows CSSS to start at user login to a Linux computer
+        /// Allows CSSS to start on any user login to a Linux computer
         /// 
         /// A file is created in /etc/profile.d directory, which is
         /// called whenever a user logs onto the computer. This file
@@ -134,6 +136,43 @@ namespace CSSS
                 logger.Error("Unable to create CSSS startup file {0} as it already exists, so it wasn't overwritten", fileLocation);
                 logger.Error("Please create this manually before taking an image. File contents: " + fileText);
             }
+        }
+
+        /// <summary>
+        /// Allows CSSS to start on any user login to a WinNT computer
+        /// 
+        /// A scheduled task is created which runs whenever any user
+        /// logs onto the computer. The task starts the CSSSLauncher.exe
+        /// program inside the CSSS running directory
+        /// </summary>
+        private void AddToStartupWinNT()
+        {
+            logger.Debug("Creating scheduled task to run CSSS on any user login");
+
+            TaskDefinition task = TaskService.Instance.NewTask();
+            task.RegistrationInfo.Description = "Runs CSSS at user login";
+            task.Settings.Hidden = true;
+            task.Settings.StartWhenAvailable = true;
+            task.Settings.DisallowStartIfOnBatteries = false;
+            task.Settings.StopIfGoingOnBatteries = false;
+            task.Settings.RestartCount = 5;
+            task.Settings.RestartInterval = TimeSpan.FromSeconds(60);
+            task.Actions.Add(CSSSDirectory + Path.DirectorySeparatorChar + "CSSSLauncher.exe",
+                             null,
+                             CSSSDirectory);
+
+            LogonTrigger trigger = new LogonTrigger();
+            task.Triggers.Add(trigger);
+
+            TaskService.Instance.RootFolder.RegisterTaskDefinition("CyberSecurity Scoring System",
+                                                                   task,
+                                                                   TaskCreation.CreateOrUpdate,
+                                                                   null,
+                                                                   null,
+                                                                   TaskLogonType.InteractiveToken,
+                                                                   null);
+
+            logger.Debug("CSSS scheduled task has been created");
         }
     }
 }
