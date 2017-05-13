@@ -21,6 +21,16 @@ using System;
 
 namespace CSSS
 {
+    /// <summary>
+    /// Prepares CSSS for image capture
+    /// 
+    /// When the user has customised the image and CSSS to
+    /// check various "issues", the "--prepare" argument is
+    /// passed. This class looks after performing the relevant
+    /// steps needed to get CSSS ready for deployment, such
+    /// as encrypting the issue files and setting itself to
+    /// run automatically when a user logs in to the computer
+    /// </summary>
     public class Prepare
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -37,8 +47,24 @@ namespace CSSS
         /// </summary>
         private IssueFiles issueFiles = new IssueFiles();
 
-        public Prepare()
+        /// <summary>
+        /// Performs all of the preparation steps needed to get CSSS
+        /// ready for image capture
+        /// </summary>
+        public void PerformAllPreparationSteps()
         {
+            PrepareAllIssueFiles();
+        }
+
+        /// <summary>
+        /// Prepares all issue files by encrypting them, to prevent
+        /// competitors from opening them to see the issues
+        /// </summary>
+        public void PrepareAllIssueFiles()
+        {
+            // Encrypting the issue files and removing any plaintext
+            // files
+            issueFiles.PrepareAllIssueFiles();
         }
     }
 }
