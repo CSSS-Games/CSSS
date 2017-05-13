@@ -69,6 +69,26 @@ namespace CSSS
             // Setting the runtime environment
             SetRuntimeEnvironment();
 
+            // Seeing if CSSS is running with elevated privileges,
+            // such as running with 'sudo' or as an administrator.
+            // This is only needed if the "-p" argument has been passed,
+            // as it requires writing to some "admin-only" areas
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Prepare))
+            {
+                logger.Debug("Checking if CSSS has administrative privileges");
+
+                if (CheckElevatedPrivilegesGranted())
+                {
+                    logger.Info("CSSS is running with administrative privileges");
+                }
+                else
+                {
+                    // Throw a security exception, as CSSS would not be able
+                    // to complete its tasks
+                    throw new System.Security.SecurityException("CSSS needs to be run with administrative privileges when \"--prepare\" is used");
+                }
+            }
+
             // All tasks have been completed, so let the config class know
             // so that the CSSS kernel can start performing tasks
             config.InitTasksCompleted = true;
@@ -306,6 +326,44 @@ namespace CSSS
         }
 
         /// <summary>
+        /// Checks that elevated privileges have been granted
+        /// 
+        /// During the "-p" (prepare) stage of CSSS, a number of files
+        /// and settings are written to "admin-only" areas. To make sure
+        /// that there isn't a problem when these settings are being
+        /// configured, CSSS checks to make sure that it is run with
+        /// elevated (administrative) privileges
+        /// 
+        /// To perform this check, CSSS tries to access some privileged
+        /// settings and sees what the error code is. If it's successful
+        /// then the privileges have been granted. Otherwise, error out
+        /// and let the user know why in <see cref="T:Program.cs"/>.
+        /// There doesn't seem to be any better way to do this that I
+        /// can find online, which also works across multiple Operating
+        /// Systems
+        /// </summary>
+        /// <returns><c>true</c>, if elevated privileges are granted, <c>false</c> otherwise</returns>
+        private bool CheckElevatedPrivilegesGranted()
+        {
+             switch (config.operatingSystemType)
+            {
+                case Config.OperatingSystemType.WinNT:
+                    // Attempt to run `CACLS "%SYSTEMROOT%\system32\config\system"`
+                    // See: http://www.robvanderwoude.com/battech_elevation.php
+                    return SuccessfulExitCode("C:\\Windows\\System32\\cacls.exe", "C:\\Windows\\system32\\config\\system");
+
+                case Config.OperatingSystemType.Linux:
+                    // Attempt to run `cat /etc/sudoers`
+                    return SuccessfulExitCode("/bin/cat", "/etc/sudoers");
+            }
+
+            // An exception should already have been thrown if an unsupported
+            // Operating System is in use, but it's included here just to
+            // prevent anything unexpected happening
+            throw new NotImplementedException("CSSS does not support running on your Operating System");
+        }
+
+        /// <summary>
         /// Reads system program process output to determine information about
         /// the current Operating System type
         /// 
@@ -343,6 +401,42 @@ namespace CSSS
             {
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Checks to see if the exit code is successful or not for
+        /// an external program
+        /// 
+        /// See: http://stackoverflow.com/a/4251752
+        /// </summary>
+        /// <returns><c>true</c>, if exit code was successful, <c>false</c> otherwise</returns>
+        /// <param name="Program">The program to run</param>
+        /// <param name="Arguments">The arguments to pass to the program</param>
+        private bool SuccessfulExitCode(string Program, string Arguments)
+        {
+            Process checkProcess = new Process();
+            ProcessStartInfo checkProcessInfo = new ProcessStartInfo();
+
+            checkProcessInfo.FileName = Program;
+            checkProcessInfo.Arguments = Arguments;
+
+            // Hide any windows from showing
+            checkProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            checkProcessInfo.CreateNoWindow = true;
+            checkProcessInfo.UseShellExecute = false;
+
+            // "Eat" the output, as on Linux it will echo out the file
+            checkProcessInfo.RedirectStandardOutput = true;
+
+            checkProcess.StartInfo = checkProcessInfo;
+
+            checkProcess.Start();
+
+            checkProcess.WaitForExit();
+
+            logger.Debug("Exit code for process \"{0} {1}\": {2}", Program, Arguments, checkProcess.ExitCode);
+
+            return (checkProcess.ExitCode == 0) ? true : false;
         }
     }
 }

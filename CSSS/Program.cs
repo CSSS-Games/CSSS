@@ -55,6 +55,12 @@ namespace CSSS
                 logger.Error("An instance of CSSS is probably already running... exiting");
                 return 11;
             }
+            catch (System.Security.SecurityException e)
+            {
+                // CSSS is in "prepare" mode, but has not been run with administrative privileges
+                logger.Error(e.Message);
+                return 12;
+            }
 
             // Creating an instance of the CSSS kernel so that tasks
             // can be co-ordinated. The constructor will throw an
