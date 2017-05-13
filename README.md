@@ -29,16 +29,38 @@ Before CSSS will run, the following additional programs need to be installed ont
 ## Running
 Double-clicking on CSSS will cause it to quickly show the usage window, then close itself. This is by design. To run CSSS properly, a number of arguments need to be passed to the program, which are:
 ```
--c, --check:   Checks the config files for any problems
--o, --observe: Observes CSSS running before preparing it (implies 'c')
--p, --prepare: Prepares CSSS ready for image release (implies '-c')
--s, --start:   Starts the scoring system
--h, --help:    Shows the program usage
+Usage:
+  CSSS.exe -c | -o | -p | -s | [-h] | [-m]
+
+Examples:
+  CSSS.exe -c
+  CSSS.exe -o -m
+  CSSS.exe -p
+  CSSS.exe -s
+  CSSS.exe -h
+
+
+Required arguments (at least one is needed):
+  -c, --check:    Checks the config files for any problems
+  -o, --observe:  Observes CSSS running before preparing it (implies '-c')
+  -p, --prepare:  Prepares CSSS ready for image release (implies '-c')
+  -s, --start:    Starts the scoring system
+
+
+Optional arguments:
+  -h, --help:     Shows this help message
+
+
+Developer arguments (all optional):
+  -m, --multiple: Allows multiple instances of CSSS to run concurently
 ```
 
-These arguments have been chosen to spell 'COPS', as competitors are 'policing' the security of the computer.
+The required arguments have been chosen to spell 'COPS', as competitors are 'policing' the security of the computer.
 
-Under normal image building, the '-o' option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+Under normal image building, the `-o` option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+
+When you are ready to release the image, __with administrative privileges__ (e.g. `sudo`, "Run as administrator") run CSSS with the `-p` option to prepare the necessary files and allow CSSS to start automatically on computer reboots.
+> :warning: Running CSSS with the `-p` argument will excrypt the issue files. Make sure that you have a snapshot of your image before you run this command, otherwise you will need to set everything up again should there be any problems.
 
 ## Contributing
 Thanks for your interest in contributing to this project. You can contribute or report issues in the following ways:
@@ -46,7 +68,7 @@ Thanks for your interest in contributing to this project. You can contribute or 
 ### Pull Requests
 If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
 
-The current development environment is with Xamarin Studio Community 6.2 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
+The current development environment is with Xamarin Studio Community 6.3 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
 
 ## License Terms
 CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
