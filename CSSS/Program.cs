@@ -123,7 +123,9 @@ namespace CSSS
         /// 
         /// The URLs are:
         ///   Full: https://github.com/stuajnht/CSSS/wiki/CSSS-Exit-Codes
-        ///   Short: https://git.io/v9QbU
+        ///   Short: https://git.io/csss-exit-codes
+        ///   (Thanks to @shawnajean at GitHub support for help when I
+        ///    screwed up creating the vanity URL the first time)
         /// 
         /// Note: If any additional exit codes are created, the
         ///       wiki pages will also need to be updated to reflect
@@ -133,7 +135,7 @@ namespace CSSS
         /// <param name="exitCode">The CSSS exit code</param>
         private static string GenerateExitCodeURLMessage(int exitCode)
         {
-            return "See \"https://github.com/stuajnht/CSSS/wiki/CSSS-Exit-Codes#exit-code-" +
+            return "See \"https://git.io/csss-exit-codes#exit-code-" +
                    exitCode +
                    "\" for more information";
         }
