@@ -14,11 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSSCheckerEngine;
+using System.Collections.Generic;
 using CSSSConfig;
 using NLog;
-using System;
-using System.Collections.Generic;
 
 namespace IssueChecks
 {

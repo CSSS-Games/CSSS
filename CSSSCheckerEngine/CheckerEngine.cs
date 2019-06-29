@@ -1,5 +1,5 @@
 ﻿//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-using NLog;
-using System;
 
 namespace CSSSCheckerEngine
 {

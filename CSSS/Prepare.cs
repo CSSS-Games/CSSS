@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.IO;
+using System.Reflection;
 using CSSSCheckerEngine;
 using CSSSConfig;
 using Microsoft.Win32.TaskScheduler;
 using NLog;
-using System;
-using System.IO;
-using System.Reflection;
 
 namespace CSSS
 {
@@ -43,7 +43,7 @@ namespace CSSS
         /// able to read and set values for it
         /// </summary>
         private static Config config = Config.GetCurrentConfig;
-        
+
         /// <summary>
         /// A reference to the <see cref="T:CSSSCheckerEngine.IssueFiles"/>
         /// IssueFiles class, used when preparing the issue files
@@ -91,11 +91,11 @@ namespace CSSS
                 case Config.OperatingSystemType.WinNT:
                     AddToStartupWinNT();
                     break;
-                    
+
                 case Config.OperatingSystemType.Linux:
                     AddToStartupLinux();
                     break;
-                    
+
                 default:
                     break;
             }

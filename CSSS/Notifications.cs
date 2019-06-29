@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 using CSSSConfig;
 using CSSSNotifications;
 using NLog;
-using System;
 
 namespace CSSS
 {

@@ -1,5 +1,5 @@
 ﻿//  CSSSTests - CyberSecurity Scoring System Tests
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 using CSSS;
 using CSSSConfig;
 using NUnit.Framework;
-using System;
 
 namespace CSSSTests
 {
@@ -296,13 +295,13 @@ namespace CSSSTests
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(bootstrapChecks.CheckArguments(multipleInstancesShortArgument),
-                			   "'-m' argument passed to CSSS should not continue execution"
-                			  );
+                               "'-m' argument passed to CSSS should not continue execution"
+                              );
                 Assert.AreEqual(Config.CSSSModes.MultipleInstances,
-                				config.CSSSProgramMode,
-                				"Mode for CSSS should be 'MultipleInstances' if '-m' argument is passed"
-                			   );
-                });
+                                config.CSSSProgramMode,
+                                "Mode for CSSS should be 'MultipleInstances' if '-m' argument is passed"
+                               );
+            });
         }
 
         /// <summary>
@@ -314,11 +313,11 @@ namespace CSSSTests
         {
             string[] multipleInstancesLongArgument = new string[1] { "--multiple" };
 
-        	Assert.Multiple(() =>
-        	{
-        		Assert.IsFalse(bootstrapChecks.CheckArguments(multipleInstancesLongArgument),
-        					   "'--multiple' argument passed to CSSS should not continue execution"
-        					  );
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(bootstrapChecks.CheckArguments(multipleInstancesLongArgument),
+                               "'--multiple' argument passed to CSSS should not continue execution"
+                              );
                 Assert.AreEqual(Config.CSSSModes.MultipleInstances,
                                 config.CSSSProgramMode,
                                 "Mode for CSSS should be 'MultipleInstances' if '--multiple' argument is passed"
@@ -339,12 +338,12 @@ namespace CSSSTests
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(bootstrapChecks.CheckArguments(observeMultipleInstancesShortArguments),
-                			   "'-o -m' arguments passed to CSSS should continue execution"
-                			  );
+                               "'-o -m' arguments passed to CSSS should continue execution"
+                              );
                 Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Observe | Config.CSSSModes.MultipleInstances),
-                				config.CSSSProgramMode,
-                				"Mode for CSSS should be 'Check, Observe, MultipleInstances' if '-o -m' arguments are passed"
-                			   );
+                                config.CSSSProgramMode,
+                                "Mode for CSSS should be 'Check, Observe, MultipleInstances' if '-o -m' arguments are passed"
+                               );
             });
         }
 
@@ -361,12 +360,12 @@ namespace CSSSTests
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(bootstrapChecks.CheckArguments(observeMultipleInstancesLongArguments),
-                			   "'--observe --multiple' arguments passed to CSSS should continue execution"
-                			  );
+                               "'--observe --multiple' arguments passed to CSSS should continue execution"
+                              );
                 Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Observe | Config.CSSSModes.MultipleInstances),
-                				config.CSSSProgramMode,
-                				"Mode for CSSS should be 'Check, Observe, MultipleInstances' if '--observe --multiple' arguments are passed"
-                			   );
+                                config.CSSSProgramMode,
+                                "Mode for CSSS should be 'Check, Observe, MultipleInstances' if '--observe --multiple' arguments are passed"
+                               );
             });
         }
 
@@ -383,12 +382,12 @@ namespace CSSSTests
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(bootstrapChecks.CheckArguments(prepareShortArgument),
-                			   "'-p -m' arguments passed to CSSS should continue execution"
-                			  );
+                               "'-p -m' arguments passed to CSSS should continue execution"
+                              );
                 Assert.AreEqual((Config.CSSSModes.Check | Config.CSSSModes.Prepare | Config.CSSSModes.MultipleInstances),
-                				config.CSSSProgramMode,
-                				"Mode for CSSS should be 'Check, Prepare, MultipleInstances' if '-p -m' arguments are passed"
-                			   );
+                                config.CSSSProgramMode,
+                                "Mode for CSSS should be 'Check, Prepare, MultipleInstances' if '-p -m' arguments are passed"
+                               );
             });
         }
 
@@ -400,9 +399,9 @@ namespace CSSSTests
         [Test()]
         public void TestPrepareMultipleInstancesLongArgumentsToProgram()
         {
-        	string[] prepareLongArgument = new string[2] { "--prepare", "--multiple" };
+            string[] prepareLongArgument = new string[2] { "--prepare", "--multiple" };
 
-        	Assert.Multiple(() =>
+            Assert.Multiple(() =>
             {
                 Assert.IsTrue(bootstrapChecks.CheckArguments(prepareLongArgument),
                                "'--prepare --multiple' arguments passed to CSSS should continue execution"
@@ -427,12 +426,12 @@ namespace CSSSTests
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(bootstrapChecks.CheckArguments(prepareShortArgument),
-                			   "'-s -m' arguments passed to CSSS should continue execution"
-                			  );
+                               "'-s -m' arguments passed to CSSS should continue execution"
+                              );
                 Assert.AreEqual((Config.CSSSModes.Start | Config.CSSSModes.MultipleInstances),
-                				config.CSSSProgramMode,
-                				"Mode for CSSS should be 'Start, MultipleInstances' if '-s -m' arguments are passed"
-                			   );
+                                config.CSSSProgramMode,
+                                "Mode for CSSS should be 'Start, MultipleInstances' if '-s -m' arguments are passed"
+                               );
             });
         }
 
@@ -444,13 +443,13 @@ namespace CSSSTests
         [Test()]
         public void TestStartMultipleInstancesLongArgumentsToProgram()
         {
-        	string[] prepareLongArgument = new string[2] { "--start", "--multiple" };
+            string[] prepareLongArgument = new string[2] { "--start", "--multiple" };
 
-        	Assert.Multiple(() =>
-        	{
-        		Assert.IsTrue(bootstrapChecks.CheckArguments(prepareLongArgument),
-        					   "'--start --multiple' arguments passed to CSSS should continue execution"
-        					  );
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(bootstrapChecks.CheckArguments(prepareLongArgument),
+                               "'--start --multiple' arguments passed to CSSS should continue execution"
+                              );
                 Assert.AreEqual((Config.CSSSModes.Start | Config.CSSSModes.MultipleInstances),
                                 config.CSSSProgramMode,
                                 "Mode for CSSS should be 'Start, MultipleInstances' if '--start --multiple' arguments are passed"

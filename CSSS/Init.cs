@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,14 +14,14 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSSConfig;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using CSSSConfig;
+using NLog;
 using SupportLibrary.OSVersionInfo;
 
 namespace CSSS
@@ -240,7 +240,7 @@ namespace CSSS
                     config.OperatingSystemName = WinNTVersionInfo.Name;
                     logger.Info("Operating System name: {0}", config.OperatingSystemName);
                     return true;
-                    
+
                 case Config.OperatingSystemType.Linux:
                     // Using the `lsb_release -i -s` and `lsb_release -c -s`
                     // program and arguments to join the Operating System
@@ -250,7 +250,7 @@ namespace CSSS
                                                + ReadProcessOutput("lsb_release", "-c -s");
                     logger.Info("Operating System name: {0}", config.OperatingSystemName);
                     return true;
-                    
+
                 default:
                     // The operating system type is not known, so it is not
                     // possible to set a name
@@ -293,7 +293,7 @@ namespace CSSS
                                                                   "");
                     logger.Info("Operating System ver.: {0}", config.OperatingSystemVersion);
                     return true;
-                    
+
                 default:
                     // The operating system type is not known, so it is not
                     // possible to set a version number
@@ -345,7 +345,7 @@ namespace CSSS
         /// <returns><c>true</c>, if elevated privileges are granted, <c>false</c> otherwise</returns>
         private bool CheckElevatedPrivilegesGranted()
         {
-             switch (config.operatingSystemType)
+            switch (config.operatingSystemType)
             {
                 case Config.OperatingSystemType.WinNT:
                     // Attempt to run `CACLS "%SYSTEMROOT%\system32\config\system"`
