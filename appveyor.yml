@@ -31,4 +31,4 @@ build:
 #---------------------------------#
 test: off
 
-test_script: nunit3-console.exe .\CSSS.sln --config=Release --result=myresults.xml;format=AppVeyor
+test_script: nunit3-console.exe .\CSSS.sln --config=Release --skipnontestassemblies --result=myresults.xml;format=AppVeyor

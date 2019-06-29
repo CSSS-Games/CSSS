@@ -12,4 +12,4 @@ matrix:
 
 script:
   - xbuild /p:Configuration=Release CSSS.sln
-  - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSS.sln --config=Release
+  - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSS.sln --config=Release --skipnontestassemblies
