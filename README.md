@@ -68,7 +68,7 @@ Thanks for your interest in contributing to this project. You can contribute or 
 ### Pull Requests
 If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
 
-The current development environment is with Xamarin Studio Community 6.3 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
+The current development environment is with Visual Studio Community 2019 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
 
 ## License Terms
 CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
