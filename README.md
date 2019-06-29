@@ -7,14 +7,20 @@ While it is currently possible to create [your own practice images](https://www.
 ## Requirements
 To run CSSS, you will need to have an image running one of the supported operating systems:
   * Windows:
-    * Windows Vista
-    * Windows 7
-    * Windows 8
-    * Windows Server 2008
+    * Desktop:
+      * Windows 7
+      * Windows 8
+      * Windows 10
+    * Server:
+      * Windows Server 2008 R2
+      * Windows Server 2012
+      * Windows Server 2012 R2
+      * Windows Server 2016
+      * Windows Server 2019
   * Linux:
-    * Ubuntu 14.04
     * Ubuntu 16.04
-    * Debian 7
+    * Ubuntu 18.04
+    * Debian 9
 
 Other operating systems should work, but they are not supported as the CyberPatriot / CyberCenturion competitions do not use them.
 
