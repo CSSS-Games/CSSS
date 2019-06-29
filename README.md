@@ -7,14 +7,20 @@ While it is currently possible to create [your own practice images](https://www.
 ## Requirements
 To run CSSS, you will need to have an image running one of the supported operating systems:
   * Windows:
-    * Windows Vista
-    * Windows 7
-    * Windows 8
-    * Windows Server 2008
+    * Desktop:
+      * Windows 7
+      * Windows 8
+      * Windows 10
+    * Server:
+      * Windows Server 2008 R2
+      * Windows Server 2012
+      * Windows Server 2012 R2
+      * Windows Server 2016
+      * Windows Server 2019
   * Linux:
-    * Ubuntu 14.04
     * Ubuntu 16.04
-    * Debian 7
+    * Ubuntu 18.04
+    * Debian 9
 
 Other operating systems should work, but they are not supported as the CyberPatriot / CyberCenturion competitions do not use them.
 
@@ -68,7 +74,7 @@ Thanks for your interest in contributing to this project. You can contribute or 
 ### Pull Requests
 If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
 
-The current development environment is with Xamarin Studio Community 6.3 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
+The current development environment is with Visual Studio Community 2019 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
 
 ## License Terms
 CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.

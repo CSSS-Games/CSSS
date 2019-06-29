@@ -18,6 +18,7 @@ using CSSS;
 using CSSSConfig;
 using NUnit.Framework;
 using System;
+using System.Security.Principal;
 
 namespace CSSSTests
 {
@@ -105,6 +106,20 @@ namespace CSSSTests
         [Test()]
         public void TestKernelPerformTasksPrepareArgumentReturnsTrue()
         {
+            // The 'Prepare' mode requires administrative permissions due to it modifying
+            // parts of the system that normal users shouldn't have access to (`/etc`,
+            // task scheduler). If this permission is not currently granted, then ignore
+            // the test rather than making it fail
+            // See: https://stackoverflow.com/a/5953294
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+                {
+                    Assert.Ignore("The 'Prepare' argument test has been ignored due to administrative permissions not being available");
+                }
+            }
+
             config.CSSSProgramMode = Config.CSSSModes.Prepare;
 
             kernel = new Kernel();
