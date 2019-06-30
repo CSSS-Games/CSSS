@@ -112,11 +112,20 @@ These are the tasks planned for each release version. Please note that these can
 * Comment ~~and coding style~~ tidy-up
 
 ### Version 0.4
+* Allow creating "named" images, so that it's possible to keep track of multiple images
+* Enter team identifiers to keep track of who is using which image
+* A server instance that will provide:
+  * A central store of scoring reports for a team and their images in that "round"
+  * Scoreboards and graphs to show which team is in the lead
+  * A way to send messages from the server to all images (e.g. "Time limit is approaching")
+  * Checks to make sure that only one instance of an image is open at once
+
+### Version 0.5
 * Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)
 * Install additional software when CSSS is being installed to make sure all items are available for it to use
 * Create build scripts that install software that can be used when testing the checker system engine
 
-### Versions 0.5 onward
+### Versions 0.6 onwards
 * Create more check template files and relevant classes for the checker system engine to use (a new version for each check "category")
 * Create some example checker files with instructions to create images based around them with pre-made questions and scenarios
 
