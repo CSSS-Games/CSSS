@@ -161,10 +161,59 @@ namespace CSSSCheckerEngineTests.Issues.Files
         // A "gain points" should return `True` - "loose points" returns `False`
 
         [Test()]
-        public void TestFileExistsAndShouldExistAndIsNotPenaltyIssue()
+        public void TestFileDoesExistAndShouldExistAndIsNotPenaltyIssue()
         {
             Assert.IsTrue(existenceFilesChecks.CheckFileExistence(existingFilePath, true, false),
                           "Files that exist and should exist and aren't a penalty should return True");
+        }
+
+        [Test()]
+        public void TestFileDoesExistAndShouldNotExistAndIsNotPenaltyIssue()
+        {
+            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(existingFilePath, false, false),
+                          "Files that exist and shouldn't exist and aren't a penalty should return False");
+        }
+
+        [Test()]
+        public void TestFileDoesNotExistAndShouldExistAndIsNotPenaltyIssue()
+        {
+            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, true, false),
+                          "Files that don't exist and should exist and aren't a penalty should return False");
+        }
+
+        [Test()]
+        public void TestFileDoesNotExistAndShouldNotExistAndIsNotPenaltyIssue()
+        {
+            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, false, false),
+                          "Files that don't exist and shouldn't exist and aren't a penalty should return True");
+        }
+
+        [Test()]
+        public void TestFileDoesExistAndShouldExistAndIsPenaltyIssue()
+        {
+            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(existingFilePath, true, true),
+                          "Files that exist and should exist and are a penalty should return False");
+        }
+
+        [Test()]
+        public void TestFileDoesExistAndShouldNotExistAndIsPenaltyIssue()
+        {
+            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(existingFilePath, false, true),
+                          "Files that exist and shouldn't exist and are a penalty should return True");
+        }
+
+        [Test()]
+        public void TestFileDoesNotExistAndShouldExistAndIsPenaltyIssue()
+        {
+            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, true, true),
+                          "Files that don't exist and should exist and are a penalty should return True");
+        }
+
+        [Test()]
+        public void TestFileDoesNotExistAndShouldNotExistAndIsPenaltyIssue()
+        {
+            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, false, true),
+                          "Files that don't exist and shouldn't exist and are a penalty should return False");
         }
     }
 }
