@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -38,7 +38,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckAPI\Files\Existence.Files.CheckAPI.cs" />
     <Compile Include="CheckerEngine.cs" />
+    <Compile Include="Checker\Files\Existence.Files.Checker.cs" />
+    <Compile Include="OS\Linux\Files\Existence.Files.Linux.OS.cs" />
+    <Compile Include="OS\WinNT\Files\Existence.Files.WinNT.OS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Checker\System\Version.System.Checker.cs" />
     <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
@@ -47,24 +51,15 @@
     <Compile Include="IssueFiles.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Issues\Files\Existence.Files.Issues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Issues\System\Version.System.Issues.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Checker\" />
-    <Folder Include="Checker\System\" />
-    <Folder Include="OS\" />
-    <Folder Include="OS\Linux\" />
-    <Folder Include="OS\Linux\System\" />
-    <Folder Include="OS\WinNT\" />
-    <Folder Include="OS\WinNT\System\" />
-    <Folder Include="CheckAPI\" />
-    <Folder Include="CheckAPI\System\" />
-    <Folder Include="Issues\" />
-    <Folder Include="Issues\System\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
       <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
