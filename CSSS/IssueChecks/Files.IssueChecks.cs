@@ -15,6 +15,7 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
 namespace IssueChecks
 {
@@ -32,7 +33,91 @@ namespace IssueChecks
         /// </summary>
         public void PerformAllFilesChecks()
         {
+            CheckFilesContents();
             CheckFilesExistence();
+        }
+
+        /// <summary>
+        /// Checks the file contents with the values in the issue file,
+        /// to see if they do or don't match what is expected
+        /// </summary>
+        public void CheckFilesContents()
+        {
+            // This is the issue file category that is being looked
+            // at for this check
+            const string issueCategory = "issues.files.contents";
+
+            // If the issue file is not available then any attempts
+            // at checking it can be bypassed. This is indicated by
+            // a boolean value being returned when trying to load
+            // the relevant issue file
+            dynamic issueFile = LoadIssueFile(issueCategory);
+            if (!(issueFile is bool))
+            {
+                logger.Debug("Performing checks for the category: {0}", issueCategory);
+
+                var fileCheck = new CheckAPI.Files.Contents();
+
+                // Checking each issue in the file to see if the values
+                // listed match with what is expected
+                for (int issue = 0; issue < issueFile.Issues.Count; issue++)
+                {
+                    // Adding to the total number of issue to find, but
+                    // only if the points available are more than 0
+                    if ((int)issueFile.Issues[issue].Points > 0)
+                    {
+                        config.TotalIssues += 1;
+                    }
+
+                    var filePath = (string)issueFile.Issues[issue].Path;
+                    // Calling `ToObject` is needed to convert from `Newtonsoft.Json.Linq.JArray`
+                    // so that the contents of the file can be looped over
+                    // See: https://stackoverflow.com/a/13565373
+                    var fileContents = issueFile.Issues[issue].Contents.ToObject<List<String>>();
+
+                    try
+                    {
+                        // Checking the current file contents match, according to
+                        // the issue file
+                        if (fileCheck.CheckFileContents(filePath, fileContents))
+                        {
+                            // The issue check matches with the current system state,
+                            // so include the points in the total score
+                            PointsScored((int)issueFile.Issues[issue].Points,
+                                         (string)issueFile.Issues[issue].Description,
+                                         (bool)issueFile.Issues[issue].Triggered);
+
+                            // The check for this issue has been triggered,
+                            // so update the JSON to reflect this
+                            issueFile.Issues[issue].Triggered = true;
+                        }
+                        else
+                        {
+                            // Seeing if the issue was already resolved and has
+                            // been broken again, as the check returned false
+                            if (issueFile.Issues[issue].Triggered == true)
+                            {
+                                PointsLost((int)issueFile.Issues[issue].Points,
+                                           (string)issueFile.Issues[issue].Description);
+
+                                issueFile.Issues[issue].Triggered = false;
+                            }
+                        }
+                    }
+                    catch (NotImplementedException e)
+                    {
+                        // If the check is attempted on an Operating System that
+                        // doesn't support it, it will throw an exception which
+                        // will be caught here. This function is returned from here
+                        // instead of looping through each possible issue on the basis
+                        // of "if it can't be completed once, there's no point retrying"
+                        logger.Warn("Unable to perform {0} check: {1}", issueCategory, e.Message);
+                        return;
+                    }
+                }
+
+                logger.Debug("Finished performing checks for the category: {0}", issueCategory);
+            }
         }
 
         /// <summary>
