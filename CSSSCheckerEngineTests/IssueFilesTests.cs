@@ -97,6 +97,7 @@ namespace CSSSCheckerEngineTests
             // is replaced later on with the relevant Operating
             // System directory path separator
             string[] issueFilesList = {
+                "Files+Contents.Files.Issues.json",
                 "Files+Existence.Files.Issues.json",
                 "System+Version.System.Issues.json"
             };
