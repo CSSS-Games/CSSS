@@ -1,0 +1,46 @@
+﻿{
+    "Category": "issues.system.registry",
+    "SupportedOS": "WinNT",
+    "Issues": [
+        {
+            "Description": "Windows Updates have been disabled",
+            "Points": -5,
+            "Triggered": false,
+            "Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU",
+            "Name": "NoAutoUpdate",
+            "Value": 1
+        },
+        {
+            "Description": "Access by anonymous users is unrestricted",
+            "Points": -5,
+            "Triggered": false,
+            "Path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa",
+            "Name": "everyoneincludesanonymous",
+            "Value": 1
+        },
+        {
+            "Description": "PowerShell is not blocked from loading configuration files or running scripts",
+            "Points": -5,
+            "Triggered": false,
+            "Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell",
+            "Name": "ExecutionPolicy",
+            "Value": "Bypass"
+        },
+        {
+            "Description": "Authorised remote users are not able to access this computer",
+            "Points": -5,
+            "Triggered": false,
+            "Path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\TermService",
+            "Name": "Start",
+            "Value": null
+        },
+        {
+            "Description": "Account Policy has been set",
+            "Points": 5,
+            "Triggered": false,
+            "Path": "HKEY_LOCAL_MACHINE\\SAM\\SAM\\Domains\\Account",
+            "Name": "F",
+            "Value": ""
+        }
+    ]
+}
