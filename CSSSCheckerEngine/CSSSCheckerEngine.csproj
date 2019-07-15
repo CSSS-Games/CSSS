@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -40,13 +40,16 @@
   <ItemGroup>
     <Compile Include="CheckAPI\Files\Contents.Files.CheckAPI.cs" />
     <Compile Include="CheckAPI\Files\Existence.Files.CheckAPI.cs" />
+    <Compile Include="CheckAPI\System\Registry.System.CheckAPI.cs" />
     <Compile Include="CheckerEngine.cs" />
     <Compile Include="Checker\Files\Contents.Files.Checker.cs" />
     <Compile Include="Checker\Files\Existence.Files.Checker.cs" />
+    <Compile Include="Checker\System\Registry.System.Checker.cs" />
     <Compile Include="OS\Linux\Files\Contents.Files.Linux.OS.cs" />
     <Compile Include="OS\Linux\Files\Existence.Files.Linux.OS.cs" />
     <Compile Include="OS\WinNT\Files\Contents.Files.WinNT.OS.cs" />
     <Compile Include="OS\WinNT\Files\Existence.Files.WinNT.OS.cs" />
+    <Compile Include="OS\WinNT\System\Registry.System.WinNT.OS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Checker\System\Version.System.Checker.cs" />
     <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
