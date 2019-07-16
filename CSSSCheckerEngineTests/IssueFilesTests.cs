@@ -99,6 +99,7 @@ namespace CSSSCheckerEngineTests
             string[] issueFilesList = {
                 "Files+Contents.Files.Issues.json",
                 "Files+Existence.Files.Issues.json",
+                "System+Registry.System.Issues.json",
                 "System+Version.System.Issues.json"
             };
 
