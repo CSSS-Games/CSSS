@@ -197,6 +197,36 @@ namespace CSSSCheckerEngineTests.Issues.System
         }
 
         [Test()]
+        public void TestRegistryValueWithExpectedBINARYValueMatchingReturnsTrue()
+        {
+            // `binaryValue` = "C\0S\0S\0S\0"
+            byte[] binaryValue = { 67, 0, 83, 0, 83, 0, 83, 0 };
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
+            rk.SetValue("BINARYValueMatching", binaryValue);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\BINARYTests";
+            var registryName = "BINARYValueMatching";
+            var registryValue = "43,00,53,00,53,00,53,00";
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
+                          "Registry values with BINARY values matching should return true");
+        }
+
+        [Test()]
+        public void TestRegistryValueWithExpectedBINARYValueNotMatchingReturnsFalse()
+        {
+            // `binaryValue` = "404"
+            byte[] binaryValue = { 52, 48, 52 };
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
+            rk.SetValue("BINARYValueNotMatching", binaryValue);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\BINARYTests";
+            var registryName = "BINARYValueNotMatching";
+            var registryValue = "43,00,53,00,53,00,53,00";
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
+                          "Registry values with BINARY values not matching should return false");
+        }
+
+        [Test()]
         public void TestRegistryValueMissingValueMatchingReturnsTrue()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");

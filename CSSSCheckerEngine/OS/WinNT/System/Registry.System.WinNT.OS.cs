@@ -14,6 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Security;
 using Microsoft.Win32;
 
@@ -35,17 +36,24 @@ namespace OS.WinNT.System
             {
                 // Get the value of the registry key, or `null` if it does
                 // not exist
-                var value = Registry.GetValue(registryPath, registryName, null);
+                dynamic value = Registry.GetValue(registryPath, registryName, null);
 
                 // See: https://stackoverflow.com/a/1797610
                 if (value == null)
                 {
                     return string.IsNullOrEmpty(registryValue);
                 }
-                else
+
+                // Binary values stored in the registry (REG_BINARY) are returned
+                // as a numerical byte array. Binary values exported using regedit
+                // are a comma-separated hex string. `System.BitConverter` separates
+                // the values with a dash '-'
+                if (value is byte[])
                 {
-                    return string.Equals(value.ToString(), registryValue);
+                    value = BitConverter.ToString(value).Replace('-', ',');
                 }
+
+                return string.Equals(value.ToString(), registryValue, StringComparison.OrdinalIgnoreCase);
             }
             catch (SecurityException e)
             {
