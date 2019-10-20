@@ -1,4 +1,4 @@
-﻿//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
+//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
 //  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -67,7 +67,7 @@ static class RegistrySystemFactory
             case Config.OperatingSystemType.WinNT:
                 return new RegistrySystemWinNT();
             default:
-                throw new NotSupportedException("This Operating System is not supported for issue checks to be performed");
+                throw new NotSupportedException("This Operating System is not supported for registry issue checks to be performed");
         }
     }
 }

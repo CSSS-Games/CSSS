@@ -133,6 +133,14 @@ namespace IssueChecks
             dynamic issueFile = LoadIssueFile(issueCategory);
             if (!(issueFile is bool))
             {
+                if (issueFile.SupportedOS != config.operatingSystemType)
+                {
+                    // Only WinNT uses the concept of a registry, so other Operating
+                    // Systems cannot do anything with these checks
+                    logger.Debug("Skipping checks for the category: {0}", issueCategory);
+                    return;
+                }
+
                 logger.Debug("Performing checks for the category: {0}", issueCategory);
 
                 var registryCheck = new CheckAPI.System.Registry();
