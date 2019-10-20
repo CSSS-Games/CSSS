@@ -226,7 +226,7 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllIssueFilesAreCollected()
         {
-            Assert.AreEqual(IssueFilesList(),
+            CollectionAssert.AreEquivalent(IssueFilesList(),
                             issueFilesChecks.GetAllIssueFiles(),
                             "All JSON files in the issues directory should be a known issue check file");
         }
