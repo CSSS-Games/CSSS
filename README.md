@@ -1,8 +1,47 @@
 # CyberSecurity Scoring System (CSSS)
 
+|Branch|Status (Windows Build)|Status (Linux Build)|Last Commit|
+|---|---|---|---|
+|Master|[![AppVeyor Build status](https://img.shields.io/appveyor/ci/stuajnht/CSSS?label=AppVeyor%20Build)](https://ci.appveyor.com/project/stuajnht/csss)|[![Build Status](https://img.shields.io/travis/stuajnht/CSSS.svg?label=Travis%20Build)](https://travis-ci.org/stuajnht/CSSS) |[![Last Master Commit](https://img.shields.io/github/last-commit/stuajnht/CSSS.svg)]()
+|Develop|[![AppVeyor Build status](https://img.shields.io/appveyor/ci/stuajnht/CSSS/develop?label=AppVeyor%20Build)](https://ci.appveyor.com/project/stuajnht/csss/develop)|[![Develop Build Status](https://img.shields.io/travis/stuajnht/CSSS/develop?label=Travis%20Build)]()|[![Last Develop Commit](https://img.shields.io/github/last-commit/stuajnht/CSSS/develop.svg)]()
+
+[![.Net Versions](https://img.shields.io/badge/.Net%20Versions-4.0|4.5|4.6|4.7-blue.svg)]()
+[![Status](https://img.shields.io/badge/status-Pre%20Release-red.svg)]()
+[![Releases](https://img.shields.io/github/v/release/stuajnht/CSSS?include_prereleases)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
+[![Known Vulnerabilities](https://snyk.io/test/github/stuajnht/CSSS/badge.svg?targetFile=CSSS.sln)](https://snyk.io/test/github/stuajnht/CSSS?targetFile=CSSS.sln)
+[![Contributors](https://img.shields.io/github/contributors/stuajnht/CSSS.svg)]()
+[![Forks](https://img.shields.io/github/forks/stuajnht/CSSS.svg)]()
+[![Issues](https://img.shields.io/github/issues/stuajnht/CSSS.svg)](https://github.com/Stormy102/Lancer/issues)
+
 CyberSecurity Scoring System (CSSS) is a program to assist with training for the CyberPatriot / CyberCenturion competitions.
 
 While it is currently possible to create [your own practice images](https://www.uscyberpatriot.org/competition/training-materials/practice-images), there is only a scoring client for Windows computers. To assist with training competitors with Windows, Ubuntu and Debian Operating Systems, this program has been created to provide a scoring system for them.
+
+## Disclaimer
+This program is designed to score the state of a computer image against a pre-defined checklist of "issues". It is not designed to rate your computer security, provide security advice, or anything else that isn't related to the CyberPatriot / CyberCenturion competitions.
+
+## To-Do
+These are the tasks planned for each release version. Please note that these can change without warning, depending on how features are progressing.
+
+### Version 0.3
+* Perform various tasks when the '-p' argument is passed:
+  * ~~Set issue check files to be encrypted, so that images can be released but competitors can not find out what "issues" need to be fixed~~
+  * ~~Add files to the relevant Operating System startup folders, so that CSSS will start automatically:~~
+    * ~~[Windows shortcut](http://stackoverflow.com/a/19914018) in [Programdata startup folder](https://www.kiloroot.com/all-users-or-common-startup-folder-locations-launch-programs-at-window-login-windows-server-2008-r2-2012-2012-r2/)~~
+    * ~~[Linux](http://raspberrypi.stackexchange.com/a/5159)~~
+  * Email list of issues to be fixed when '--email' argument is passed
+  * Shutdown the computer to allow an image to be taken
+* Comment ~~and coding style~~ tidy-up
+
+### Version 0.4
+* Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)
+* Install additional software when CSSS is being installed to make sure all items are available for it to use
+* Create build scripts that install software that can be used when testing the checker system engine
+
+### Versions 0.5 onward
+* Create more check template files and relevant classes for the checker system engine to use (a new version for each check "category")
+* Create some example checker files with instructions to create images based around them with pre-made questions and scenarios
 
 ## Requirements
 To run CSSS, you will need to have an image running one of the supported operating systems:
@@ -69,23 +108,7 @@ When you are ready to release the image, __with administrative privileges__ (e.g
 > :warning: Running CSSS with the `-p` argument will encrypt the issue files. Make sure that you have a snapshot of your image before you run this command, otherwise you will need to set everything up again should there be any problems.
 
 ## Contributing
-Thanks for your interest in contributing to this project. You can contribute or report issues in the following ways:
-
-### Pull Requests
-If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
-
-The current development environment is with Visual Studio Community 2019 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
-
-### Coding Conventions
-This project uses [*EditorConfig*](https://editorconfig.org/) to maintain a consistent coding style, using the [default EditorConfig file](https://docs.microsoft.com/en-gb/visualstudio/ide/editorconfig-code-style-settings-reference#example-editorconfig-file) that comes with Visual Studio (with [a few additional tweaks](.editorconfig)).
-
-If you are planning to contribute code, please make sure that you have [performed a code cleanup](https://docs.microsoft.com/en-us/visualstudio/ide/code-styles-and-code-cleanup?#apply-code-styles). Alternatively, install an extension to do this for you:
-
-* [Format document on Save](https://marketplace.visualstudio.com/items?itemName=mynkow.FormatdocumentonSave)
-* [Code Cleanup On Save](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.CodeCleanupOnSave)
-
-## License Terms
-CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
+Thanks for your interest in contributing to this project. You can read more about contributing to the project [here](CONTRIBUTING.md)
 
 ### NuGet Packages
 This project uses NuGet packages. Their project source code pages and licenses can be found below:
@@ -98,32 +121,10 @@ This project uses NuGet packages. Their project source code pages and licenses c
 The following projects and source code are included in CSSS. Their licenses project pages can be found below:
 * [OSVersionInfo](https://www.codeproject.com/Articles/73000/Getting-Operating-System-Version-Info-Even-for-Win)
 
-## To-Do
-These are the tasks planned for each release version. Please note that these can change without warning, depending on how features are progressing.
-
-### Version 0.3
-* Perform various tasks when the '-p' argument is passed:
-  * ~~Set issue check files to be encrypted, so that images can be released but competitors can not find out what "issues" need to be fixed~~
-  * ~~Add files to the relevant Operating System startup folders, so that CSSS will start automatically:~~
-    * ~~[Windows shortcut](http://stackoverflow.com/a/19914018) in [Programdata startup folder](https://www.kiloroot.com/all-users-or-common-startup-folder-locations-launch-programs-at-window-login-windows-server-2008-r2-2012-2012-r2/)~~
-    * ~~[Linux](http://raspberrypi.stackexchange.com/a/5159)~~
-  * Email list of issues to be fixed when '--email' argument is passed
-  * Shutdown the computer to allow an image to be taken
-* Comment ~~and coding style~~ tidy-up
-
-### Version 0.4
-* Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)
-* Install additional software when CSSS is being installed to make sure all items are available for it to use
-* Create build scripts that install software that can be used when testing the checker system engine
-
-### Versions 0.5 onward
-* Create more check template files and relevant classes for the checker system engine to use (a new version for each check "category")
-* Create some example checker files with instructions to create images based around them with pre-made questions and scenarios
+## License Terms
+CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
 
 ## Copyright
 CyberPatriot is copyright of US Air Force Association
 
 CyberCentrurion is copyright of Cyber Security Challenge UK
-
-## Disclaimer
-This program is designed to score the state of a computer image against a pre-defined checklist of "issues". It is not designed to rate your computer security, provide security advice, or anything else that isn't related to the CyberPatriot / CyberCenturion competitions.
