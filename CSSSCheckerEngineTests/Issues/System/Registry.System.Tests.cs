@@ -63,6 +63,11 @@ namespace CSSSCheckerEngineTests.Issues.System
         [OneTimeTearDown]
         protected void OneTimeTearDown()
         {
+            if (config.operatingSystemType != Config.OperatingSystemType.WinNT)
+            {
+                Assert.Ignore("Registry tests have been ignored due to this Operating System not having a registry");
+            }
+
             // `DeleteSubKeyTree` is used to save having to delete any subkeys
             // that are created, as `DeleteSubKey` doesn't do this
             Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(HiveRoot, false);
