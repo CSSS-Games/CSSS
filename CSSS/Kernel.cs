@@ -101,6 +101,7 @@ namespace CSSS
         {
             logger.Debug("Performing kernel tasks");
             bool shouldExit = false;
+            bool shouldShutdown = false;
 
             // Seeing if the check files need to be linted
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Check))
@@ -157,6 +158,10 @@ namespace CSSS
                 // so return 'true' from this function to let the
                 // calling main run loop know it can exit
                 shouldExit = true;
+                // As the -p flag should also shutdown the OS so
+                // that the machine can be imaged, we should set
+                // the shutdown flag to true
+                shouldShutdown = true;
             }
 
             // Seeing if CSSS should start and run normally
@@ -164,6 +169,32 @@ namespace CSSS
             {
                 logger.Info("Running CSSS normally");
                 PerformIssueCheckTasks();
+            }
+
+            // If we should shutdown
+            if (shouldShutdown)
+            {
+                // Run the shutdown command
+                var process = new System.Diagnostics.Process();
+                process.StartInfo.FileName = "shutdown";
+                switch (config.operatingSystemType)
+                {
+                    case Config.OperatingSystemType.WinNT:
+                        // On Windows, we can specify the seconds
+                        // to delay the shutdown :D
+                        // So we shutdown in 15 seconds (should be suffficient time)
+                        process.StartInfo.Arguments = "-s -t 15";
+                        break;
+                    case Config.OperatingSystemType.Linux:
+                        // Linux doesn't let you specify seconds... >:(
+                        process.StartInfo.Arguments = "-h +1";
+                        break;
+                    default:
+                        logger.Warn("Unknown OS specified in Shutdown - this shouldn't happen");
+                        break;
+                }
+                // Execute
+                process.Start();
             }
 
             logger.Debug("CSSS should exit: {0}", shouldExit);
