@@ -159,12 +159,13 @@ namespace IssueChecks
                     var registryPath = (string)issueFile.Issues[issue].Path;
                     var registryName = (string)issueFile.Issues[issue].Name;
                     var registryValue = (string)issueFile.Issues[issue].Value;
+                    var registryValueShouldMatch = (bool)issueFile.Issues[issue].ValueShouldMatch;
 
                     try
                     {
                         // Checking the current registry key value against what
                         // is expected to be from the issue file
-                        if (registryCheck.CheckRegistryValue(registryPath, registryName, registryValue))
+                        if (registryCheck.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch))
                         {
                             // The issue check matches with the current system state,
                             // so include the points in the total score

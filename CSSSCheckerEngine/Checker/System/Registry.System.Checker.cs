@@ -40,7 +40,8 @@ namespace Checker.System
         /// <param name="registryPath">The path to the registry hive containing the key</param>
         /// <param name="registryName">The name of the key to look up in the registry hive</param>
         /// <param name="registryValue">The expected value of the registry key</param>
-        /// <returns><c>true</c>, if the registry key value matches what is expecteded, <c>false</c> otherwise</returns>
-        public abstract bool CheckRegistryValue(string registryPath, string registryName, string registryValue);
+        /// <param name="registryValueShouldMatch">Should the value in the registry match what is in the issue file</param>
+        /// <returns><c>true</c>, if the registry key value matches what is expected, <c>false</c> otherwise</returns>
+        public abstract bool CheckRegistryValue(string registryPath, string registryName, string registryValue, bool registryValueShouldMatch);
     }
 }

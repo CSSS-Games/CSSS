@@ -148,7 +148,7 @@ namespace CSSSCheckerEngineTests.Issues.System
         }
 
         [Test()]
-        public void TestRegistryValueWithExpectedStringValueMatchingReturnsTrue()
+        public void TestRegistryValueWithExpectedStringValueMatchingAndShouldMatchReturnsTrue()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
             rk.SetValue("StringValueMatching", "ExpectedValue");
@@ -156,12 +156,27 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\StringTests";
             var registryName = "StringValueMatching";
             var registryValue = "ExpectedValue";
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values with string values matching should return true");
+            bool registryValueShouldMatch = true;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with string values matching and should match should return true");
         }
 
         [Test()]
-        public void TestRegistryValueWithExpectedStringValueNotMatchingReturnsFalse()
+        public void TestRegistryValueWithExpectedStringValueMatchingAndShouldNotMatchReturnsFalse()
+        {
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
+            rk.SetValue("StringValueMatching", "ExpectedValue");
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\StringTests";
+            var registryName = "StringValueMatching";
+            var registryValue = "ExpectedValue";
+            bool registryValueShouldMatch = false;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with string values matching and should not match should return false");
+        }
+
+        [Test()]
+        public void TestRegistryValueWithExpectedStringValueNotMatchingAndShouldMatchReturnsFalse()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
             rk.SetValue("StringValueNotMatching", "ActualValue");
@@ -169,12 +184,27 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\StringTests";
             var registryName = "StringValueNotMatching";
             var registryValue = "ExpectedValue";
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values with string values not matching should return false");
+            bool registryValueShouldMatch = true;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with string values not matching and should match should return false");
         }
 
         [Test()]
-        public void TestRegistryValueWithExpectedDWORDValueMatchingReturnsTrue()
+        public void TestRegistryValueWithExpectedStringValueNotMatchingAndShouldNotMatchReturnsTrue()
+        {
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
+            rk.SetValue("StringValueNotMatching", "ActualValue");
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\StringTests";
+            var registryName = "StringValueNotMatching";
+            var registryValue = "ExpectedValue";
+            bool registryValueShouldMatch = false;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with string values not matching and should not match should return true");
+        }
+
+        [Test()]
+        public void TestRegistryValueWithExpectedDWORDValueMatchingAndShouldMatchReturnsTrue()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
             rk.SetValue("DWORDValueMatching", 2);
@@ -182,12 +212,27 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\DWORDTests";
             var registryName = "DWORDValueMatching";
             var registryValue = 2.ToString();
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values with DWORD values matching should return true");
+            bool registryValueShouldMatch = true;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with DWORD values matching and should match should return true");
         }
 
         [Test()]
-        public void TestRegistryValueWithExpectedDWORDValueNotMatchingReturnsFalse()
+        public void TestRegistryValueWithExpectedDWORDValueMatchingAndShouldNotMatchReturnsFalse()
+        {
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
+            rk.SetValue("DWORDValueMatching", 2);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\DWORDTests";
+            var registryName = "DWORDValueMatching";
+            var registryValue = 2.ToString();
+            bool registryValueShouldMatch = false;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with DWORD values matching and should not match should return false");
+        }
+
+        [Test()]
+        public void TestRegistryValueWithExpectedDWORDValueNotMatchingAndShouldMatchReturnsFalse()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
             rk.SetValue("DWORDValueNotMatching", 3);
@@ -195,12 +240,27 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\DWORDTests";
             var registryName = "DWORDValueNotMatching";
             var registryValue = 2.ToString();
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values with DWORD values not matching should return false");
+            bool registryValueShouldMatch = true;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with DWORD values not matching and should match should return false");
         }
 
         [Test()]
-        public void TestRegistryValueWithExpectedBINARYValueMatchingReturnsTrue()
+        public void TestRegistryValueWithExpectedDWORDValueNotMatchingAndShouldNotMatchReturnsTrue()
+        {
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
+            rk.SetValue("DWORDValueNotMatching", 3);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\DWORDTests";
+            var registryName = "DWORDValueNotMatching";
+            var registryValue = 2.ToString();
+            bool registryValueShouldMatch = false;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with DWORD values not matching and should not match should return true");
+        }
+
+        [Test()]
+        public void TestRegistryValueWithExpectedBINARYValueMatchingAndShouldMatchReturnsTrue()
         {
             // `binaryValue` = "C\0S\0S\0S\0"
             byte[] binaryValue = { 67, 0, 83, 0, 83, 0, 83, 0 };
@@ -210,12 +270,29 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\BINARYTests";
             var registryName = "BINARYValueMatching";
             var registryValue = "43,00,53,00,53,00,53,00";
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values with BINARY values matching should return true");
+            bool registryValueShouldMatch = true;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with BINARY values matching and should match should return true");
         }
 
         [Test()]
-        public void TestRegistryValueWithExpectedBINARYValueNotMatchingReturnsFalse()
+        public void TestRegistryValueWithExpectedBINARYValueMatchingAndShouldNotMatchReturnsFalse()
+        {
+            // `binaryValue` = "C\0S\0S\0S\0"
+            byte[] binaryValue = { 67, 0, 83, 0, 83, 0, 83, 0 };
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
+            rk.SetValue("BINARYValueMatching", binaryValue);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\BINARYTests";
+            var registryName = "BINARYValueMatching";
+            var registryValue = "43,00,53,00,53,00,53,00";
+            bool registryValueShouldMatch = false;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with BINARY values matching and should not match should return false");
+        }
+
+        [Test()]
+        public void TestRegistryValueWithExpectedBINARYValueNotMatchingAndShouldMatchReturnsFalse()
         {
             // `binaryValue` = "404"
             byte[] binaryValue = { 52, 48, 52 };
@@ -225,24 +302,55 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\BINARYTests";
             var registryName = "BINARYValueNotMatching";
             var registryValue = "43,00,53,00,53,00,53,00";
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values with BINARY values not matching should return false");
+            bool registryValueShouldMatch = true;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with BINARY values not matching and should match should return false");
         }
 
         [Test()]
-        public void TestRegistryValueMissingValueMatchingReturnsTrue()
+        public void TestRegistryValueWithExpectedBINARYValueNotMatchingAndShouldNotMatchReturnsTrue()
+        {
+            // `binaryValue` = "404"
+            byte[] binaryValue = { 52, 48, 52 };
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
+            rk.SetValue("BINARYValueNotMatching", binaryValue);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\BINARYTests";
+            var registryName = "BINARYValueNotMatching";
+            var registryValue = "43,00,53,00,53,00,53,00";
+            bool registryValueShouldMatch = false;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values with BINARY values not matching and should not match should return true");
+        }
+
+        [Test()]
+        public void TestRegistryValueMissingValueMatchingAndShouldMatchReturnsTrue()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "404";
             var registryValue = (string)null;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values not existing that should not exist should return true");
+            bool registryValueShouldMatch = true;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values not existing that should not exist and should match should return true");
         }
 
         [Test()]
-        public void TestRegistryValueMissingValueNotMatchingReturnsFalse()
+        public void TestRegistryValueMissingValueMatchingAndShouldNotMatchReturnsFalse()
+        {
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
+            var registryName = "404";
+            var registryValue = (string)null;
+            bool registryValueShouldMatch = false;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values not existing that should not exist and should not match should return false");
+        }
+
+        [Test()]
+        public void TestRegistryValueMissingValueNotMatchingAndShouldMatchReturnsFalse()
         {
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
             rk.SetValue("ShouldBeRemoved", 404);
@@ -250,28 +358,67 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "ShouldBeRemoved";
             var registryValue = (string)null;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry values existing that should not exist should return false");
+            bool registryValueShouldMatch = true;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values existing that should not exist and should match should return false");
         }
 
         [Test()]
-        public void TestRegistryKeyMissingValueMatchingReturnsTrue()
+        public void TestRegistryValueMissingValueNotMatchingAndShouldNotMatchReturnsTrue()
+        {
+            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
+            rk.SetValue("ShouldBeRemoved", 404);
+
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
+            var registryName = "ShouldBeRemoved";
+            var registryValue = (string)null;
+            bool registryValueShouldMatch = false;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry values existing that should not exist and should not match should return true");
+        }
+
+        [Test()]
+        public void TestRegistryKeyMissingValueMatchingAndShouldMatchReturnsTrue()
         {
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "";
             var registryValue = (string)null;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry keys not existing that should not exist should return true");
+            bool registryValueShouldMatch = true;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry keys not existing that should not exist and should match should return true");
         }
 
         [Test()]
-        public void TestRegistryKeyMissingValueNotMatchingReturnsFalse()
+        public void TestRegistryKeyMissingValueMatchingAndShouldNotMatchReturnsFalse()
+        {
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
+            var registryName = "";
+            var registryValue = (string)null;
+            bool registryValueShouldMatch = false;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry keys not existing that should not exist and should not match should return false");
+        }
+
+        [Test()]
+        public void TestRegistryKeyMissingValueNotMatchingAndShouldMatchReturnsFalse()
         {
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "KeyShouldExist";
             var registryValue = "KeyShouldExist";
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
-                          "Registry keys not existing that should exist should return false");
+            bool registryValueShouldMatch = true;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry keys not existing that should exist and should match should return false");
+        }
+
+        [Test()]
+        public void TestRegistryKeyMissingValueNotMatchingAndShouldNotMatchReturnsTrue()
+        {
+            var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
+            var registryName = "KeyShouldExist";
+            var registryValue = "KeyShouldExist";
+            bool registryValueShouldMatch = false;
+            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                          "Registry keys not existing that should exist and should not match should return true");
         }
 
         [Test()]
@@ -280,7 +427,8 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryPath = "HKEY_LOCAL_MACHINE\\SAM\\SAM\\Domains\\Account";
             var registryName = "F";
             var registryValue = (string)null;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue),
+            bool registryValueShouldMatch = true;
+            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
                           "Registry values accessed without permission return false");
         }
     }

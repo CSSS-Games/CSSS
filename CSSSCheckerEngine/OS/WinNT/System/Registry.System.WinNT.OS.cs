@@ -29,8 +29,9 @@ namespace OS.WinNT.System
         /// <param name="registryPath">The path to the registry hive containing the key</param>
         /// <param name="registryName">The name of the key to look up in the registry hive</param>
         /// <param name="registryValue">The expected value of the registry key</param>
-        /// <returns><c>true</c>, if the registry key value matches what is expecteded, <c>false</c> otherwise</returns>
-        public override bool CheckRegistryValue(string registryPath, string registryName, string registryValue)
+        /// <param name="registryValueShouldMatch">Should the value in the registry match what is in the issue file</param>
+        /// <returns><c>true</c>, if the registry key value matches what is expected, <c>false</c> otherwise</returns>
+        public override bool CheckRegistryValue(string registryPath, string registryName, string registryValue, bool registryValueShouldMatch)
         {
             try
             {
@@ -41,7 +42,14 @@ namespace OS.WinNT.System
                 // See: https://stackoverflow.com/a/1797610
                 if (value == null)
                 {
-                    return string.IsNullOrEmpty(registryValue);
+                    if (registryValueShouldMatch)
+                    {
+                        return string.IsNullOrEmpty(registryValue);
+                    }
+                    else
+                    {
+                        return !string.IsNullOrEmpty(registryValue);
+                    }
                 }
 
                 // Binary values stored in the registry (REG_BINARY) are returned
@@ -53,7 +61,18 @@ namespace OS.WinNT.System
                     value = BitConverter.ToString(value).Replace('-', ',');
                 }
 
-                return string.Equals(value.ToString(), registryValue, StringComparison.OrdinalIgnoreCase);
+                //Console.WriteLine(registryValueShouldMatch);
+                //Console.WriteLine(value.ToString());
+                //Console.WriteLine(registryValue);
+
+                if (registryValueShouldMatch)
+                {
+                    return string.Equals(value.ToString(), registryValue, StringComparison.OrdinalIgnoreCase);
+                }
+                else
+                {
+                    return !string.Equals(value.ToString(), registryValue, StringComparison.OrdinalIgnoreCase);
+                }
             }
             catch (SecurityException e)
             {
