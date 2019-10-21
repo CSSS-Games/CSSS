@@ -1,0 +1,25 @@
+﻿{
+    "Category": "issues.files.contents",
+    "SupportedOS": "all",
+    "Issues": [
+        {
+            "Description": "Question 1 has been answered correctly",
+            "Points": 5,
+            "Triggered": false,
+            "Path": "Question 1.txt",
+            "Contents": [
+                "Hello World!"
+            ]
+        },
+        {
+            "Description": "Question 2 has been answered correctly",
+            "Points": 10,
+            "Triggered": false,
+            "Path": "Question 2.txt",
+            "Contents": [
+                "Administrator",
+                "Guest"
+            ]
+        }
+    ]
+}
