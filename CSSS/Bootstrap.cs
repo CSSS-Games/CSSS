@@ -142,6 +142,11 @@ namespace CSSS
                     // *******************
                     // Optional arguments
                     // *******************
+                    case "shutdown":
+                        config.CSSSProgramMode |= Config.CSSSModes.Shutdown;
+                        canStart = true;
+                        break;
+
                     case "h":
                     case "help":
                     default:
@@ -186,12 +191,13 @@ namespace CSSS
 
             // Argument combinations to pass
             Console.WriteLine("Usage:");
-            Console.WriteLine("  CSSS.exe -c | -o | -p | -s | [-h] | [-m]");
+            Console.WriteLine("  CSSS.exe -c | -o | -p | -s | [--shutdown] | [-h] | [-m]");
             Console.WriteLine();
             Console.WriteLine("Examples:");
             Console.WriteLine("  CSSS.exe -c");
             Console.WriteLine("  CSSS.exe -o -m");
             Console.WriteLine("  CSSS.exe -p");
+            Console.WriteLine("  CSSS.exe -p --shutdown");
             Console.WriteLine("  CSSS.exe -s");
             Console.WriteLine("  CSSS.exe -h");
 
@@ -231,6 +237,9 @@ namespace CSSS
             Console.Write("  -h, --help:".PadRight(rightPadding));
             Console.WriteLine("Shows this help message");
 
+            // Shutdown the computer
+            Console.Write("  --shutdown:".PadRight(rightPadding));
+            Console.WriteLine("Shuts down the computer. Should be used in conjunction with -p/--prepare to aid imaging.");
 
             // *******************
             // Developer arguments

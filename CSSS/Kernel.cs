@@ -101,7 +101,6 @@ namespace CSSS
         {
             logger.Debug("Performing kernel tasks");
             bool shouldExit = false;
-            bool shouldShutdown = false;
 
             // Seeing if the check files need to be linted
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Check))
@@ -158,10 +157,6 @@ namespace CSSS
                 // so return 'true' from this function to let the
                 // calling main run loop know it can exit
                 shouldExit = true;
-                // As the -p flag should also shutdown the OS so
-                // that the machine can be imaged, we should set
-                // the shutdown flag to true
-                shouldShutdown = true;
             }
 
             // Seeing if CSSS should start and run normally
@@ -172,7 +167,7 @@ namespace CSSS
             }
 
             // If we should shutdown
-            if (shouldShutdown)
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Shutdown))
             {
                 // Run the shutdown command
                 var process = new System.Diagnostics.Process();
@@ -180,20 +175,26 @@ namespace CSSS
                 switch (config.operatingSystemType)
                 {
                     case Config.OperatingSystemType.WinNT:
-                        // On Windows, we can specify the seconds
-                        // to delay the shutdown :D
-                        // So we shutdown in 15 seconds (should be suffficient time)
-                        process.StartInfo.Arguments = "-s -t 15";
+                        logger.Info("Operating System detected as WinNT - shutting down computer in 5 seconds");
+                        // On Windows, we can specify the seconds to delay the shutdown
+                        // So we shutdown in 15 seconds 
+                        // The logic behind this is that shutting down the program immediately
+                        // may cause issues if there is a longer lasting process and allows
+                        // time for the program to gracefully exit without being terminated
+                        // as the computer shutsdown
+                        process.StartInfo.Arguments = "-s -t 5";
                         break;
                     case Config.OperatingSystemType.Linux:
-                        // Linux doesn't let you specify seconds... >:(
+                        logger.Info("Operating System detected as WinNT - shutting down computer in 1 minute");
+                        // Linux doesn't let you specify seconds so it defaults to 1 minute
+                        // See above command for logic on shutdown
                         process.StartInfo.Arguments = "-h +1";
                         break;
                     default:
-                        logger.Warn("Unknown OS specified in Shutdown - this shouldn't happen");
+                        logger.Warn("Unknown OS specified in Shutdown - you will need to do this manually");
                         break;
                 }
-                // Execute
+
                 process.Start();
             }
 
