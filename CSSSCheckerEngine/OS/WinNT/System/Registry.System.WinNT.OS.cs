@@ -61,10 +61,6 @@ namespace OS.WinNT.System
                     value = BitConverter.ToString(value).Replace('-', ',');
                 }
 
-                //Console.WriteLine(registryValueShouldMatch);
-                //Console.WriteLine(value.ToString());
-                //Console.WriteLine(registryValue);
-
                 if (registryValueShouldMatch)
                 {
                     return string.Equals(value.ToString(), registryValue, StringComparison.OrdinalIgnoreCase);
