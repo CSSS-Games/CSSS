@@ -1,5 +1,5 @@
 # Contributing
-Thanks for your interest in contributing to this project. contribute or report issues in the following ways:
+Thanks for your interest in contributing to this project. You can contribute or report issues in the following ways:
 
 ## Pull Requests
 If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
