@@ -99,6 +99,7 @@ namespace CSSSCheckerEngineTests
             string[] issueFilesList = {
                 "Files+Contents.Files.Issues.json",
                 "Files+Existence.Files.Issues.json",
+                "System+Registry.System.Issues.json",
                 "System+Version.System.Issues.json"
             };
 
@@ -225,7 +226,7 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllIssueFilesAreCollected()
         {
-            Assert.AreEqual(IssueFilesList(),
+            CollectionAssert.AreEquivalent(IssueFilesList(),
                             issueFilesChecks.GetAllIssueFiles(),
                             "All JSON files in the issues directory should be a known issue check file");
         }
