@@ -274,9 +274,13 @@ namespace SupportLibrary.OSVersionInfo
                     #region VERSION 6
                     else if (majorVersion == 6)
                     {
+                        // Since VS 2015 is a build image, the use of "out var x" cannot
+                        // be used. If VS 2015 support is dropped, then the use of this
+                        // can be implemented as it is part of C# 7.0
+                        int ed;
                         if (GetProductInfo(majorVersion, minorVersion,
                             osVersionInfo.wServicePackMajor, osVersionInfo.wServicePackMinor,
-                            out var ed))
+                            out ed))
                         {
                             switch (ed)
                             {
