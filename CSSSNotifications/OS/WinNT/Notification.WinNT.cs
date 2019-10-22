@@ -58,19 +58,17 @@ namespace OS.WinNT
         /// <param name="title">The text to display in the notification title</param>
         private void ShowNotification(string message, Icon icon, string title = notificationTitleText)
         {
-            var notification = new System.Windows.Forms.NotifyIcon()
+            using (var notification = new System.Windows.Forms.NotifyIcon()
             {
                 Visible = true,
                 Icon = icon,
                 BalloonTipText = message,
                 BalloonTipTitle = title
-            };
-
-            // Display for 5 seconds
-            notification.ShowBalloonTip(5000);
-
-            // The notification should be disposed when you don't need it anymore
-            notification.Dispose();
+            })
+            {
+                // Display for 5 seconds
+                notification.ShowBalloonTip(5000);
+            }
         }
     }
 }
