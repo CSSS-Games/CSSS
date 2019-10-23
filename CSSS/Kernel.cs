@@ -203,6 +203,10 @@ namespace CSSS
             var systemIssueChecks = new IssueChecks.System();
             systemIssueChecks.PerformAllSystemChecks();
 
+            // Performing any checks under the "issues.files" category
+            var filesIssueChecks = new IssueChecks.Files();
+            filesIssueChecks.PerformAllFilesChecks();
+
             // Completing any tasks after the issue checks have
             // been completed
             PerformPostIssueTasks();
