@@ -174,7 +174,7 @@ namespace CSSS
         /// </summary>
         private void ShowUsage()
         {
-            int rightPadding = 18;
+            const int RIGHT_PADDING = 18;
 
             // Preventing the usage screen being shown multiple times if
             // the "-h" argument is passed more than once to CSSS, or a
@@ -191,7 +191,7 @@ namespace CSSS
 
             // Argument combinations to pass
             Console.WriteLine("Usage:");
-            Console.WriteLine("  CSSS.exe -c | -o | -p | -s | [--shutdown] | [-h] | [-m]");
+            Console.WriteLine("  CSSS.exe -c | -o | -p | -s [--shutdown] | [-h] | [-m]");
             Console.WriteLine();
             Console.WriteLine("Examples:");
             Console.WriteLine("  CSSS.exe -c");
@@ -210,19 +210,19 @@ namespace CSSS
             Console.WriteLine("Required arguments (at least one is needed):");
 
             // Check config files
-            Console.Write("  -c, --check:".PadRight(rightPadding));
+            Console.Write("  -c, --check:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Checks the config files for any problems");
 
             // Observe running
-            Console.Write("  -o, --observe:".PadRight(rightPadding));
+            Console.Write("  -o, --observe:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Observes CSSS running before preparing it (implies '-c')");
 
             // Prepare CSSS
-            Console.Write("  -p, --prepare:".PadRight(rightPadding));
+            Console.Write("  -p, --prepare:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Prepares CSSS ready for image release (implies '-c')");
 
             // Start scoring system
-            Console.Write("  -s, --start:".PadRight(rightPadding));
+            Console.Write("  -s, --start:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Starts the scoring system");
 
 
@@ -234,12 +234,14 @@ namespace CSSS
             Console.WriteLine("Optional arguments:");
 
             // Help
-            Console.Write("  -h, --help:".PadRight(rightPadding));
+            Console.Write("  -h, --help:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Shows this help message");
 
             // Shutdown the computer
-            Console.Write("  --shutdown:".PadRight(rightPadding));
-            Console.WriteLine("Shuts down the computer. Should be used in conjunction with -p/--prepare to aid imaging.");
+            Console.Write("  --shutdown".PadRight(RIGHT_PADDING));
+            Console.WriteLine("Shuts down the computer");
+            Console.Write("".PadRight(RIGHT_PADDING));
+            Console.WriteLine("Can be used with -p / --prepare to aid image capture");
 
             // *******************
             // Developer arguments
@@ -249,7 +251,7 @@ namespace CSSS
             Console.WriteLine("Developer arguments (all optional):");
 
             // Multipile instances allowed to concurrently run
-            Console.Write("  -m, --multiple:".PadRight(rightPadding));
+            Console.Write("  -m, --multiple:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Allows multiple instances of CSSS to run concurently");
         }
     }
