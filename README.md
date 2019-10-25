@@ -4,8 +4,7 @@
 [![Status](https://img.shields.io/badge/status-Pre%20Release-red.svg)]()
 [![Releases](https://img.shields.io/github/v/release/stuajnht/CSSS?include_prereleases)]()
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
-[![Known Vulnerabilities](https://snyk.io/test/github/stuajnht/CSSS/badge.svg?targetFile=CSSS.sln)](https://snyk.io/test/github/stuajnht/CSSS?targetFile=CSSS.sln)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)  <!-- [![Known Vulnerabilities](https://snyk.io/test/github/stuajnht/CSSS/badge.svg?targetFile=CSSS.sln)](https://snyk.io/test/github/stuajnht/CSSS?targetFile=CSSS.sln) -->
 [![Contributors](https://img.shields.io/github/contributors/stuajnht/CSSS.svg)]()
 [![Forks](https://img.shields.io/github/forks/stuajnht/CSSS.svg)](https://github.com/stuajnht/CSSS/network/members)
 [![Issues](https://img.shields.io/github/issues/stuajnht/CSSS.svg)](https://github.com/stuajnht/CSSS/issues)
@@ -101,7 +100,11 @@ When you are ready to release the image, __with administrative privileges__ (e.g
 
 ## Contributing
 Thanks for your interest in CSSS. Read more about [contributing to the project](CONTRIBUTING.md) to get started.
+
 Please note that this project is released with a [Contributor Code of Conduct](#CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+## License Terms
+CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
 
 ### NuGet Packages
 This project uses NuGet packages. Their project source code pages and licenses can be found below:
@@ -121,6 +124,3 @@ CyberCentrurion is copyright of Cyber Security Challenge UK
 
 ## Disclaimer
 This program is designed to score the state of a computer image against a pre-defined checklist of "issues". It is not designed to rate your computer security, provide security advice, or anything else that isn't related to the CyberPatriot / CyberCenturion competitions.
-
-## License Terms
-CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
