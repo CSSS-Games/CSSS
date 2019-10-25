@@ -165,25 +165,16 @@ namespace CSSS
                     var process = new System.Diagnostics.Process();
                     process.StartInfo.FileName = "shutdown";
 
-                    Console.WriteLine("Shutting down computer in 1 minute for image capture");
-
+                    // The logic behind a minute delay before shutting down is to allow
+                    // CSSS to finish running and gracefully exit, rather than being
+                    // terminated as the computer shuts down
                     logger.Info("Attempting to shut down the computer in 1 minute");
                     switch (config.operatingSystemType)
                     {
                         case Config.OperatingSystemType.WinNT:
-                            logger.Info("Operating System detected as WinNT - shutting down computer in 5 seconds");
-                            // On Windows, we can specify the seconds to delay the shutdown
-                            // So we shutdown in 60 seconds 
-                            // The logic behind this is that shutting down the program immediately
-                            // may cause issues if there is a longer lasting process and allows
-                            // time for the program to gracefully exit without being terminated
-                            // as the computer shutsdown
                             process.StartInfo.Arguments = "-s -t 60";
                             break;
                         case Config.OperatingSystemType.Linux:
-                            
-                            // Linux doesn't let you specify seconds so it defaults to 1 minute
-                            // See above command for logic on shutdown
                             process.StartInfo.Arguments = "-h +1";
                             break;
                         default:

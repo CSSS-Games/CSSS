@@ -191,7 +191,7 @@ namespace CSSS
 
             // Argument combinations to pass
             Console.WriteLine("Usage:");
-            Console.WriteLine("  CSSS.exe -c | -o | -p | -s [--shutdown] | [-h] | [-m]");
+            Console.WriteLine("  CSSS.exe -c | -o | -p [--shutdown] | -s | [-h] | [-m]");
             Console.WriteLine();
             Console.WriteLine("Examples:");
             Console.WriteLine("  CSSS.exe -c");
