@@ -9,6 +9,10 @@
 // SUCH TERMS AND CONDITIONS. IF YOU DO NOT AGREE TO ACCEPT AND BE BOUND
 // BY THE TERMS OF THIS LICENSE, YOU CANNOT MAKE ANY USE OF THE WORK.
 
+// This file has been modified as part of https://github.com/stuajnht/CSSS/pull/4
+// on 25/10/2019 This is to ensure that the file meets the code standards which
+// are present for the project. 
+
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -274,10 +278,12 @@ namespace SupportLibrary.OSVersionInfo
                     #region VERSION 6
                     else if (majorVersion == 6)
                     {
-                        // Since VS 2015 is a build image, the use of "out var x" cannot
-                        // be used. If VS 2015 support is dropped, then the use of this
-                        // can be implemented as it is part of C# 7.0
+                        // Since VS 2015 is a build image on AppVeyor (for Windows Server 2012 R2
+                        // support) the use of `out var x` cannot be used. Once support for this has
+                        // been dropped, the use of this can be implemented as it is part of C# 7.0
+#pragma warning disable IDE0018 // This disables the warning for inline comments
                         int ed;
+#pragma warning restore IDE0018
                         if (GetProductInfo(majorVersion, minorVersion,
                             osVersionInfo.wServicePackMajor, osVersionInfo.wServicePackMinor,
                             out ed))
