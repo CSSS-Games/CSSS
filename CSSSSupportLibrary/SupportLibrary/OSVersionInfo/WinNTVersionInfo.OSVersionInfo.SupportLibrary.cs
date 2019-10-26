@@ -10,7 +10,7 @@
 // BY THE TERMS OF THIS LICENSE, YOU CANNOT MAKE ANY USE OF THE WORK.
 
 // This file has been modified as part of https://github.com/stuajnht/CSSS/pull/4
-// on 25/10/2019 This is to ensure that the file meets the code standards which
+// on 25/10/2019. This is to ensure that the file meets the code standards which
 // are present for the project. 
 
 using System;
@@ -281,9 +281,9 @@ namespace SupportLibrary.OSVersionInfo
                         // Since VS 2015 is a build image on AppVeyor (for Windows Server 2012 R2
                         // support) the use of `out var x` cannot be used. Once support for this has
                         // been dropped, the use of this can be implemented as it is part of C# 7.0
-#pragma warning disable IDE0018 // This disables the warning for inline comments
+#pragma warning disable IDE0018 // Disable warning for "Variable declaration can be inlined"
                         int ed;
-#pragma warning restore IDE0018
+#pragma warning restore IDE0018 // Restore warning for "Variable declaration can be inlined"
                         if (GetProductInfo(majorVersion, minorVersion,
                             osVersionInfo.wServicePackMajor, osVersionInfo.wServicePackMinor,
                             out ed))
