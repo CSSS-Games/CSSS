@@ -58,15 +58,15 @@ namespace CSSS
         /// image is released, to prevent any cheating by competitors
         /// 
         /// Valid required arguments that CSSS accepts are:
-        ///   * -c, --check:   Checks the config files for any problems
-        ///   * -o, --observe: Observes CSSS running before preparing it (implies 'c')
-        ///   * -p, --prepare: Prepares CSSS ready for image release (implies '-c')
-        ///   * -s, --start:   Starts the scoring system
-        ///   * -h, --help:    Shows the program usage
+        ///   * -c, --check:    Checks the config files for any problems
+        ///   * -o, --observe:  Observes CSSS running before preparing it (implies '-c')
+        ///   * -p, --prepare:  Prepares CSSS ready for image release (implies '-c')
+        ///   * -s, --start:    Starts the scoring system
+        ///   * -h, --help:     Shows the program usage
         /// 
         /// Additional arguments that can be passed to CSSS are:
+        ///   * --shutdown:     Shuts down the computer after preparing CSSS (used with '-p')
         ///   * -m, --multiple: Allows multiple instances of CSSS to run concurently
-        /// 
         /// These arguments have been chosen to spell 'COPS', as competitors
         /// are 'policing' the security of the computer
         /// 
