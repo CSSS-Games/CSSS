@@ -238,7 +238,7 @@ namespace CSSS
             Console.WriteLine("Shows this help message");
 
             // Shutdown the computer
-            Console.Write("  --shutdown".PadRight(RIGHT_PADDING));
+            Console.Write("  --shutdown:".PadRight(RIGHT_PADDING));
             Console.WriteLine("Shuts down the computer");
             Console.Write("".PadRight(RIGHT_PADDING));
             Console.WriteLine("Can be used with -p / --prepare to aid image capture");
