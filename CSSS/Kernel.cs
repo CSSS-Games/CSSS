@@ -157,6 +157,34 @@ namespace CSSS
                 // so return 'true' from this function to let the
                 // calling main run loop know it can exit
                 shouldExit = true;
+
+                // If we should shutdown
+                if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Shutdown))
+                {
+                    // Run the shutdown command
+                    var process = new System.Diagnostics.Process();
+                    process.StartInfo.FileName = "shutdown";
+
+                    // The logic behind a minute delay before shutting down is to allow
+                    // CSSS to finish running and gracefully exit, rather than being
+                    // terminated as the computer shuts down
+                    logger.Info("Attempting to shut down the computer in 1 minute");
+                    switch (config.operatingSystemType)
+                    {
+                        case Config.OperatingSystemType.WinNT:
+                            process.StartInfo.Arguments = "-s -t 60";
+                            break;
+                        case Config.OperatingSystemType.Linux:
+                            process.StartInfo.Arguments = "-h +1";
+                            break;
+                        default:
+                            logger.Warn("Unable to shutdown computer - you will need to do this manually");
+                            break;
+                    }
+
+                    process.Start();
+                    process.WaitForExit();
+                }
             }
 
             // Seeing if CSSS should start and run normally

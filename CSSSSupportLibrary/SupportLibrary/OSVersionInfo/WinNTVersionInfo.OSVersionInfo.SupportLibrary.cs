@@ -9,6 +9,10 @@
 // SUCH TERMS AND CONDITIONS. IF YOU DO NOT AGREE TO ACCEPT AND BE BOUND
 // BY THE TERMS OF THIS LICENSE, YOU CANNOT MAKE ANY USE OF THE WORK.
 
+// This file has been modified as part of https://github.com/stuajnht/CSSS/pull/4
+// on 25/10/2019. This is to ensure that the file meets the code standards which
+// are present for the project. 
+
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -61,13 +65,13 @@ namespace SupportLibrary.OSVersionInfo
         /// <summary>
         /// Determines if the current application is 32 or 64-bit.
         /// </summary>
-        static public SoftwareArchitecture ProgramBits
+        public static SoftwareArchitecture ProgramBits
         {
             get
             {
                 SoftwareArchitecture pbits = SoftwareArchitecture.Unknown;
 
-                System.Collections.IDictionary test = Environment.GetEnvironmentVariables();
+                var test = Environment.GetEnvironmentVariables();
 
                 switch (IntPtr.Size * 8)
                 {
@@ -88,11 +92,11 @@ namespace SupportLibrary.OSVersionInfo
             }
         }
 
-        static public SoftwareArchitecture OSBits
+        public static SoftwareArchitecture OSBits
         {
             get
             {
-                SoftwareArchitecture osbits = SoftwareArchitecture.Unknown;
+                var osbits = SoftwareArchitecture.Unknown;
 
                 switch (IntPtr.Size * 8)
                 {
@@ -119,15 +123,15 @@ namespace SupportLibrary.OSVersionInfo
         /// <summary>
         /// Determines if the current processor is 32 or 64-bit.
         /// </summary>
-        static public ProcessorArchitecture ProcessorBits
+        public static ProcessorArchitecture ProcessorBits
         {
             get
             {
-                ProcessorArchitecture pbits = ProcessorArchitecture.Unknown;
+                var pbits = ProcessorArchitecture.Unknown;
 
                 try
                 {
-                    SYSTEM_INFO l_System_Info = new SYSTEM_INFO();
+                    var l_System_Info = new SYSTEM_INFO();
                     GetNativeSystemInfo(ref l_System_Info);
 
                     switch (l_System_Info.uProcessorInfo.wProcessorArchitecture)
@@ -157,11 +161,11 @@ namespace SupportLibrary.OSVersionInfo
         #endregion BITS
 
         #region EDITION
-        static private string s_Edition;
+        private static string s_Edition;
         /// <summary>
         /// Gets the edition of the operating system running on this computer.
         /// </summary>
-        static public string Edition
+        public static string Edition
         {
             get
             {
@@ -170,9 +174,11 @@ namespace SupportLibrary.OSVersionInfo
 
                 string edition = String.Empty;
 
-                OperatingSystem osVersion = Environment.OSVersion;
-                OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
-                osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
+                var osVersion = Environment.OSVersion;
+                var osVersionInfo = new OSVERSIONINFOEX
+                {
+                    dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX))
+                };
 
                 if (GetVersionEx(ref osVersionInfo))
                 {
@@ -272,7 +278,12 @@ namespace SupportLibrary.OSVersionInfo
                     #region VERSION 6
                     else if (majorVersion == 6)
                     {
+                        // Since VS 2015 is a build image on AppVeyor (for Windows Server 2012 R2
+                        // support) the use of `out var x` cannot be used. Once support for this has
+                        // been dropped, the use of this can be implemented as it is part of C# 7.0
+#pragma warning disable IDE0018 // Disable warning for "Variable declaration can be inlined"
                         int ed;
+#pragma warning restore IDE0018 // Restore warning for "Variable declaration can be inlined"
                         if (GetProductInfo(majorVersion, minorVersion,
                             osVersionInfo.wServicePackMajor, osVersionInfo.wServicePackMinor,
                             out ed))
@@ -502,11 +513,11 @@ namespace SupportLibrary.OSVersionInfo
         #endregion EDITION
 
         #region NAME
-        static private string s_Name;
+        private static string s_Name;
         /// <summary>
         /// Gets the name of the operating system running on this computer.
         /// </summary>
-        static public string Name
+        public static string Name
         {
             get
             {
@@ -515,8 +526,8 @@ namespace SupportLibrary.OSVersionInfo
 
                 string name = "unknown";
 
-                OperatingSystem osVersion = Environment.OSVersion;
-                OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
+                var osVersion = Environment.OSVersion;
+                var osVersionInfo = new OSVERSIONINFOEX();
                 osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
 
                 if (GetVersionEx(ref osVersionInfo))
@@ -881,10 +892,11 @@ namespace SupportLibrary.OSVersionInfo
         {
             get
             {
-                string servicePack = String.Empty;
-                OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
-
-                osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
+                string servicePack = string.Empty;
+                var osVersionInfo = new OSVERSIONINFOEX
+                {
+                    dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX))
+                };
 
                 if (GetVersionEx(ref osVersionInfo))
                 {
@@ -915,7 +927,7 @@ namespace SupportLibrary.OSVersionInfo
         /// <summary>
         /// Gets the full version string of the operating system running on this computer.
         /// </summary>
-        static public string VersionString
+        public static string VersionString
         {
             get
             {
@@ -928,7 +940,7 @@ namespace SupportLibrary.OSVersionInfo
         /// <summary>
         /// Gets the full version of the operating system running on this computer.
         /// </summary>
-        static public Version Version
+        public static Version Version
         {
             get
             {
@@ -942,7 +954,7 @@ namespace SupportLibrary.OSVersionInfo
         /// <summary>
         /// Gets the major version number of the operating system running on this computer.
         /// </summary>
-        static public int MajorVersion
+        public static int MajorVersion
         {
             get
             {
@@ -965,7 +977,7 @@ namespace SupportLibrary.OSVersionInfo
         /// <summary>
         /// Gets the minor version number of the operating system running on this computer.
         /// </summary>
-        static public int MinorVersion
+        public static int MinorVersion
         {
             get
             {
@@ -1005,15 +1017,15 @@ namespace SupportLibrary.OSVersionInfo
         #region 64 BIT OS DETECTION
         private static IsWow64ProcessDelegate GetIsWow64ProcessDelegate()
         {
-            IntPtr handle = LoadLibrary("kernel32");
+            var handle = LoadLibrary("kernel32");
 
             if (handle != IntPtr.Zero)
             {
-                IntPtr fnPtr = GetProcAddress(handle, "IsWow64Process");
+                var fnPtr = GetProcAddress(handle, "IsWow64Process");
 
                 if (fnPtr != IntPtr.Zero)
                 {
-                    return (IsWow64ProcessDelegate)Marshal.GetDelegateForFunctionPointer((IntPtr)fnPtr, typeof(IsWow64ProcessDelegate));
+                    return (IsWow64ProcessDelegate)Marshal.GetDelegateForFunctionPointer(fnPtr, typeof(IsWow64ProcessDelegate));
                 }
             }
 

@@ -237,7 +237,7 @@ namespace CSSSCheckerEngine
                 }
 
                 logger.Info("Removing any empty issue file directories");
-                removeEmptyIssueDirectories(GetIssueFilesDirectory());
+                RemoveEmptyIssueDirectories(GetIssueFilesDirectory());
             }
 
             return filesPreparedSuccessfully;
@@ -358,11 +358,11 @@ namespace CSSSCheckerEngine
         /// See: http://stackoverflow.com/a/2811654
         /// </summary>
         /// <param name="startLocation">The location to search from</param>
-        private static void removeEmptyIssueDirectories(string startLocation)
+        private static void RemoveEmptyIssueDirectories(string startLocation)
         {
             foreach (var directory in Directory.GetDirectories(startLocation))
             {
-                removeEmptyIssueDirectories(directory);
+                RemoveEmptyIssueDirectories(directory);
                 if (Directory.GetFiles(directory).Length == 0 &&
                     Directory.GetDirectories(directory).Length == 0)
                 {

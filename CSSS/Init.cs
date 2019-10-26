@@ -176,7 +176,7 @@ namespace CSSS
         /// <returns>The current operating system</returns>
         public Config.OperatingSystemType SetOperatingSystemType()
         {
-            Config.OperatingSystemType currentOS = Config.OperatingSystemType.Unknown;
+            var currentOS = Config.OperatingSystemType.Unknown;
 
             // Seeing if CSSS us running on WinNT (this seems to be the
             // easiest check to carry out
@@ -311,7 +311,7 @@ namespace CSSS
             // See: http://www.mono-project.com/docs/faq/technical/#how-can-i-detect-if-am-running-in-mono
             config.runtimeEnvironment = Config.RuntimeEnvironment.Unknown;
 
-            Type t = Type.GetType("Mono.Runtime");
+            var t = Type.GetType("Mono.Runtime");
             if (t != null)
             {
                 config.runtimeEnvironment = Config.RuntimeEnvironment.Mono;
@@ -381,7 +381,7 @@ namespace CSSS
         {
             try
             {
-                Process p = new Process();
+                var p = new Process();
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 if (args != null && args != "") p.StartInfo.Arguments = " " + args;
@@ -414,19 +414,20 @@ namespace CSSS
         /// <param name="Arguments">The arguments to pass to the program</param>
         private bool SuccessfulExitCode(string Program, string Arguments)
         {
-            Process checkProcess = new Process();
-            ProcessStartInfo checkProcessInfo = new ProcessStartInfo();
+            var checkProcess = new Process();
+            var checkProcessInfo = new ProcessStartInfo
+            {
+                FileName = Program,
+                Arguments = Arguments,
 
-            checkProcessInfo.FileName = Program;
-            checkProcessInfo.Arguments = Arguments;
+                // Hide any windows from showing
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = false,
 
-            // Hide any windows from showing
-            checkProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            checkProcessInfo.CreateNoWindow = true;
-            checkProcessInfo.UseShellExecute = false;
-
-            // "Eat" the output, as on Linux it will echo out the file
-            checkProcessInfo.RedirectStandardOutput = true;
+                // "Eat" the output, as on Linux it will echo out the file
+                RedirectStandardOutput = true
+            };
 
             checkProcess.StartInfo = checkProcessInfo;
 
