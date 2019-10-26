@@ -101,7 +101,7 @@ When you are ready to release the image, __with administrative privileges__ (e.g
 ## Contributing
 Thanks for your interest in CSSS. Read more about [contributing to the project](CONTRIBUTING.md) to get started.
 
-Please note that this project is released with a [Contributor Code of Conduct](#CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## License Terms
 CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
