@@ -124,7 +124,7 @@ namespace CSSS
             if (!File.Exists(fileLocation))
             {
                 // Create a file to write to it
-                using (StreamWriter sw = File.CreateText(fileLocation))
+                using (var sw = File.CreateText(fileLocation))
                 {
                     sw.WriteLine(fileText);
                 }
@@ -149,7 +149,7 @@ namespace CSSS
         {
             logger.Debug("Creating scheduled task to run CSSS on any user login");
 
-            TaskDefinition task = TaskService.Instance.NewTask();
+            var task = TaskService.Instance.NewTask();
             task.RegistrationInfo.Description = "Runs CSSS at user login";
             task.Settings.Hidden = true;
             task.Settings.StartWhenAvailable = true;
@@ -161,7 +161,7 @@ namespace CSSS
                              null,
                              CSSSDirectory);
 
-            LogonTrigger trigger = new LogonTrigger();
+            var trigger = new LogonTrigger();
             task.Triggers.Add(trigger);
 
             TaskService.Instance.RootFolder.RegisterTaskDefinition("CyberSecurity Scoring System",

@@ -57,7 +57,7 @@ namespace CSSS
         /// constant to prevent any accidental typos when using it
         /// in this class
         /// </summary>
-        private const string scoringReportHTMLFilename = "ScoringReport.html";
+        private const string ScoringReportHTMLFilename = "ScoringReport.html";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:CSSS.ScoringReport"/> class,
@@ -71,11 +71,11 @@ namespace CSSS
             try
             {
                 scoringReportHTML = new HtmlDocument();
-                scoringReportHTML.Load(scoringReportHTMLFilename);
+                scoringReportHTML.Load(ScoringReportHTMLFilename);
             }
             catch (FileNotFoundException)
             {
-                throw new FileNotFoundException("The \"" + scoringReportHTMLFilename + "\" file could not be found");
+                throw new FileNotFoundException("The \"" + ScoringReportHTMLFilename + "\" file could not be found");
             }
         }
 
@@ -110,7 +110,7 @@ namespace CSSS
         /// </summary>
         private void SaveScoringReport()
         {
-            scoringReportHTML.Save(scoringReportHTMLFilename);
+            scoringReportHTML.Save(ScoringReportHTMLFilename);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace CSSS
             // the score at its last known value
             try
             {
-                TimeSpan runningTime = currentTime.Subtract(Convert.ToDateTime(SupportLibrary.Encryption.String.Decrypt(startTime.InnerHtml)));
+                var runningTime = currentTime.Subtract(Convert.ToDateTime(SupportLibrary.Encryption.String.Decrypt(startTime.InnerHtml)));
 
                 runtimeOverview.InnerHtml = runningTime.Hours + ":" + runningTime.Minutes.ToString("00");
             }
@@ -219,7 +219,7 @@ namespace CSSS
         /// </summary>
         private void UpdateGainedPointsDetails()
         {
-            StringBuilder issueDescriptions = new StringBuilder();
+            var issueDescriptions = new StringBuilder();
 
             foreach (var issueSolved in config.PointsGainedDescriptions)
             {
@@ -246,7 +246,7 @@ namespace CSSS
         /// </summary>
         private void UpdatePenaltyPointsDetails()
         {
-            StringBuilder penaltyDescriptions = new StringBuilder();
+            var penaltyDescriptions = new StringBuilder();
 
             foreach (var penalties in config.PointsLostDescriptions)
             {

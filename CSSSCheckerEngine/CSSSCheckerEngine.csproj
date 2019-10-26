@@ -47,7 +47,6 @@
     <Compile Include="CheckAPI\Files\Contents.Files.CheckAPI.cs" />
     <Compile Include="CheckAPI\Files\Existence.Files.CheckAPI.cs" />
     <Compile Include="CheckAPI\System\Registry.System.CheckAPI.cs" />
-    <Compile Include="CheckerEngine.cs" />
     <Compile Include="Checker\Files\Contents.Files.Checker.cs" />
     <Compile Include="Checker\Files\Existence.Files.Checker.cs" />
     <Compile Include="Checker\System\Registry.System.Checker.cs" />

@@ -51,14 +51,16 @@ namespace CSSSLauncher
             // See: http://stackoverflow.com/a/836436
             // See: http://stackoverflow.com/a/848343
             // See: http://stackoverflow.com/a/29535211
-            Process CSSS = new Process();
-            ProcessStartInfo CSSSProcessInfo = new ProcessStartInfo();
-            CSSSProcessInfo.FileName = "CSSS.exe";
-            CSSSProcessInfo.Arguments = "--start";
+            var CSSS = new Process();
+            var CSSSProcessInfo = new ProcessStartInfo
+            {
+                FileName = "CSSS.exe",
+                Arguments = "--start",
 
-            CSSSProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            CSSSProcessInfo.CreateNoWindow = true;
-            CSSSProcessInfo.UseShellExecute = false;
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
             CSSS.StartInfo = CSSSProcessInfo;
 
             // Let's get things underway...

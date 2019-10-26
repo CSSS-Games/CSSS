@@ -141,7 +141,7 @@ namespace IssueChecks
                 logger.Debug("Performing checks for the category: {0}", issueCategory);
 
                 var fileCheck = new CheckAPI.Files.Existence();
-                var isPenaltyIssue = new Boolean();
+                var isPenaltyIssue = new bool();
 
                 // Checking each issue in the file to see if the values
                 // listed match with what is expected
