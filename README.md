@@ -4,7 +4,7 @@
 [![Status](https://img.shields.io/badge/status-Pre%20Release-red.svg)]()
 [![Releases](https://img.shields.io/github/v/release/stuajnht/CSSS?include_prereleases)]()
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)  <!-- [![Known Vulnerabilities](https://snyk.io/test/github/stuajnht/CSSS/badge.svg?targetFile=CSSS.sln)](https://snyk.io/test/github/stuajnht/CSSS?targetFile=CSSS.sln) -->
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 [![Contributors](https://img.shields.io/github/contributors/stuajnht/CSSS.svg)]()
 [![Forks](https://img.shields.io/github/forks/stuajnht/CSSS.svg)](https://github.com/stuajnht/CSSS/network/members)
 [![Issues](https://img.shields.io/github/issues/stuajnht/CSSS.svg)](https://github.com/stuajnht/CSSS/issues)
