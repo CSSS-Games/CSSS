@@ -36,12 +36,13 @@ Before CSSS will run, the following additional programs need to be installed ont
 Double-clicking on CSSS will cause it to quickly show the usage window, then close itself. This is by design. To run CSSS properly, a number of arguments need to be passed to the program, which are:
 ```
 Usage:
-  CSSS.exe -c | -o | -p | -s | [-h] | [-m]
+  CSSS.exe -c | -o | -p [--shutdown] | -s | [-h] | [-m]
 
 Examples:
   CSSS.exe -c
   CSSS.exe -o -m
   CSSS.exe -p
+  CSSS.exe -p --shutdown
   CSSS.exe -s
   CSSS.exe -h
 
@@ -55,6 +56,8 @@ Required arguments (at least one is needed):
 
 Optional arguments:
   -h, --help:     Shows this help message
+  --shutdown:     Shuts down the computer
+                  Can be used with -p / --prepare to aid image capture
 
 
 Developer arguments (all optional):
@@ -108,7 +111,7 @@ These are the tasks planned for each release version. Please note that these can
     * ~~[Windows shortcut](http://stackoverflow.com/a/19914018) in [Programdata startup folder](https://www.kiloroot.com/all-users-or-common-startup-folder-locations-launch-programs-at-window-login-windows-server-2008-r2-2012-2012-r2/)~~
     * ~~[Linux](http://raspberrypi.stackexchange.com/a/5159)~~
   * Email list of issues to be fixed when '--email' argument is passed
-  * Shutdown the computer to allow an image to be taken
+  * ~~Shutdown the computer to allow an image to be taken~~
 * Comment ~~and coding style~~ tidy-up
 
 ### Version 0.4
