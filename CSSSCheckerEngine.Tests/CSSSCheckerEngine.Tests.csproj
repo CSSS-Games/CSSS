@@ -1,55 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{40A0EAD2-7A6B-4C02-9315-5AEF401AFD24}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>CSSSCheckerEngineTests</RootNamespace>
-    <AssemblyName>CSSSCheckerEngineTests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ReleaseVersion>0.3</ReleaseVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.12.0\lib\net40\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="IssueFilesTests.cs" />
-    <Compile Include="Issues\Files\Contents.Files.Tests.cs" />
-    <Compile Include="Issues\Files\Existence.Files.Tests.cs" />
-    <Compile Include="Issues\System\Registry.System.Tests.cs" />
+    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj" />
+    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
-      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
-      <Name>CSSSCheckerEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
-      <Project>{61accf24-1161-448a-8f32-c98fb3a00bcc}</Project>
-      <Name>CSSSConfig</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
 </Project>
