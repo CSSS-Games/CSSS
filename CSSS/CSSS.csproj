@@ -73,10 +73,6 @@
       <Project>{61accf24-1161-448a-8f32-c98fb3a00bcc}</Project>
       <Name>CSSSConfig</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
-      <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
-      <Name>CSSSSupportLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
       <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
       <Name>CSSSCheckerEngine</Name>
