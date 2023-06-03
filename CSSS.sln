@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngine", "CSSSCh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSConfig", "CSSSConfig\CSSSConfig.csproj", "{2B005BD2-677F-4646-BB17-673AD50DF07D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngineTests", "CSSSCheckerEngineTests\CSSSCheckerEngineTests.csproj", "{40A0EAD2-7A6B-4C02-9315-5AEF401AFD24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngine.Tests", "CSSSCheckerEngine.Tests\CSSSCheckerEngine.Tests.csproj", "{40A0EAD2-7A6B-4C02-9315-5AEF401AFD24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSNotifications", "CSSSNotifications\CSSSNotifications.csproj", "{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}"
 EndProject
