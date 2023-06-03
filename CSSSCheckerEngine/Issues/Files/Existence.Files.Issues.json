@@ -1,0 +1,20 @@
+﻿{
+    "Category": "issues.files.existence",
+    "SupportedOS": "all",
+    "Issues": [
+        {
+            "Description": "Unauthorised media files have been removed",
+            "Points": 5,
+            "Triggered": false,
+            "Path": "C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg",
+            "FileShouldExist": false
+        },
+        {
+            "Description": "A legitimate user account has been deleted",
+            "Points": -10,
+            "Triggered": false,
+            "Path": "C:\\Users\\Default\\NTUSER.DAT",
+            "FileShouldExist": true
+        }
+    ]
+}

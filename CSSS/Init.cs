@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,12 +14,14 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSSConfig;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using CSSSConfig;
+using NLog;
 using SupportLibrary.OSVersionInfo;
 
 namespace CSSS
@@ -44,6 +46,9 @@ namespace CSSS
         /// </summary>
         public Init()
         {
+            // Preventing more than once instance of CSSS from running
+            SetRuntimeLock();
+
             // Setting the current Operating System type
             SetOperatingSystemType();
 
@@ -64,9 +69,84 @@ namespace CSSS
             // Setting the runtime environment
             SetRuntimeEnvironment();
 
+            // Seeing if CSSS is running with elevated privileges,
+            // such as running with 'sudo' or as an administrator.
+            // This is only needed if the "-p" argument has been passed,
+            // as it requires writing to some "admin-only" areas
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Prepare))
+            {
+                logger.Debug("Checking if CSSS has administrative privileges");
+
+                if (CheckElevatedPrivilegesGranted())
+                {
+                    logger.Info("CSSS is running with administrative privileges");
+                }
+                else
+                {
+                    // Throw a security exception, as CSSS would not be able
+                    // to complete its tasks
+                    throw new System.Security.SecurityException("CSSS needs to be run with administrative privileges when \"--prepare\" is used");
+                }
+            }
+
             // All tasks have been completed, so let the config class know
             // so that the CSSS kernel can start performing tasks
             config.InitTasksCompleted = true;
+        }
+
+        /// <summary>
+        /// Prevents more than one running instance of CSSS
+        /// 
+        /// While CSSS can be run multiple times at once without causing
+        /// problems, this is not ideal as competitors will see multiple
+        /// notifications when points change, and the scoring report will
+        /// show the running time jumping around
+        /// 
+        /// To prevent this, only one instance of CSSS should be run at
+        /// once. Ideally a named mutex would be used, but since non-WinNT
+        /// Operating Systems do not support this, opening a port locally
+        /// is the next best way to do it. A lock file is not used as it
+        /// involves more work to see if the process that created it is
+        /// still alive (e.g. after a computer crash) and also requires
+        /// the lock file to be tidied up after use
+        /// 
+        /// Port number 55555 has been chosen, as it's above the well-known
+        /// ports which require administrator access to create, and is a
+        /// nice number to remember. Should there be a problem creating
+        /// this port, it is assumed that another instance of CSSS is
+        /// already running (and is caught in <see cref="T:Program.cs"/>)
+        /// 
+        /// Note: The "-m" switch can be passed to CSSS to skip this check,
+        /// which should mainly be used when developing CSSS (or performing
+        /// unit testing)
+        /// </summary>
+        private void SetRuntimeLock()
+        {
+            if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.MultipleInstances))
+            {
+                logger.Warn("Multiple instances of CSSS are allowed to be run concurently");
+                logger.Warn("While this is allowed, multiple notifications may be shown on points changing");
+                logger.Warn("or the scoring report may show the running time jumping around");
+            }
+            else
+            {
+                // This is pretty much copy-pasted from Microsoft
+                // MSDN: https://msdn.microsoft.com/en-us/library/system.net.sockets.tcplistener(v=vs.110).aspx#Anchor_6
+                try
+                {
+                    logger.Debug("Checking if CSSS is already running");
+                    config.CSSSRuntimeLockServer = new TcpListener(IPAddress.Any, 55555);
+                    config.CSSSRuntimeLockServer.Start();
+                }
+                catch (SocketException)
+                {
+                    // It's not important to keep the error details, as it's
+                    // a deliberate problem and CSSS is just going to exit
+                    throw new SocketException();
+                }
+
+                logger.Debug("This is the only running instance of CSSS");
+            }
         }
 
         /// <summary>
@@ -96,7 +176,7 @@ namespace CSSS
         /// <returns>The current operating system</returns>
         public Config.OperatingSystemType SetOperatingSystemType()
         {
-            Config.OperatingSystemType currentOS = Config.OperatingSystemType.Unknown;
+            var currentOS = Config.OperatingSystemType.Unknown;
 
             // Seeing if CSSS us running on WinNT (this seems to be the
             // easiest check to carry out
@@ -160,7 +240,7 @@ namespace CSSS
                     config.OperatingSystemName = WinNTVersionInfo.Name;
                     logger.Info("Operating System name: {0}", config.OperatingSystemName);
                     return true;
-                    
+
                 case Config.OperatingSystemType.Linux:
                     // Using the `lsb_release -i -s` and `lsb_release -c -s`
                     // program and arguments to join the Operating System
@@ -170,7 +250,7 @@ namespace CSSS
                                                + ReadProcessOutput("lsb_release", "-c -s");
                     logger.Info("Operating System name: {0}", config.OperatingSystemName);
                     return true;
-                    
+
                 default:
                     // The operating system type is not known, so it is not
                     // possible to set a name
@@ -213,7 +293,7 @@ namespace CSSS
                                                                   "");
                     logger.Info("Operating System ver.: {0}", config.OperatingSystemVersion);
                     return true;
-                    
+
                 default:
                     // The operating system type is not known, so it is not
                     // possible to set a version number
@@ -231,7 +311,7 @@ namespace CSSS
             // See: http://www.mono-project.com/docs/faq/technical/#how-can-i-detect-if-am-running-in-mono
             config.runtimeEnvironment = Config.RuntimeEnvironment.Unknown;
 
-            Type t = Type.GetType("Mono.Runtime");
+            var t = Type.GetType("Mono.Runtime");
             if (t != null)
             {
                 config.runtimeEnvironment = Config.RuntimeEnvironment.Mono;
@@ -243,6 +323,44 @@ namespace CSSS
 
             logger.Info("Runtime environment: {0}", config.runtimeEnvironment);
             return config.runtimeEnvironment;
+        }
+
+        /// <summary>
+        /// Checks that elevated privileges have been granted
+        /// 
+        /// During the "-p" (prepare) stage of CSSS, a number of files
+        /// and settings are written to "admin-only" areas. To make sure
+        /// that there isn't a problem when these settings are being
+        /// configured, CSSS checks to make sure that it is run with
+        /// elevated (administrative) privileges
+        /// 
+        /// To perform this check, CSSS tries to access some privileged
+        /// settings and sees what the error code is. If it's successful
+        /// then the privileges have been granted. Otherwise, error out
+        /// and let the user know why in <see cref="T:Program.cs"/>.
+        /// There doesn't seem to be any better way to do this that I
+        /// can find online, which also works across multiple Operating
+        /// Systems
+        /// </summary>
+        /// <returns><c>true</c>, if elevated privileges are granted, <c>false</c> otherwise</returns>
+        private bool CheckElevatedPrivilegesGranted()
+        {
+            switch (config.operatingSystemType)
+            {
+                case Config.OperatingSystemType.WinNT:
+                    // Attempt to run `CACLS "%SYSTEMROOT%\system32\config\system"`
+                    // See: http://www.robvanderwoude.com/battech_elevation.php
+                    return SuccessfulExitCode("C:\\Windows\\System32\\cacls.exe", "C:\\Windows\\system32\\config\\system");
+
+                case Config.OperatingSystemType.Linux:
+                    // Attempt to run `cat /etc/sudoers`
+                    return SuccessfulExitCode("/bin/cat", "/etc/sudoers");
+            }
+
+            // An exception should already have been thrown if an unsupported
+            // Operating System is in use, but it's included here just to
+            // prevent anything unexpected happening
+            throw new NotImplementedException("CSSS does not support running on your Operating System");
         }
 
         /// <summary>
@@ -263,7 +381,7 @@ namespace CSSS
         {
             try
             {
-                Process p = new Process();
+                var p = new Process();
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 if (args != null && args != "") p.StartInfo.Arguments = " " + args;
@@ -283,6 +401,43 @@ namespace CSSS
             {
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Checks to see if the exit code is successful or not for
+        /// an external program
+        /// 
+        /// See: http://stackoverflow.com/a/4251752
+        /// </summary>
+        /// <returns><c>true</c>, if exit code was successful, <c>false</c> otherwise</returns>
+        /// <param name="Program">The program to run</param>
+        /// <param name="Arguments">The arguments to pass to the program</param>
+        private bool SuccessfulExitCode(string Program, string Arguments)
+        {
+            var checkProcess = new Process();
+            var checkProcessInfo = new ProcessStartInfo
+            {
+                FileName = Program,
+                Arguments = Arguments,
+
+                // Hide any windows from showing
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = false,
+
+                // "Eat" the output, as on Linux it will echo out the file
+                RedirectStandardOutput = true
+            };
+
+            checkProcess.StartInfo = checkProcessInfo;
+
+            checkProcess.Start();
+
+            checkProcess.WaitForExit();
+
+            logger.Debug("Exit code for process \"{0} {1}\": {2}", Program, Arguments, checkProcess.ExitCode);
+
+            return (checkProcess.ExitCode == 0) ? true : false;
         }
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -8,6 +8,7 @@
     <RootNamespace>CSSSCheckerEngine</RootNamespace>
     <AssemblyName>CSSSCheckerEngine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ReleaseVersion>0.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,17 +28,33 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.6.7\lib\net40-client\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.4.4.4\lib\net40\NLog.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckerEngine.cs" />
+    <Compile Include="CheckAPI\Files\Contents.Files.CheckAPI.cs" />
+    <Compile Include="CheckAPI\Files\Existence.Files.CheckAPI.cs" />
+    <Compile Include="CheckAPI\System\Registry.System.CheckAPI.cs" />
+    <Compile Include="Checker\Files\Contents.Files.Checker.cs" />
+    <Compile Include="Checker\Files\Existence.Files.Checker.cs" />
+    <Compile Include="Checker\System\Registry.System.Checker.cs" />
+    <Compile Include="OS\Linux\Files\Contents.Files.Linux.OS.cs" />
+    <Compile Include="OS\Linux\Files\Existence.Files.Linux.OS.cs" />
+    <Compile Include="OS\WinNT\Files\Contents.Files.WinNT.OS.cs" />
+    <Compile Include="OS\WinNT\Files\Existence.Files.WinNT.OS.cs" />
+    <Compile Include="OS\WinNT\System\Registry.System.WinNT.OS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Checker\System\Version.System.Checker.cs" />
     <Compile Include="OS\Linux\System\Version.System.Linux.OS.cs" />
@@ -46,28 +63,29 @@
     <Compile Include="IssueFiles.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Issues\Files\Contents.Files.Issues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Issues\Files\Existence.Files.Issues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Issues\System\Registry.System.Issues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Issues\System\Version.System.Issues.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Checker\" />
-    <Folder Include="Checker\System\" />
-    <Folder Include="OS\" />
-    <Folder Include="OS\Linux\" />
-    <Folder Include="OS\Linux\System\" />
-    <Folder Include="OS\WinNT\" />
-    <Folder Include="OS\WinNT\System\" />
-    <Folder Include="CheckAPI\" />
-    <Folder Include="CheckAPI\System\" />
-    <Folder Include="Issues\" />
-    <Folder Include="Issues\System\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
       <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
       <Name>CSSSConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSSSSupportLibrary\CSSSSupportLibrary.csproj">
+      <Project>{486E86DE-4D41-41B0-AC5F-C19E734464A3}</Project>
+      <Name>CSSSSupportLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

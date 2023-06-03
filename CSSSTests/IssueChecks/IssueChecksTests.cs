@@ -1,5 +1,5 @@
 ﻿//  CSSSTests - CyberSecurity Scoring System Tests
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,11 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSS;
+using System.Collections.Generic;
 using CSSSConfig;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace IssueChecks
 {
@@ -28,7 +26,7 @@ namespace IssueChecks
     [TestFixture]
     public class IssueChecksTests
     {
-        private IssueChecks IssueChecksChecks;
+        private IssueChecks issueChecksChecks;
 
         private static Config config;
 
@@ -38,7 +36,7 @@ namespace IssueChecks
         [SetUp]
         protected void SetUp()
         {
-            IssueChecksChecks = new IssueChecks();
+            issueChecksChecks = new IssueChecks();
             config = Config.GetCurrentConfig;
 
             config.ResetScoringData();
@@ -50,7 +48,7 @@ namespace IssueChecks
         [TearDown]
         protected void TearDown()
         {
-            IssueChecksChecks = null;
+            issueChecksChecks = null;
             config = null;
         }
 
@@ -66,7 +64,7 @@ namespace IssueChecks
             string description = "TestPointsScoredPositivePointsTriggered";
             bool triggered = true;
 
-            IssueChecksChecks.PointsScored(points, description, triggered);
+            issueChecksChecks.PointsScored(points, description, triggered);
 
             Assert.Multiple(() =>
             {
@@ -95,7 +93,7 @@ namespace IssueChecks
             string description = "TestPointsScoredPositivePointsNotTriggered";
             bool triggered = false;
 
-            IssueChecksChecks.PointsScored(points, description, triggered);
+            issueChecksChecks.PointsScored(points, description, triggered);
 
             Assert.Multiple(() =>
             {
@@ -125,7 +123,7 @@ namespace IssueChecks
             string description = "TestPointsScoredNegativePointsTriggered";
             bool triggered = true;
 
-            IssueChecksChecks.PointsScored(points, description, triggered);
+            issueChecksChecks.PointsScored(points, description, triggered);
 
             Assert.Multiple(() =>
             {
@@ -154,7 +152,7 @@ namespace IssueChecks
             string description = "TestPointsScoredNegativePointsNotTriggered";
             bool triggered = false;
 
-            IssueChecksChecks.PointsScored(points, description, triggered);
+            issueChecksChecks.PointsScored(points, description, triggered);
 
             Assert.Multiple(() =>
             {
@@ -183,7 +181,7 @@ namespace IssueChecks
             int points = 5;
             string description = "TestPointsLostPositivePoints";
 
-            IssueChecksChecks.PointsLost(points, description);
+            issueChecksChecks.PointsLost(points, description);
 
             Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Lost),
                         "The 'Lost' pointsStatus enum should be set if the issue has been solved but broken again");
@@ -200,7 +198,7 @@ namespace IssueChecks
             int points = -5;
             string description = "TestPointsLostNegativePoints";
 
-            IssueChecksChecks.PointsLost(points, description);
+            issueChecksChecks.PointsLost(points, description);
 
             Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
                         "The 'Gained' pointsStatus enum should be set if the penalty has been resolved");
@@ -217,13 +215,13 @@ namespace IssueChecks
             string descriptionOne = "TestMultiplePointsScoredPositivePointsIssueOne";
             bool triggeredOne = true;
 
-            IssueChecksChecks.PointsScored(pointsOne, descriptionOne, triggeredOne);
+            issueChecksChecks.PointsScored(pointsOne, descriptionOne, triggeredOne);
 
             int pointsTwo = 10;
             string descriptionTwo = "TestMultiplePointsScoredPositivePointsIssueTwo";
             bool triggeredTwo = true;
 
-            IssueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
+            issueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
 
             List<string> descriptionList = new List<string>();
             descriptionList.Add(descriptionOne + " - " + pointsOne + " points");
@@ -254,13 +252,13 @@ namespace IssueChecks
             string descriptionOne = "TestMultiplePointsScoredNegativePointsIssueOne";
             bool triggeredOne = true;
 
-            IssueChecksChecks.PointsScored(pointsOne, descriptionOne, triggeredOne);
+            issueChecksChecks.PointsScored(pointsOne, descriptionOne, triggeredOne);
 
             int pointsTwo = -10;
             string descriptionTwo = "TestMultiplePointsScoredNegativePointsIssueTwo";
             bool triggeredTwo = true;
 
-            IssueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
+            issueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
 
             List<string> descriptionList = new List<string>();
             descriptionList.Add(descriptionOne + " - " + pointsOne.ToString().Replace("-", "") + " points");
@@ -292,13 +290,13 @@ namespace IssueChecks
             string descriptionPositive = "TestMultiplePointsScoredPositivePointsIssueOne";
             bool triggeredPositive = true;
 
-            IssueChecksChecks.PointsScored(pointsPositive, descriptionPositive, triggeredPositive);
+            issueChecksChecks.PointsScored(pointsPositive, descriptionPositive, triggeredPositive);
 
             int pointsNegative = -10;
             string descriptionNegative = "TestMultiplePointsScoredNegativePointsIssueTwo";
             bool triggeredNegative = true;
 
-            IssueChecksChecks.PointsScored(pointsNegative, descriptionNegative, triggeredNegative);
+            issueChecksChecks.PointsScored(pointsNegative, descriptionNegative, triggeredNegative);
 
             Assert.Multiple(() =>
             {

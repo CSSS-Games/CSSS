@@ -1,5 +1,5 @@
 ﻿//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 
 using CSSSConfig;
 using NLog;
-using System;
 
 namespace Checker.System
 {
@@ -40,8 +39,8 @@ namespace Checker.System
         /// Gets a value indicating whether the OS version currently
         /// installed matches what is expected in the issue json file
         /// </summary>
-        /// <param name="OperatingSystemVersion">The Operating System version to compare with the one running</param>
+        /// <param name="operatingSystemVersion">The Operating System version to compare with the one running</param>
         /// <value><c>true</c> if expected OS Version; otherwise, <c>false</c></value>
-        public abstract bool ExpectedOSVersion(string OperatingSystemVersion);
+        public abstract bool ExpectedOSVersion(string operatingSystemVersion);
     }
 }

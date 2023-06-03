@@ -1,12 +1,15 @@
 #---------------------------------#
 #      general configuration      #
 #---------------------------------#
-version: 0.2.{build}-{branch}
+version: 0.3.{build}-{branch}
 
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
-image: Visual Studio 2015  # Allows use if Xamarin: https://www.appveyor.com/docs/installed-software/#xamarin
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
+  - Visual Studio 2019
 
 #---------------------------------#
 #       build configuration       #
@@ -26,4 +29,4 @@ build:
 #---------------------------------#
 test: off
 
-test_script: nunit3-console.exe .\CSSS.sln --config=Release --result=myresults.xml;format=AppVeyor
+test_script: nunit3-console.exe .\CSSS.sln --config=Release --skipnontestassemblies --result=myresults.xml;format=AppVeyor

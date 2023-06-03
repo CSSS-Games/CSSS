@@ -1,5 +1,5 @@
 ﻿//  CSSSTests - CyberSecurity Scoring System Tests
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using NUnit.Framework;
-using System;
 namespace CSSSTests
 {
     [TestFixture()]

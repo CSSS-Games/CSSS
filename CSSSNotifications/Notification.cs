@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System Notifications
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 
 using CSSSConfig;
 using NLog;
-using System;
 
 namespace CSSSNotifications
 {
@@ -35,10 +34,10 @@ namespace CSSSNotifications
         protected static Config config = Config.GetCurrentConfig;
 
         // The notification message and title text to display
-        protected const string NotificationTitleText = "CyberSecurity Scoring System";
-        protected const string NotificationMessageTextPointsGained = "Points have been gained";
-        protected const string NotificationMessageTextPointsChanged = "Points have been changed";
-        protected const string NotificationMessageTextPointsLost = "Points have been lost";
+        protected const string notificationTitleText = "CyberSecurity Scoring System";
+        protected const string notificationMessageTextPointsGained = "Points have been gained";
+        protected const string notificationMessageTextPointsChanged = "Points have been changed";
+        protected const string notificationMessageTextPointsLost = "Points have been lost";
 
         /// <summary>
         /// Displays a positive notification to the competitor to

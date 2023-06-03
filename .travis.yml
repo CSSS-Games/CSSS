@@ -4,13 +4,12 @@ solution: CSSS.sln
 matrix:
   include:
     - os: linux
-      dist: trusty
-      sudo: false
+      dist: bionic
       mono: latest
     - os: linux
-      dist: precise
+      dist: xenial
       mono: latest
 
 script:
   - xbuild /p:Configuration=Release CSSS.sln
-  - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSS.sln --config=Release
+  - mono ./packages/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./CSSS.sln --config=Release --skipnontestassemblies

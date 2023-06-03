@@ -1,5 +1,5 @@
 ﻿//  CSSSTests - CyberSecurity Scoring System Tests
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,10 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System.Security.Principal;
 using CSSS;
 using CSSSConfig;
 using NUnit.Framework;
-using System;
 
 namespace CSSSTests
 {
@@ -41,6 +41,10 @@ namespace CSSSTests
         {
             config = Config.GetCurrentConfig;
 
+            // Allowing multiple instances of tests to run at once,
+            // as the first test locks port 55555 from the init tests
+            config.CSSSProgramMode = Config.CSSSModes.MultipleInstances;
+
             init = new Init();
         }
 
@@ -50,6 +54,15 @@ namespace CSSSTests
         [TearDown]
         protected void TearDown()
         {
+            // Removing any set CSSS Mode flags
+            // There doesn't seem to be a tidy way to do this
+            config.CSSSProgramMode &= ~Config.CSSSModes.Check;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Help;
+            config.CSSSProgramMode &= ~Config.CSSSModes.MultipleInstances;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Observe;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Prepare;
+            config.CSSSProgramMode &= ~Config.CSSSModes.Start;
+
             init = null;
             config = null;
             kernel = null;
@@ -92,6 +105,20 @@ namespace CSSSTests
         [Test()]
         public void TestKernelPerformTasksPrepareArgumentReturnsTrue()
         {
+            // The 'Prepare' mode requires administrative permissions due to it modifying
+            // parts of the system that normal users shouldn't have access to (`/etc`,
+            // task scheduler). If this permission is not currently granted, then ignore
+            // the test rather than making it fail
+            // See: https://stackoverflow.com/a/5953294
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+                {
+                    Assert.Ignore("The 'Prepare' argument test has been ignored due to administrative permissions not being available");
+                }
+            }
+
             config.CSSSProgramMode = Config.CSSSModes.Prepare;
 
             kernel = new Kernel();

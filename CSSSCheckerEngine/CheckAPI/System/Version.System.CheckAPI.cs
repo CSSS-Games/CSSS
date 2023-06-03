@@ -1,5 +1,5 @@
 ﻿//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using CSSSConfig;
 using NLog;
 using OS.Linux.System;
 using OS.WinNT.System;
-using System;
 
 namespace CheckAPI.System
 {
@@ -41,11 +41,11 @@ namespace CheckAPI.System
         /// Compares the current running Operating System version against
         /// the expected number in the issue check file
         /// </summary>
-        /// <param name="OperatingSystemVersion">The Operating System version to compare with the one running</param>
+        /// <param name="operatingSystemVersion">The Operating System version to compare with the one running</param>
         /// <returns><c>true</c>, if OS version matches what is expecteded, <c>false</c> otherwise</returns>
-        public bool ExpectedOSVersion(string OperatingSystemVersion)
+        public bool ExpectedOSVersion(string operatingSystemVersion)
         {
-            return VersionSystemFactory.GetCurrentOperatingSystemClass().ExpectedOSVersion(OperatingSystemVersion);
+            return VersionSystemFactory.GetCurrentOperatingSystemClass().ExpectedOSVersion(operatingSystemVersion);
         }
     }
 }

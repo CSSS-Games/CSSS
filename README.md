@@ -1,20 +1,56 @@
 # CyberSecurity Scoring System (CSSS)
 
+[![.Net Versions](https://img.shields.io/badge/.Net%20Versions-4.0|4.5|4.6|4.7|4.8-blue.svg)]()
+[![Status](https://img.shields.io/badge/status-Pre%20Release-red.svg)]()
+[![Releases](https://img.shields.io/github/v/release/stuajnht/CSSS?include_prereleases)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+[![Contributors](https://img.shields.io/github/contributors/stuajnht/CSSS.svg)]()
+[![Forks](https://img.shields.io/github/forks/stuajnht/CSSS.svg)](https://github.com/stuajnht/CSSS/network/members)
+[![Issues](https://img.shields.io/github/issues/stuajnht/CSSS.svg)](https://github.com/stuajnht/CSSS/issues)
+
 CyberSecurity Scoring System (CSSS) is a program to assist with training for the CyberPatriot / CyberCenturion competitions.
 
 While it is currently possible to create [your own practice images](https://www.uscyberpatriot.org/competition/training-materials/practice-images), there is only a scoring client for Windows computers. To assist with training competitors with Windows, Ubuntu and Debian Operating Systems, this program has been created to provide a scoring system for them.
 
+<details>
+  <summary>Contents</summary>
+
+  * [Build Info](#build-info)
+  * [Requirements](#requirements)
+  * [Installing](#installing)
+  * [Running](#running)
+  * [Contributing](#contributing)
+  * [License Terms](#license-terms)
+    * [NuGet Packages](#nuget-packages)
+    * [Other Projects](#other-projects)
+  * [Copyright](#copyright)
+  * [Disclaimer](#disclaimer)
+</details>
+
+## Build Info
+|Branch|Status (Windows Build)|Status (Linux Build)|Last Commit|
+|---|---|---|---|
+|Master|[![AppVeyor Build status](https://img.shields.io/appveyor/ci/stuajnht/CSSS?label=AppVeyor%20Build)](https://ci.appveyor.com/project/stuajnht/csss)|[![Build Status](https://img.shields.io/travis/stuajnht/CSSS.svg?label=Travis%20Build)](https://travis-ci.org/stuajnht/CSSS)|[![Last Master Commit](https://img.shields.io/github/last-commit/stuajnht/CSSS.svg)]()
+|Develop|[![AppVeyor Build status](https://img.shields.io/appveyor/ci/stuajnht/CSSS/develop?label=AppVeyor%20Build)](https://ci.appveyor.com/project/stuajnht/csss/history?branch=develop)|[![Develop Build Status](https://img.shields.io/travis/stuajnht/CSSS/develop?label=Travis%20Build)](https://travis-ci.org/stuajnht/CSSS/branches)|[![Last Develop Commit](https://img.shields.io/github/last-commit/stuajnht/CSSS/develop.svg)]()
+
 ## Requirements
 To run CSSS, you will need to have an image running one of the supported operating systems:
   * Windows:
-    * Windows Vista
-    * Windows 7
-    * Windows 8
-    * Windows Server 2008
+    * Desktop:
+      * Windows 7
+      * Windows 8
+      * Windows 10
+    * Server:
+      * Windows Server 2008 R2
+      * Windows Server 2012
+      * Windows Server 2012 R2
+      * Windows Server 2016
+      * Windows Server 2019
   * Linux:
-    * Ubuntu 14.04
     * Ubuntu 16.04
-    * Debian 7
+    * Ubuntu 18.04
+    * Debian 9
 
 Other operating systems should work, but they are not supported as the CyberPatriot / CyberCenturion competitions do not use them.
 
@@ -29,24 +65,46 @@ Before CSSS will run, the following additional programs need to be installed ont
 ## Running
 Double-clicking on CSSS will cause it to quickly show the usage window, then close itself. This is by design. To run CSSS properly, a number of arguments need to be passed to the program, which are:
 ```
--c, --check:   Checks the config files for any problems
--o, --observe: Observes CSSS running before preparing it (implies 'c')
--p, --prepare: Prepares CSSS ready for image release (implies '-c')
--s, --start:   Starts the scoring system
--h, --help:    Shows the program usage
+Usage:
+  CSSS.exe -c | -o | -p [--shutdown] | -s | [-h] | [-m]
+
+Examples:
+  CSSS.exe -c
+  CSSS.exe -o -m
+  CSSS.exe -p
+  CSSS.exe -p --shutdown
+  CSSS.exe -s
+  CSSS.exe -h
+
+
+Required arguments (at least one is needed):
+  -c, --check:    Checks the config files for any problems
+  -o, --observe:  Observes CSSS running before preparing it (implies '-c')
+  -p, --prepare:  Prepares CSSS ready for image release (implies '-c')
+  -s, --start:    Starts the scoring system
+
+
+Optional arguments:
+  -h, --help:     Shows this help message
+  --shutdown:     Shuts down the computer
+                  Can be used with -p / --prepare to aid image capture
+
+
+Developer arguments (all optional):
+  -m, --multiple: Allows multiple instances of CSSS to run concurently
 ```
 
-These arguments have been chosen to spell 'COPS', as competitors are 'policing' the security of the computer.
+The required arguments have been chosen to spell 'COPS', as competitors are 'policing' the security of the computer.
 
-Under normal image building, the '-o' option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+Under normal image building, the `-o` option should be passed, as this allows CSSS to run as it would for training, but without affecting the files used to list the 'issues'.
+
+When you are ready to release the image, __with administrative privileges__ (e.g. `sudo`, "Run as administrator") run CSSS with the `-p` option to prepare the necessary files and allow CSSS to start automatically on computer reboots.
+> :warning: Running CSSS with the `-p` argument will encrypt the issue files. Make sure that you have a snapshot of your image before you run this command, otherwise you will need to set everything up again should there be any problems.
 
 ## Contributing
-Thanks for your interest in contributing to this project. You can contribute or report issues in the following ways:
+Thanks for your interest in CSSS. Read more about [contributing to the project](CONTRIBUTING.md) to get started.
 
-### Pull Requests
-If you would like to create a pull request, please make sure that you are on the [develop branch](https://github.com/stuajnht/CSSS/tree/develop) before opening one. Once you have cloned or forked this repo, open the `CSSS.sln` file to begin development. This project uses [git-flow](https://github.com/nvie/gitflow) as its branching model.
-
-The current development environment is with Xamarin Studio Community 6.2 and .Net Framework 4.0. Please make sure you are using these versions before submitting any pull requests.
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## License Terms
 CSSS is publised under the GNU GPL v3 License, see the [LICENSE](LICENSE.md) file for more information.
@@ -61,27 +119,6 @@ This project uses NuGet packages. Their project source code pages and licenses c
 ### Other Projects
 The following projects and source code are included in CSSS. Their licenses project pages can be found below:
 * [OSVersionInfo](https://www.codeproject.com/Articles/73000/Getting-Operating-System-Version-Info-Even-for-Win)
-
-## To-Do
-These are the tasks planned for each release version. Please note that these can change without warning, depending on how features are progressing.
-
-### Version 0.3
-* Perform various tasks when the '-p' argument is passed:
-  * Set issue check files to be encrypted, so that images can be released but competitors can not find out what "issues" need to be fixed
-  * Add files to the relevant Operating System startup folders, so that CSSS will start automatically:
-    * [Windows shortcut](http://stackoverflow.com/a/19914018) in [Programdata startup folder](https://www.kiloroot.com/all-users-or-common-startup-folder-locations-launch-programs-at-window-login-windows-server-2008-r2-2012-2012-r2/)
-    * [Linux](http://raspberrypi.stackexchange.com/a/5159)
-  * Shutdown the computer to allow an image to be taken
-* Comment and coding style tidy-up
-
-### Version 0.4
-* Create scripts to install CSSS files into the correct locations (WinNT: root of `%SystemDrive%`, Linux: `/opt` directory)
-* Install additional software when CSSS is being installed to make sure all items are available for it to use
-* Create build scripts that install software that can be used when testing the checker system engine
-
-### Versions 0.5 onward
-* Create more check template files and relevant classes for the checker system engine to use (a new version for each check "category")
-* Create some example checker files with instructions to create images based around them with pre-made questions and scenarios
 
 ## Copyright
 CyberPatriot is copyright of US Air Force Association

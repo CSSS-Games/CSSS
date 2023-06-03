@@ -1,11 +1,16 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{429D7241-EDB8-4E8E-BFE5-E84B7D05A1D2}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
 		CHANGES.md = CHANGES.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		CONTRIBUTING.md = CONTRIBUTING.md
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
@@ -23,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngineTests", "CSSSCheckerEngineTests\CSSSCheckerEngineTests.csproj", "{40A0EAD2-7A6B-4C02-9315-5AEF401AFD24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSNotifications", "CSSSNotifications\CSSSNotifications.csproj", "{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSLauncher", "CSSSLauncher\CSSSLauncher.csproj", "{6264217F-7E32-462C-A1EC-74CBA7CD71A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,5 +65,18 @@ Global
 		{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4BEC591-C6CE-4449-889B-A9BF84FA57F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6264217F-7E32-462C-A1EC-74CBA7CD71A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6264217F-7E32-462C-A1EC-74CBA7CD71A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6264217F-7E32-462C-A1EC-74CBA7CD71A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6264217F-7E32-462C-A1EC-74CBA7CD71A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A52343C-9CC9-417B-87C9-3D6A6EDA54F9}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		version = 0.3
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,12 +14,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSSConfig;
-using HtmlAgilityPack;
-using NLog;
 using System;
 using System.IO;
 using System.Text;
+using CSSSConfig;
+using HtmlAgilityPack;
+using NLog;
 
 namespace CSSS
 {
@@ -50,7 +50,7 @@ namespace CSSS
         /// <summary>
         /// The scoring report HTML, to be modified and saved
         /// </summary>
-        private HtmlDocument ScoringReportHTML;
+        private HtmlDocument scoringReportHTML;
 
         /// <summary>
         /// The filename of the ScoringReport.html file, set as a
@@ -70,8 +70,8 @@ namespace CSSS
             // changes
             try
             {
-                ScoringReportHTML = new HtmlDocument();
-                ScoringReportHTML.Load(ScoringReportHTMLFilename);
+                scoringReportHTML = new HtmlDocument();
+                scoringReportHTML.Load(ScoringReportHTMLFilename);
             }
             catch (FileNotFoundException)
             {
@@ -110,7 +110,7 @@ namespace CSSS
         /// </summary>
         private void SaveScoringReport()
         {
-            ScoringReportHTML.Save(ScoringReportHTMLFilename);
+            scoringReportHTML.Save(ScoringReportHTMLFilename);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace CSSS
         /// </summary>
         private void UpdatePointsGained()
         {
-            var pointsGained = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-scored']");
+            var pointsGained = scoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-scored']");
             pointsGained.InnerHtml = config.PointsGainedTotal.ToString();
             logger.Info("  Points gained: {0}", pointsGained.InnerHtml);
         }
@@ -130,7 +130,7 @@ namespace CSSS
         /// </summary>
         private void UpdatePointsLost()
         {
-            var pointsLost = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-lost']");
+            var pointsLost = scoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-lost']");
             pointsLost.InnerHtml = config.PointsLostTotal.ToString().Replace("-", "");
             logger.Info("  Penalty points: {0}", pointsLost.InnerHtml);
         }
@@ -144,7 +144,7 @@ namespace CSSS
             var pointsGained = config.PointsGainedTotal;
             var pointsLost = config.PointsLostTotal;
 
-            var pointsTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-total']");
+            var pointsTotal = scoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-points-total']");
             pointsTotal.InnerHtml = (pointsLost + pointsGained).ToString();
             logger.Info("  Total score: {0}", pointsTotal.InnerHtml);
         }
@@ -157,10 +157,14 @@ namespace CSSS
         /// hidden value is updated with the time it was updated at. From
         /// then onwards, this value can be compared to the current time to
         /// see the overall running time of the image</para>
+        /// 
+        /// <para>The hidden value stored is encrypted to prevent competitors
+        /// changing it to decrease their running time. While this is unlikely
+        /// to happen, the precaution is there to make sure it can't</para>
         /// </summary>
         private void UpdateRunningTime()
         {
-            var startTime = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='image-start-time']");
+            var startTime = scoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='image-start-time']");
 
             // If the saved start time is empty then CSSS is running on a
             // fresh image (e.g. only just started) and not from a restart
@@ -168,17 +172,33 @@ namespace CSSS
             if (string.IsNullOrEmpty(startTime.InnerHtml))
             {
                 // Save the current time to the HTML node for future use
-                startTime.InnerHtml = DateTime.UtcNow.ToString();
+                startTime.InnerHtml = SupportLibrary.Encryption.String.Encrypt(DateTime.UtcNow.ToString());
             }
+
+            var runtimeOverview = scoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-runtime']");
 
             // Seeing the timespan between the image start and now
             // See: http://stackoverflow.com/a/9017567
             DateTime currentTime = DateTime.UtcNow;
 
-            TimeSpan runningTime = currentTime.Subtract(Convert.ToDateTime(startTime.InnerHtml));
+            // Attempting to get the start time from the stored encrypted
+            // value. If this fails (such as competitors attempting to change
+            // it or, more likely, when debugging on multiple Operating
+            // Systems at once and not rebuilding the solution to copy an
+            // empty ScoringReport.html file) then warn the user and keep
+            // the score at its last known value
+            try
+            {
+                var runningTime = currentTime.Subtract(Convert.ToDateTime(SupportLibrary.Encryption.String.Decrypt(startTime.InnerHtml)));
 
-            var runtimeOverview = ScoringReportHTML.DocumentNode.SelectSingleNode("//div[@id='overview-runtime']");
-            runtimeOverview.InnerHtml = runningTime.Hours + ":" + runningTime.Minutes.ToString("00");
+                runtimeOverview.InnerHtml = runningTime.Hours + ":" + runningTime.Minutes.ToString("00");
+            }
+            catch (System.Security.Cryptography.CryptographicException)
+            {
+                logger.Warn("Unable to decrypt the image start time");
+                logger.Warn("You either didn't rebuild the solution or you're trying to cheat!");
+            }
+
             logger.Info("  Running time: {0}", runtimeOverview.InnerHtml);
         }
 
@@ -187,10 +207,10 @@ namespace CSSS
         /// </summary>
         private void UpdateGainedPointsTitle()
         {
-            var issuesSolved = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-scored-total']");
+            var issuesSolved = scoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-scored-total']");
             issuesSolved.InnerHtml = config.PointsGainedDescriptions.Count.ToString();
 
-            var issuesTotal = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-scored-total-issues']");
+            var issuesTotal = scoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-scored-total-issues']");
             issuesTotal.InnerHtml = config.TotalIssues.ToString();
         }
 
@@ -199,14 +219,14 @@ namespace CSSS
         /// </summary>
         private void UpdateGainedPointsDetails()
         {
-            StringBuilder issueDescriptions = new StringBuilder();
+            var issueDescriptions = new StringBuilder();
 
             foreach (var issueSolved in config.PointsGainedDescriptions)
             {
                 issueDescriptions.AppendLine(issueSolved + "<br>");
             }
 
-            var detailScored = ScoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-scored']");
+            var detailScored = scoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-scored']");
             detailScored.InnerHtml = issueDescriptions.ToString();
         }
 
@@ -217,7 +237,7 @@ namespace CSSS
         {
             var penaltiesIssued = config.PointsLostDescriptions.Count;
 
-            var penaltiesTitleCount = ScoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-penalties-total']");
+            var penaltiesTitleCount = scoringReportHTML.DocumentNode.SelectSingleNode("//span[@id='score-information-title-penalties-total']");
             penaltiesTitleCount.InnerHtml = penaltiesIssued.ToString();
         }
 
@@ -226,14 +246,14 @@ namespace CSSS
         /// </summary>
         private void UpdatePenaltyPointsDetails()
         {
-            StringBuilder penaltyDescriptions = new StringBuilder();
+            var penaltyDescriptions = new StringBuilder();
 
             foreach (var penalties in config.PointsLostDescriptions)
             {
                 penaltyDescriptions.AppendLine(penalties + "<br>");
             }
 
-            var detailPenalties = ScoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-penalties']");
+            var detailPenalties = scoringReportHTML.DocumentNode.SelectSingleNode("//p[@id='score-information-detail-penalties']");
             detailPenalties.InnerHtml = penaltyDescriptions.ToString();
         }
     }

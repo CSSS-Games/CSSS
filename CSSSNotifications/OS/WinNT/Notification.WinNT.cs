@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System Notifications
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,9 +14,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using CSSSNotifications;
-using System;
 using System.Drawing;
+using CSSSNotifications;
 
 namespace OS.WinNT
 {
@@ -28,7 +27,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsGained()
         {
-            ShowNotification(NotificationMessageTextPointsGained, SystemIcons.Information);
+            ShowNotification(notificationMessageTextPointsGained, SystemIcons.Information);
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsLost()
         {
-            ShowNotification(NotificationMessageTextPointsLost, SystemIcons.Error);
+            ShowNotification(notificationMessageTextPointsLost, SystemIcons.Error);
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsChanged()
         {
-            ShowNotification(NotificationMessageTextPointsChanged, SystemIcons.Warning);
+            ShowNotification(notificationMessageTextPointsChanged, SystemIcons.Warning);
         }
 
         /// <summary>
@@ -54,24 +53,22 @@ namespace OS.WinNT
         /// 
         /// See: http://stackoverflow.com/a/34956412
         /// </summary>
-        /// <param name="NotificationMessage">The message to show to the competitor</param>
-        /// <param name="NotificationIcon">The icon to show, see: https://msdn.microsoft.com/en-us/library/system.drawing.systemicons.aspx</param>
-        /// <param name="NotificationTitle">The text to display in the notification title</param>
-        private void ShowNotification(string NotificationMessage, Icon NotificationIcon, string NotificationTitle = NotificationTitleText)
+        /// <param name="message">The message to show to the competitor</param>
+        /// <param name="icon">The icon to show, see: https://msdn.microsoft.com/en-us/library/system.drawing.systemicons.aspx</param>
+        /// <param name="title">The text to display in the notification title</param>
+        private void ShowNotification(string message, Icon icon, string title = notificationTitleText)
         {
-            var notification = new System.Windows.Forms.NotifyIcon()
+            using (var notification = new System.Windows.Forms.NotifyIcon()
             {
                 Visible = true,
-                Icon = NotificationIcon,
-                BalloonTipText = NotificationMessage,
-                BalloonTipTitle = NotificationTitle
-            };
-
-            // Display for 5 seconds
-            notification.ShowBalloonTip(5000);
-
-            // The notification should be disposed when you don't need it anymore
-            notification.Dispose();
+                Icon = icon,
+                BalloonTipText = message,
+                BalloonTipTitle = title
+            })
+            {
+                // Display for 5 seconds
+                notification.ShowBalloonTip(5000);
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System Config
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace CSSSConfig
 {
@@ -76,7 +77,9 @@ namespace CSSSConfig
             Check = 0x1,
             Prepare = 0x2,
             Observe = 0x4,
-            Start = 0x8
+            Start = 0x8,
+            MultipleInstances = 0x10,
+            Shutdown = 0x20
         }
 
         /// <summary>
@@ -102,6 +105,15 @@ namespace CSSSConfig
         /// </summary>
         /// <value><c>true</c> if init tasks completed; otherwise, <c>false</c>.</value>
         public bool InitTasksCompleted { get; set; }
+
+        /// <summary>
+        /// To prevent multiple CSSS instances being run, a TCP port is
+        /// reserved when CSSS is run
+        /// 
+        /// When another instance of CSSS tries to run, it checks to see
+        /// if the port is in use, and if so, that instance of CSSS exits
+        /// </summary>
+        public TcpListener CSSSRuntimeLockServer;
 
 
 
@@ -186,17 +198,17 @@ namespace CSSSConfig
         /// Adds an issue file to the dictionary of available issues,
         /// so it can be accessed when performing checks
         /// </summary>
-        /// <param name="IssueFileCategory">The category the issue file is for</param>
-        /// <param name="IssueFileJSON">The JSON contents of the whole issue file</param>
-        public void AddIssueFile(string IssueFileCategory, dynamic IssueFileJSON)
+        /// <param name="issueFileCategory">The category the issue file is for</param>
+        /// <param name="issueFileJSON">The JSON contents of the whole issue file</param>
+        public void AddIssueFile(string issueFileCategory, dynamic issueFileJSON)
         {
             try
             {
-                IssueFileList.Add(IssueFileCategory, IssueFileJSON);
+                IssueFileList.Add(issueFileCategory, issueFileJSON);
             }
             catch (ArgumentException)
             {
-                throw new OperationCanceledException("An issue file with a category of \"" + IssueFileCategory + "\" already exists... skipping adding");
+                throw new OperationCanceledException("An issue file with a category of \"" + issueFileCategory + "\" already exists... skipping adding");
             }
         }
 
@@ -204,17 +216,17 @@ namespace CSSSConfig
         /// Gets the issue file JSON of the issue category
         /// </summary>
         /// <returns>The issue file JSON object</returns>
-        /// <param name="IssueFileCategory">The category of the issue file</param>
-        public dynamic GetIssueFile(string IssueFileCategory)
+        /// <param name="issueFileCategory">The category of the issue file</param>
+        public dynamic GetIssueFile(string issueFileCategory)
         {
-            dynamic IssueFileJSON;
-            if (IssueFileList.TryGetValue(IssueFileCategory, out IssueFileJSON))
+            dynamic issueFileJSON;
+            if (IssueFileList.TryGetValue(issueFileCategory, out issueFileJSON))
             {
-                return IssueFileJSON;
+                return issueFileJSON;
             }
             else
             {
-                throw new KeyNotFoundException("An issue file with a category of \"" + IssueFileCategory + "\" could not be found");
+                throw new KeyNotFoundException("An issue file with a category of \"" + issueFileCategory + "\" could not be found");
             }
         }
 
@@ -301,12 +313,12 @@ namespace CSSSConfig
         /// descriptions array, and increases the points gained total
         /// value with amount scored
         /// </summary>
-        /// <param name="Points">The amount of points gained for the issue</param>
-        /// <param name="Description">The description of the issue</param>
-        public void UpdatePointsGained(int Points, string Description)
+        /// <param name="points">The amount of points gained for the issue</param>
+        /// <param name="description">The description of the issue</param>
+        public void UpdatePointsGained(int points, string description)
         {
-            PointsGainedTotal += Points;
-            PointsGainedDescriptions.Add(Description + " - " + Points + " points");
+            PointsGainedTotal += points;
+            PointsGainedDescriptions.Add(description + " - " + points + " points");
         }
 
         /// <summary>
@@ -327,12 +339,12 @@ namespace CSSSConfig
         /// descriptions array, and increases the points lost total
         /// value with amount penalised
         /// </summary>
-        /// <param name="Points">The amount of points lost for the penalty</param>
-        /// <param name="Description">The description of the penalty</param>
-        public void UpdatePointsLost(int Points, string Description)
+        /// <param name="points">The amount of points lost for the penalty</param>
+        /// <param name="description">The description of the penalty</param>
+        public void UpdatePointsLost(int points, string description)
         {
-            PointsLostTotal += Points;
-            PointsLostDescriptions.Add(Description + " - " + Points.ToString().Replace("-", "") + " points");
+            PointsLostTotal += points;
+            PointsLostDescriptions.Add(description + " - " + points.ToString().Replace("-", "") + " points");
         }
     }
 }

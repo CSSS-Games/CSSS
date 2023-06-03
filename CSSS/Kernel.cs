@@ -1,5 +1,5 @@
 ﻿//  CSSS - CyberSecurity Scoring System
-//  Copyright(C) 2017  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
+//  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -14,11 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using CSSSCheckerEngine;
 using CSSSConfig;
-using IssueChecks;
 using NLog;
-using System;
 
 namespace CSSS
 {
@@ -151,16 +150,48 @@ namespace CSSS
             {
                 logger.Info("Preparing for image release");
 
+                var prepareCSSS = new Prepare();
+                prepareCSSS.PerformAllPreparationSteps();
+
                 // All of the asked-for tasks have been completed,
                 // so return 'true' from this function to let the
                 // calling main run loop know it can exit
                 shouldExit = true;
+
+                // If we should shutdown
+                if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Shutdown))
+                {
+                    // Run the shutdown command
+                    var process = new System.Diagnostics.Process();
+                    process.StartInfo.FileName = "shutdown";
+
+                    // The logic behind a minute delay before shutting down is to allow
+                    // CSSS to finish running and gracefully exit, rather than being
+                    // terminated as the computer shuts down
+                    logger.Info("Attempting to shut down the computer in 1 minute");
+                    switch (config.operatingSystemType)
+                    {
+                        case Config.OperatingSystemType.WinNT:
+                            process.StartInfo.Arguments = "-s -t 60";
+                            break;
+                        case Config.OperatingSystemType.Linux:
+                            process.StartInfo.Arguments = "-h +1";
+                            break;
+                        default:
+                            logger.Warn("Unable to shutdown computer - you will need to do this manually");
+                            break;
+                    }
+
+                    process.Start();
+                    process.WaitForExit();
+                }
             }
 
             // Seeing if CSSS should start and run normally
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Start))
             {
                 logger.Info("Running CSSS normally");
+                PerformIssueCheckTasks();
             }
 
             logger.Debug("CSSS should exit: {0}", shouldExit);
@@ -199,6 +230,10 @@ namespace CSSS
             // Performing any checks under the "issues.system" category
             var systemIssueChecks = new IssueChecks.System();
             systemIssueChecks.PerformAllSystemChecks();
+
+            // Performing any checks under the "issues.files" category
+            var filesIssueChecks = new IssueChecks.Files();
+            filesIssueChecks.PerformAllFilesChecks();
 
             // Completing any tasks after the issue checks have
             // been completed
