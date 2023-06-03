@@ -50,17 +50,16 @@
     <Compile Include="NotificationAPI.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
-      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
-      <Name>CSSSConfig</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="OS\Linux\NotifyAll.Linux.sh">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
+      <Project>{61accf24-1161-448a-8f32-c98fb3a00bcc}</Project>
+      <Name>CSSSConfig</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

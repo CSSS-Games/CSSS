@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,21 +42,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
+      <Project>{61accf24-1161-448a-8f32-c98fb3a00bcc}</Project>
+      <Name>CSSSConfig</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSSS\CSSS.csproj">
       <Project>{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}</Project>
       <Name>CSSS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
-      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
-      <Name>CSSSConfig</Name>
     </ProjectReference>
     <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
       <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
       <Name>CSSSCheckerEngine</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IssueChecks\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

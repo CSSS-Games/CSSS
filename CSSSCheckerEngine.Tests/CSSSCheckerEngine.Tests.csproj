@@ -47,7 +47,7 @@
       <Name>CSSSCheckerEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj">
-      <Project>{2B005BD2-677F-4646-BB17-673AD50DF07D}</Project>
+      <Project>{61accf24-1161-448a-8f32-c98fb3a00bcc}</Project>
       <Name>CSSSConfig</Name>
     </ProjectReference>
   </ItemGroup>
