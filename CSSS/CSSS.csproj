@@ -73,10 +73,6 @@
       <Project>{61accf24-1161-448a-8f32-c98fb3a00bcc}</Project>
       <Name>CSSSConfig</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj">
-      <Project>{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}</Project>
-      <Name>CSSSCheckerEngine</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CSSSLauncher\CSSSLauncher.csproj">
       <Project>{56562cce-ab79-46bf-bf41-92050e6e017e}</Project>
       <Name>CSSSLauncher</Name>

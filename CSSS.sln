@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSS", "CSSS\CSSS.csproj", "{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngine", "CSSSCheckerEngine\CSSSCheckerEngine.csproj", "{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSSConfig", "CSSSConfig\CSSSConfig.csproj", "{61ACCF24-1161-448A-8F32-C98FB3A00BCC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSS.Tests", "CSSS.Tests\CSSS.Tests.csproj", "{4819E985-CC4D-4E24-AB46-177E8376EA39}"
@@ -27,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSSCheckerEngine.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSSSupportLibrary", "CSSSSupportLibrary\CSSSSupportLibrary.csproj", "{D9731F24-0EB8-4D3F-8BE1-BEA55F4D54F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSNotifications", "CSSSNotifications\CSSSNotifications.csproj", "{051BDB78-9091-492E-990F-C083000CA4ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSSNotifications", "CSSSNotifications\CSSSNotifications.csproj", "{051BDB78-9091-492E-990F-C083000CA4ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSLauncher", "CSSSLauncher\CSSSLauncher.csproj", "{56562CCE-AB79-46BF-BF41-92050E6E017E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSSLauncher", "CSSSLauncher\CSSSLauncher.csproj", "{56562CCE-AB79-46BF-BF41-92050E6E017E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSSSCheckerEngine", "CSSSCheckerEngine\CSSSCheckerEngine.csproj", "{97C356FE-4F3D-4C52-8604-C4CBE32083FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,6 @@ Global
 		{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8346EB71-A8AE-41E0-BBE0-C93260F5AD31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DF38F4C-6B96-4E2F-A76C-8F21D976CE56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61ACCF24-1161-448A-8F32-C98FB3A00BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61ACCF24-1161-448A-8F32-C98FB3A00BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61ACCF24-1161-448A-8F32-C98FB3A00BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{56562CCE-AB79-46BF-BF41-92050E6E017E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56562CCE-AB79-46BF-BF41-92050E6E017E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56562CCE-AB79-46BF-BF41-92050E6E017E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C356FE-4F3D-4C52-8604-C4CBE32083FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C356FE-4F3D-4C52-8604-C4CBE32083FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C356FE-4F3D-4C52-8604-C4CBE32083FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C356FE-4F3D-4C52-8604-C4CBE32083FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
