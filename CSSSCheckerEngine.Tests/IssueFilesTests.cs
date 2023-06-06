@@ -212,8 +212,9 @@ namespace CSSSCheckerEngineTests
             for (int issueFile = 0; issueFile < issueFiles.Length; issueFile++)
             {
                 var currentIssueFile = issueFiles[issueFile];
-                Assert.IsTrue(issueFilesChecks.LintIssueFile(currentIssueFile),
-                              "The issue file located at \"" + currentIssueFile + "\" could not be linted properly");
+                Assert.That(issueFilesChecks.LintIssueFile(currentIssueFile),
+                            Is.True,
+                            "The issue file located at \"" + currentIssueFile + "\" could not be linted properly");
             }
         }
 
@@ -240,9 +241,9 @@ namespace CSSSCheckerEngineTests
         {
             IssueFiles.PrepareAllIssueFiles();
 
-            Assert.AreNotEqual(IssueFilesList(),
-                               IssueFiles.GetAllIssueFiles(),
-                               "All JSON files in the issues directory should be removed once prepared");
+            Assert.That(IssueFiles.GetAllIssueFiles(),
+                        Is.Not.EqualTo(IssueFilesList()),
+                        "All JSON files in the issues directory should be removed once prepared");
         }
 
         /// <summary>
@@ -264,8 +265,9 @@ namespace CSSSCheckerEngineTests
             
             // If the issue files were loaded, then it should
             // be possible to get the JSON from it
-            Assert.IsInstanceOf<dynamic>(config.GetIssueFile("issues.system.version"),
-                                         "Issue files should be able to be decrypted once they have been prepared");
+            Assert.That(config.GetIssueFile("issues.system.version"),
+                        Is.InstanceOf<dynamic>(),
+                        "Issue files should be able to be decrypted once they have been prepared");
         }
     }
 }

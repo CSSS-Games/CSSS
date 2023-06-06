@@ -14,14 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using CheckAPI.Files;
 using CSSSConfig;
-using NUnit.Framework;
 
 namespace CSSSCheckerEngineTests.Issues.Files
 {
@@ -108,7 +104,7 @@ namespace CSSSCheckerEngineTests.Issues.Files
         /// <para>This is a stub of the function in `init.cs` in the CSSS project</para>
         /// </summary>
         /// <returns>The current operating system</returns>
-        public Config.OperatingSystemType SetOperatingSystemType()
+        public static Config.OperatingSystemType SetOperatingSystemType()
         {
             // Seeing if CSSSCheckerEngineTests is running on WinNT
             if (Path.DirectorySeparatorChar == '\\')
@@ -167,7 +163,7 @@ namespace CSSSCheckerEngineTests.Issues.Files
                 // Read the output stream first and then wait.
                 string output = p.StandardOutput.ReadToEnd();
                 p.WaitForExit();
-                if (output == null) output = "";
+                output ??= "";
                 output = output.Trim();
                 return output;
             }
@@ -180,22 +176,25 @@ namespace CSSSCheckerEngineTests.Issues.Files
         [Test()]
         public void TestFileDoesExistAndDoesHaveValidContentReturnsTrue()
         {
-            Assert.IsTrue(contentsFilesChecks.CheckFileContents(validFilePath, expectedFileContents),
-                          "Files that exist and have valid contents should return True");
+            Assert.That(contentsFilesChecks.CheckFileContents(validFilePath, expectedFileContents),
+                        Is.True,
+                        "Files that exist and have valid contents should return True");
         }
 
         [Test()]
         public void TestFileDoesExistAndDoesNotHaveValidContentReturnsFalse()
         {
-            Assert.IsFalse(contentsFilesChecks.CheckFileContents(invalidFilePath, expectedFileContents),
-                          "Files that exist and have invalid contents should return False");
+            Assert.That(contentsFilesChecks.CheckFileContents(invalidFilePath, expectedFileContents),
+                        Is.False,
+                        "Files that exist and have invalid contents should return False");
         }
 
         [Test()]
         public void TestFileDoesNotExistReturnsFalse()
         {
-            Assert.IsFalse(contentsFilesChecks.CheckFileContents(nonExistingFilePath, expectedFileContents),
-                          "Files that do not exist should return False");
+            Assert.That(contentsFilesChecks.CheckFileContents(nonExistingFilePath, expectedFileContents),
+                        Is.False,
+                        "Files that do not exist should return False");
         }
     }
 }
