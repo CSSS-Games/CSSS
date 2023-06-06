@@ -14,8 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 
 namespace CSSSConfig
@@ -35,14 +34,13 @@ namespace CSSSConfig
     /// </summary>
     public sealed class Config
     {
-        private static readonly Config configInstance = new Config();
-
-        static Config()
-        {
-        }
+        private static readonly Config configInstance = new();
 
         private Config()
         {
+            OperatingSystemName = "";
+            OperatingSystemVersion = "";
+            CSSSRuntimeLockServer = new TcpListener(IPAddress.Any, 55555);
         }
 
         /// <summary>
@@ -56,9 +54,6 @@ namespace CSSSConfig
                 return configInstance;
             }
         }
-
-
-
 
         // **********************************************************
         //   CSSS Modes
@@ -88,9 +83,6 @@ namespace CSSSConfig
         /// </summary>
         public CSSSModes CSSSProgramMode { get; set; }
 
-
-
-
         // **********************************************************
         //   Init Checks
         // **********************************************************
@@ -114,9 +106,6 @@ namespace CSSSConfig
         /// if the port is in use, and if so, that instance of CSSS exits
         /// </summary>
         public TcpListener CSSSRuntimeLockServer;
-
-
-
 
         // **********************************************************
         //   Operating System
@@ -192,7 +181,7 @@ namespace CSSSConfig
         /// to check the current state of the computer against what is
         /// to be expected</para>
         /// </summary>
-        private Dictionary<string, dynamic> IssueFileList = new Dictionary<string, dynamic>();
+        private readonly Dictionary<string, dynamic> IssueFileList = new();
 
         /// <summary>
         /// Adds an issue file to the dictionary of available issues,
@@ -219,7 +208,7 @@ namespace CSSSConfig
         /// <param name="issueFileCategory">The category of the issue file</param>
         public dynamic GetIssueFile(string issueFileCategory)
         {
-            dynamic issueFileJSON;
+            dynamic? issueFileJSON;
             if (IssueFileList.TryGetValue(issueFileCategory, out issueFileJSON))
             {
                 return issueFileJSON;
@@ -306,7 +295,7 @@ namespace CSSSConfig
         /// A list of the issues that have been fixed, including the
         /// description and points value
         /// </summary>
-        public List<string> PointsGainedDescriptions = new List<string>();
+        public List<string> PointsGainedDescriptions = new();
 
         /// <summary>
         /// Adds a description and point amount to the points gained
@@ -332,7 +321,7 @@ namespace CSSSConfig
         /// A list of the penalties that have been given, including the
         /// description and points value
         /// </summary>
-        public List<string> PointsLostDescriptions = new List<string>();
+        public List<string> PointsLostDescriptions = new();
 
         /// <summary>
         /// Adds a description and point amount to the points lost

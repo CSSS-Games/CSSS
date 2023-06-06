@@ -227,7 +227,7 @@ namespace CSSSCheckerEngineTests
         public void TestAllIssueFilesAreCollected()
         {
             CollectionAssert.AreEquivalent(IssueFilesList(),
-                            issueFilesChecks.GetAllIssueFiles(),
+                            IssueFiles.GetAllIssueFiles(),
                             "All JSON files in the issues directory should be a known issue check file");
         }
 
@@ -238,10 +238,10 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllIssueFilesAreDeletedWhenPrepared()
         {
-            issueFilesChecks.PrepareAllIssueFiles();
+            IssueFiles.PrepareAllIssueFiles();
 
             Assert.AreNotEqual(IssueFilesList(),
-                               issueFilesChecks.GetAllIssueFiles(),
+                               IssueFiles.GetAllIssueFiles(),
                                "All JSON files in the issues directory should be removed once prepared");
         }
 
@@ -251,7 +251,7 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllPreparedIssueFilesCanBeDecrypted()
         {
-            issueFilesChecks.PrepareAllIssueFiles();
+            IssueFiles.PrepareAllIssueFiles();
 
             // The issue files are only decrypted when CSSS
             // is in "start" mode

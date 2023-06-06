@@ -6,8 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
 		CHANGES.md = CHANGES.md
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CONTRIBUTING.md = CONTRIBUTING.md
@@ -30,6 +28,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSSCheckerEngine", "CSSSCheckerEngine\CSSSCheckerEngine.csproj", "{97C356FE-4F3D-4C52-8604-C4CBE32083FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSSS", "CSSS\CSSS.csproj", "{D8EA59EE-983A-41BF-931F-D4E82CA44802}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{F482B18F-7191-499D-905E-6F36E364EB40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9A1ABD5F-E1AE-43D1-8912-9AD160081D9C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\test.yml = .github\workflows\test.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +77,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F482B18F-7191-499D-905E-6F36E364EB40} = {429D7241-EDB8-4E8E-BFE5-E84B7D05A1D2}
+		{9A1ABD5F-E1AE-43D1-8912-9AD160081D9C} = {F482B18F-7191-499D-905E-6F36E364EB40}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0A52343C-9CC9-417B-87C9-3D6A6EDA54F9}

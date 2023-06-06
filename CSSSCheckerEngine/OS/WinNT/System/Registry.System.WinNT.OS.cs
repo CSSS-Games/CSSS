@@ -33,11 +33,15 @@ namespace OS.WinNT.System
         /// <returns><c>true</c>, if the registry key value matches what is expected, <c>false</c> otherwise</returns>
         public override bool CheckRegistryValue(string registryPath, string registryName, string registryValue, bool registryValueShouldMatch)
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return false;
+            }
             try
             {
                 // Get the value of the registry key, or `null` if it does
                 // not exist
-                dynamic value = Registry.GetValue(registryPath, registryName, null);
+                dynamic? value = Registry.GetValue(registryPath, registryName, null);
 
                 // See: https://stackoverflow.com/a/1797610
                 if (value == null)

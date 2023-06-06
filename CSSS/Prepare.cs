@@ -36,25 +36,32 @@ namespace CSSS
     /// </summary>
     public class Prepare
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Creating an instance of the CSSS config class, to be
         /// able to read and set values for it
         /// </summary>
-        private static Config config = Config.GetCurrentConfig;
-
-        /// <summary>
-        /// A reference to the <see cref="T:CSSSCheckerEngine.IssueFiles"/>
-        /// IssueFiles class, used when preparing the issue files
-        /// </summary>
-        private IssueFiles issueFiles = new IssueFiles();
+        private static readonly Config config = Config.GetCurrentConfig;
 
         /// <summary>
         /// Getting the location where CSSS is stored, so that it can
         /// be added to the startup files / settings
         /// </summary>
-        private string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+        private string CSSSDirectory
+        {
+            get
+            {
+                var assemblyPath = Assembly.GetExecutingAssembly().Location;
+                var fp = new FileInfo(assemblyPath);
+                var dir = fp.DirectoryName;
+                if (dir == null)
+                {
+                    return "";
+                }
+                return dir;
+            }
+        }
 
         /// <summary>
         /// Performs all of the preparation steps needed to get CSSS
@@ -71,11 +78,11 @@ namespace CSSS
         /// Prepares all issue files by encrypting them, to prevent
         /// competitors from opening them to see the issues
         /// </summary>
-        public void PrepareAllIssueFiles()
+        public static void PrepareAllIssueFiles()
         {
             // Encrypting the issue files and removing any plaintext
             // files
-            issueFiles.PrepareAllIssueFiles();
+            IssueFiles.PrepareAllIssueFiles();
         }
 
         /// <summary>
