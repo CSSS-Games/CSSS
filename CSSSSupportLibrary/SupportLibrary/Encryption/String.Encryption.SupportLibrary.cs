@@ -2,14 +2,12 @@
 //  
 //  License: CC-By-SA
 //  See: http://stackoverflow.com/a/10177020
+//       https://code-maze.com/csharp-string-encryption-decryption/
 //  
 //  A few changes have been made to the code from StackOverflow,
 //  mainly to not require a password to encrypt or decrypt the
 //  string passed, but to use the name of the computer
 
-using System;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -22,14 +20,12 @@ namespace SupportLibrary.Encryption
     /// </summary>
     public class String
     {
-        // This constant is used to determine the keysize of the encryption algorithm in bits.
-        // We divide this by 8 within the code below to get the equivalent number of bytes.
-        private const int Keysize = 128;
-
         // This constant determines the number of iterations for the password bytes generation function.
         private const int DerivationIterations = 1000;
 
-        private static byte[] IV =
+        // Use a fixed IV here for simplicity - while this isn't optimal for security, ultimately
+        // there is nothing sensitive held here and competitors would only be cheating themselves
+        private static readonly byte[] IV =
         {
             0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
             0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
@@ -42,7 +38,7 @@ namespace SupportLibrary.Encryption
                 var emptySalt = Array.Empty<byte>();
                 var desiredKeyLength = 16;
                 var hashMethod = HashAlgorithmName.SHA384;
-                return Rfc2898DeriveBytes.Pbkdf2(Encoding.Unicode.GetBytes(Environment.MachineName),
+                return Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(Environment.MachineName),
                                                  emptySalt,
                                                  DerivationIterations,
                                                  hashMethod,
