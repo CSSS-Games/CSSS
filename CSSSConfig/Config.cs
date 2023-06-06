@@ -208,8 +208,7 @@ namespace CSSSConfig
         /// <param name="issueFileCategory">The category of the issue file</param>
         public dynamic GetIssueFile(string issueFileCategory)
         {
-            dynamic? issueFileJSON;
-            if (IssueFileList.TryGetValue(issueFileCategory, out issueFileJSON))
+            if (IssueFileList.TryGetValue(issueFileCategory, out var issueFileJSON))
             {
                 return issueFileJSON;
             }

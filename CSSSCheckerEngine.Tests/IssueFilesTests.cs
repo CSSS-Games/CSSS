@@ -14,20 +14,18 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System.IO;
 using System.Reflection;
 using CSSSCheckerEngine;
 using CSSSConfig;
-using NUnit.Framework;
 
 namespace CSSSCheckerEngineTests
 {
     [TestFixture()]
     public class IssueFilesTests
     {
-        private IssueFiles issueFilesChecks;
+        private IssueFiles? issueFilesChecks;
 
-        private static Config config;
+        private static Config? config;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:CSSSCheckerEngineTests.IssueFilesTests"/> class
@@ -87,7 +85,7 @@ namespace CSSSCheckerEngineTests
         /// JSON files returned from the issues directory match
         /// </summary>
         /// <returns>An array of paths to the issue files</returns>
-        private string[] IssueFilesList()
+        private static string[] IssueFilesList()
         {
             // Only the directory under the Issues directory and
             // the name of the JSON file are needed tobe included
@@ -123,7 +121,7 @@ namespace CSSSCheckerEngineTests
         /// </summary>
         /// <param name="issuesDirectoryName">The name of the folder the issues files are stored in</param>
         /// <returns>The issue files directory path</returns>
-        private string GetIssueFilesDirectory(string issuesDirectoryName = "Issues")
+        private static string GetIssueFilesDirectory(string issuesDirectoryName = "Issues")
         {
             return new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName
                                 + Path.DirectorySeparatorChar
@@ -147,7 +145,7 @@ namespace CSSSCheckerEngineTests
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs = true)
         {
             // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            var dir = new DirectoryInfo(sourceDirName);
 
             if (!dir.Exists)
             {
@@ -156,7 +154,7 @@ namespace CSSSCheckerEngineTests
                     + sourceDirName);
             }
 
-            DirectoryInfo[] dirs = dir.GetDirectories();
+            var dirs = dir.GetDirectories();
             // If the destination directory doesn't exist, create it.
             if (!Directory.Exists(destDirName))
             {
@@ -192,8 +190,10 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllIssueFilesCanBeLinted()
         {
-            Assert.IsTrue(issueFilesChecks.LintAllIssueFiles(),
-                          "All issue files included with CSSS should be valid JSON objects and should lint without errors");
+            Assert.That(issueFilesChecks, Is.Not.Null);
+            Assert.That(issueFilesChecks.LintAllIssueFiles(),
+                        Is.True,
+                        "All issue files included with CSSS should be valid JSON objects and should lint without errors");
         }
 
         /// <summary>
@@ -206,12 +206,12 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestIndividualIssueFileCanBeLinted()
         {
-            string[] issueFiles = IssueFilesList();
-            string currentIssueFile = "";
+            Assert.That(issueFilesChecks, Is.Not.Null);
 
+            var issueFiles = IssueFilesList();
             for (int issueFile = 0; issueFile < issueFiles.Length; issueFile++)
             {
-                currentIssueFile = issueFiles[issueFile];
+                var currentIssueFile = issueFiles[issueFile];
                 Assert.IsTrue(issueFilesChecks.LintIssueFile(currentIssueFile),
                               "The issue file located at \"" + currentIssueFile + "\" could not be linted properly");
             }
@@ -251,14 +251,17 @@ namespace CSSSCheckerEngineTests
         [Test()]
         public void TestAllPreparedIssueFilesCanBeDecrypted()
         {
+            Assert.That(config, Is.Not.Null);
+            Assert.That(issueFilesChecks, Is.Not.Null);
+
             IssueFiles.PrepareAllIssueFiles();
 
             // The issue files are only decrypted when CSSS
             // is in "start" mode
-            config.CSSSProgramMode = config.CSSSProgramMode | Config.CSSSModes.Start;
+            config.CSSSProgramMode |= Config.CSSSModes.Start;
 
             issueFilesChecks.LoadAllIssueFiles();
-
+            
             // If the issue files were loaded, then it should
             // be possible to get the JSON from it
             Assert.IsInstanceOf<dynamic>(config.GetIssueFile("issues.system.version"),
