@@ -23,10 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngineFramework.csproj" />
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj" />
     <ProjectReference Include="..\CSSS\CSSS.csproj" />
-    <ProjectReference Include="..\CSSS\CSSSFramework.csproj" />
   </ItemGroup>
 
 </Project>

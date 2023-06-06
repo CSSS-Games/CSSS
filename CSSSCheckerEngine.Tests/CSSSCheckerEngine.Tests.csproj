@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngine.csproj" />
-    <ProjectReference Include="..\CSSSCheckerEngine\CSSSCheckerEngineFramework.csproj" />
     <ProjectReference Include="..\CSSSConfig\CSSSConfig.csproj" />
   </ItemGroup>
 

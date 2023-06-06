@@ -27,11 +27,9 @@ namespace CSSSTests
     [TestFixture()]
     public class KernelTests
     {
-        private Kernel kernel;
+        private Kernel? kernel;
 
-        private Init init;
-
-        private static Config config;
+        private static Config? config;
 
         /// <summary>
         /// Creates an instance of the config class
@@ -44,8 +42,6 @@ namespace CSSSTests
             // Allowing multiple instances of tests to run at once,
             // as the first test locks port 55555 from the init tests
             config.CSSSProgramMode = Config.CSSSModes.MultipleInstances;
-
-            init = new Init();
         }
 
         /// <summary>
@@ -54,6 +50,10 @@ namespace CSSSTests
         [TearDown]
         protected void TearDown()
         {
+            if (config == null)
+            {
+                return;
+            }
             // Removing any set CSSS Mode flags
             // There doesn't seem to be a tidy way to do this
             config.CSSSProgramMode &= ~Config.CSSSModes.Check;
@@ -63,7 +63,6 @@ namespace CSSSTests
             config.CSSSProgramMode &= ~Config.CSSSModes.Prepare;
             config.CSSSProgramMode &= ~Config.CSSSModes.Start;
 
-            init = null;
             config = null;
             kernel = null;
         }
@@ -75,6 +74,8 @@ namespace CSSSTests
         [Test()]
         public void TestKernelPerformTasksCheckArgumentReturnsTrue()
         {
+            Assert.That(config, Is.Not.Null);
+
             config.CSSSProgramMode = Config.CSSSModes.Check;
 
             kernel = new Kernel();
@@ -90,6 +91,8 @@ namespace CSSSTests
         [Test()]
         public void TestKernelPerformTasksObserveArgumentReturnsFalse()
         {
+            Assert.That(config, Is.Not.Null);
+
             config.CSSSProgramMode = Config.CSSSModes.Observe;
 
             kernel = new Kernel();
@@ -105,19 +108,26 @@ namespace CSSSTests
         [Test()]
         public void TestKernelPerformTasksPrepareArgumentReturnsTrue()
         {
+            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                Assert.Ignore("TestKernelPerformTasksPrepareArgumentReturnsTrue can only be tested on Windows");
+                return;
+            }
             // The 'Prepare' mode requires administrative permissions due to it modifying
             // parts of the system that normal users shouldn't have access to (`/etc`,
             // task scheduler). If this permission is not currently granted, then ignore
             // the test rather than making it fail
             // See: https://stackoverflow.com/a/5953294
-            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            using (var identity = WindowsIdentity.GetCurrent())
             {
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                var principal = new WindowsPrincipal(identity);
                 if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
                 {
                     Assert.Ignore("The 'Prepare' argument test has been ignored due to administrative permissions not being available");
                 }
             }
+
+            Assert.That(config, Is.Not.Null);
 
             config.CSSSProgramMode = Config.CSSSModes.Prepare;
 
@@ -134,6 +144,8 @@ namespace CSSSTests
         [Test()]
         public void TestKernelPerformTasksStartArgumentReturnsFalse()
         {
+            Assert.That(config, Is.Not.Null);
+
             config.CSSSProgramMode = Config.CSSSModes.Start;
 
             kernel = new Kernel();

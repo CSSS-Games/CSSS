@@ -14,9 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System.Collections.Generic;
 using CSSSConfig;
-using NUnit.Framework;
 
 namespace IssueChecks
 {
@@ -26,9 +24,9 @@ namespace IssueChecks
     [TestFixture]
     public class IssueChecksTests
     {
-        private IssueChecks issueChecksChecks;
+        private IssueChecks? issueChecksChecks;
 
-        private static Config config;
+        private static Config? config;
 
         /// <summary>
         /// Creates an instance of the issuechecks class
@@ -60,6 +58,9 @@ namespace IssueChecks
         [Test]
         public void TestPointsScoredPositivePointsTriggered()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int points = 5;
             string description = "TestPointsScoredPositivePointsTriggered";
             bool triggered = true;
@@ -68,15 +69,15 @@ namespace IssueChecks
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(points,
-                                config.PointsGainedTotal,
-                                "The points scored should be added to the PointsGainedTotal integer");
-                Assert.AreEqual(0,
-                                config.PointsLostTotal,
-                                "Points should not be added to the PointsLostTotal when positive");
-                Assert.Contains(description + " - " + points + " points",
-                                config.PointsGainedDescriptions,
-                                "The description and number of points should be added to the PointsGainedDescriptions list");
+                Assert.That(config.PointsGainedTotal,
+                            Is.EqualTo(points),
+                            "The points scored should be added to the PointsGainedTotal integer");
+                Assert.That(config.PointsLostTotal,
+                            Is.Zero,
+                            "Points should not be added to the PointsLostTotal when positive");
+                Assert.That(config.PointsGainedDescriptions.Contains(description + " - " + points + " points"),
+                            Is.True,
+                            "The description and number of points should be added to the PointsGainedDescriptions list");
             });
         }
 
@@ -89,6 +90,9 @@ namespace IssueChecks
         [Test]
         public void TestPointsScoredPositivePointsNotTriggered()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int points = 5;
             string description = "TestPointsScoredPositivePointsNotTriggered";
             bool triggered = false;
@@ -97,16 +101,17 @@ namespace IssueChecks
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(points,
-                                config.PointsGainedTotal,
-                                "The points scored should be added to the PointsGainedTotal integer");
-                Assert.AreEqual(0,
-                                config.PointsLostTotal,
-                                "Points should not be added to the PointsLostTotal when positive");
-                Assert.Contains(description + " - " + points + " points",
-                                config.PointsGainedDescriptions,
-                                "The description and number of points should be added to the PointsGainedDescriptions list");
-                Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
+                Assert.That(config.PointsGainedTotal,
+                            Is.EqualTo(points),
+                            "The points scored should be added to the PointsGainedTotal integer");
+                Assert.That(config.PointsLostTotal,
+                            Is.Zero,
+                            "Points should not be added to the PointsLostTotal when positive");
+                Assert.That(config.PointsGainedDescriptions.Contains(description + " - " + points + " points"),
+                            Is.True,
+                            "The description and number of points should be added to the PointsGainedDescriptions list");
+                Assert.That(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
+                            Is.True,
                             "The 'Gained' pointsStatus enum should be set if the issue has not been solved before");
             });
         }
@@ -119,6 +124,9 @@ namespace IssueChecks
         [Test]
         public void TestPointsScoredNegativePointsTriggered()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int points = -5;
             string description = "TestPointsScoredNegativePointsTriggered";
             bool triggered = true;
@@ -127,15 +135,13 @@ namespace IssueChecks
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(points,
-                                config.PointsLostTotal,
-                                "The points lost should be added to the PointsLostTotal integer");
-                Assert.AreEqual(0,
-                                config.PointsGainedTotal,
-                                "Points should not be added to the PointsGainedTotal when negative");
-                Assert.Contains(description + " - " + points.ToString().Replace("-", "") + " points",
-                                config.PointsLostDescriptions,
-                                "The description and number of points should be added to the PointsLostDescriptions list");
+                Assert.That(config.PointsLostTotal,
+                            Is.EqualTo(points),
+                            "The points lost should be added to the PointsLostTotal integer");
+                Assert.That(config.PointsGainedTotal, Is.Zero, "Points should not be added to the PointsGainedTotal when negative");
+                Assert.That(config.PointsLostDescriptions.Contains(description + " - " + points.ToString().Replace("-", "") + " points"),
+                            Is.True,
+                            "The description and number of points should be added to the PointsLostDescriptions list");
             });
         }
 
@@ -148,6 +154,9 @@ namespace IssueChecks
         [Test]
         public void TestPointsScoredNegativePointsNotTriggered()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int points = -5;
             string description = "TestPointsScoredNegativePointsNotTriggered";
             bool triggered = false;
@@ -156,16 +165,13 @@ namespace IssueChecks
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(points,
-                                config.PointsLostTotal,
-                                "The points scored should be added to the PointsLostTotal integer");
-                Assert.AreEqual(0,
-                                config.PointsGainedTotal,
-                                "Points should not be added to the PointsGainedTotal when negative");
-                Assert.Contains(description + " - " + points.ToString().Replace("-", "") + " points",
-                                config.PointsLostDescriptions,
-                                "The description and number of points should be added to the PointsLostDescriptions list");
-                Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Lost),
+                Assert.That(config.PointsLostTotal, Is.EqualTo(points), "The points scored should be added to the PointsLostTotal integer");
+                Assert.That(config.PointsGainedTotal, Is.Zero, "Points should not be added to the PointsGainedTotal when negative");
+                Assert.That(config.PointsLostDescriptions.Contains(description + " - " + points.ToString()
+                            .Replace("-", "") + " points"),
+                            Is.True,
+                            "The description and number of points should be added to the PointsLostDescriptions list");
+                Assert.That(config.pointsStatus.HasFlag(Config.PointsStatus.Lost), Is.True,
                             "The 'Lost' pointsStatus enum should be set if the penalty has not been triggered before");
             });
         }
@@ -178,13 +184,15 @@ namespace IssueChecks
         [Test]
         public void TestPointsLostPositivePoints()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int points = 5;
             string description = "TestPointsLostPositivePoints";
 
             issueChecksChecks.PointsLost(points, description);
 
-            Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Lost),
-                        "The 'Lost' pointsStatus enum should be set if the issue has been solved but broken again");
+            Assert.That(config.pointsStatus.HasFlag(Config.PointsStatus.Lost), Is.True, "The 'Lost' pointsStatus enum should be set if the issue has been solved but broken again");
         }
 
         /// <summary>
@@ -195,12 +203,15 @@ namespace IssueChecks
         [Test]
         public void TestPointsLostNegativePoints()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int points = -5;
             string description = "TestPointsLostNegativePoints";
 
             issueChecksChecks.PointsLost(points, description);
 
-            Assert.True(config.pointsStatus.HasFlag(Config.PointsStatus.Gained),
+            Assert.That(config.pointsStatus.HasFlag(Config.PointsStatus.Gained), Is.True,
                         "The 'Gained' pointsStatus enum should be set if the penalty has been resolved");
         }
 
@@ -211,6 +222,9 @@ namespace IssueChecks
         [Test]
         public void TestMultiplePointsScoredPositivePoints()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int pointsOne = 5;
             string descriptionOne = "TestMultiplePointsScoredPositivePointsIssueOne";
             bool triggeredOne = true;
@@ -223,21 +237,23 @@ namespace IssueChecks
 
             issueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
 
-            List<string> descriptionList = new List<string>();
-            descriptionList.Add(descriptionOne + " - " + pointsOne + " points");
-            descriptionList.Add(descriptionTwo + " - " + pointsTwo + " points");
+            List<string> descriptionList = new List<string>
+            {
+                descriptionOne + " - " + pointsOne + " points",
+                descriptionTwo + " - " + pointsTwo + " points"
+            };
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(pointsOne + pointsTwo,
-                                config.PointsGainedTotal,
-                                "The points scored should be added to the PointsGainedTotal integer");
-                Assert.AreEqual(0,
-                                config.PointsLostTotal,
-                                "Points should not be added to the PointsLostTotal when positive");
-                Assert.AreEqual(descriptionList,
-                                config.PointsGainedDescriptions,
-                                "The description and number of points should be added to the PointsGainedDescriptions list");
+                Assert.That(config.PointsGainedTotal,
+                            Is.EqualTo(pointsOne + pointsTwo),
+                            "The points scored should be added to the PointsGainedTotal integer");
+                Assert.That(config.PointsLostTotal,
+                            Is.Zero,
+                            "Points should not be added to the PointsLostTotal when positive");
+                Assert.That(config.PointsGainedDescriptions,
+                            Is.EqualTo(descriptionList),
+                            "The description and number of points should be added to the PointsGainedDescriptions list");
             });
         }
 
@@ -248,6 +264,9 @@ namespace IssueChecks
         [Test]
         public void TestMultiplePointsScoredNegativePoints()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int pointsOne = -5;
             string descriptionOne = "TestMultiplePointsScoredNegativePointsIssueOne";
             bool triggeredOne = true;
@@ -260,21 +279,17 @@ namespace IssueChecks
 
             issueChecksChecks.PointsScored(pointsTwo, descriptionTwo, triggeredTwo);
 
-            List<string> descriptionList = new List<string>();
-            descriptionList.Add(descriptionOne + " - " + pointsOne.ToString().Replace("-", "") + " points");
-            descriptionList.Add(descriptionTwo + " - " + pointsTwo.ToString().Replace("-", "") + " points");
+            List<string> descriptionList = new List<string>
+            {
+                descriptionOne + " - " + pointsOne.ToString().Replace("-", "") + " points",
+                descriptionTwo + " - " + pointsTwo.ToString().Replace("-", "") + " points"
+            };
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(pointsOne + pointsTwo,
-                                config.PointsLostTotal,
-                                "The points scored should be added to the PointsLostTotal integer");
-                Assert.AreEqual(0,
-                                config.PointsGainedTotal,
-                                "Points should not be added to the PointsGainedTotal when negative");
-                Assert.AreEqual(descriptionList,
-                                config.PointsLostDescriptions,
-                                "The description and number of points should be added to the PointsLostDescriptions list");
+                Assert.That(config.PointsLostTotal, Is.EqualTo(pointsOne + pointsTwo), "The points scored should be added to the PointsLostTotal integer");
+                Assert.That(config.PointsGainedTotal, Is.Zero, "Points should not be added to the PointsGainedTotal when negative");
+                Assert.That(config.PointsLostDescriptions, Is.EqualTo(descriptionList), "The description and number of points should be added to the PointsLostDescriptions list");
             });
         }
 
@@ -286,6 +301,9 @@ namespace IssueChecks
         [Test]
         public void TestMultiplePointsScoredPositiveNegativePoints()
         {
+            Assert.That(issueChecksChecks, Is.Not.Null);
+            Assert.That(config, Is.Not.Null);
+
             int pointsPositive = 5;
             string descriptionPositive = "TestMultiplePointsScoredPositivePointsIssueOne";
             bool triggeredPositive = true;
@@ -300,18 +318,14 @@ namespace IssueChecks
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(pointsPositive,
-                                config.PointsGainedTotal,
-                                "The points gained should be added to the PointsGainedTotal integer");
-                Assert.AreEqual(pointsNegative,
-                                config.PointsLostTotal,
-                                "The points lost should be added to the PointsLostTotal integer");
-                Assert.Contains(descriptionPositive + " - " + pointsPositive + " points",
-                                config.PointsGainedDescriptions,
-                                "The description and number of points should be added to the PointsGainedDescriptions list");
-                Assert.Contains(descriptionNegative + " - " + pointsNegative.ToString().Replace("-", "") + " points",
-                                config.PointsLostDescriptions,
-                                "The description and number of points should be added to the PointsLostDescriptions list");
+                Assert.That(config.PointsGainedTotal, Is.EqualTo(pointsPositive), "The points gained should be added to the PointsGainedTotal integer");
+                Assert.That(config.PointsLostTotal, Is.EqualTo(pointsNegative), "The points lost should be added to the PointsLostTotal integer");
+                Assert.That(config.PointsGainedDescriptions.Contains(descriptionPositive + " - " + pointsPositive + " points"),
+                            Is.True,
+                            "The description and number of points should be added to the PointsGainedDescriptions list");
+                Assert.That(config.PointsLostDescriptions.Contains(descriptionNegative + " - " + pointsNegative.ToString().Replace("-", "") + " points"),
+                            Is.True,
+                            "The description and number of points should be added to the PointsLostDescriptions list");
             });
         }
     }

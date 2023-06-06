@@ -26,9 +26,9 @@ namespace CSSSTests
     [TestFixture()]
     public class InitTests
     {
-        private Init initTests;
+        private Init? initTests;
 
-        private static Config config = Config.GetCurrentConfig;
+        private static readonly Config config = Config.GetCurrentConfig;
 
         /// <summary>
         /// Creates an instance of the init class
@@ -61,9 +61,10 @@ namespace CSSSTests
         [Test()]
         public void TestOperatingSystemTypeDetected()
         {
-            Assert.AreNotEqual(Config.OperatingSystemType.Unknown,
-                               initTests.SetOperatingSystemType(),
-                               "The Operating System detected should not be an unknown type");
+            Assert.That(initTests, Is.Not.Null);
+            Assert.That(initTests.SetOperatingSystemType(),
+                        Is.Not.EqualTo(Config.OperatingSystemType.Unknown),
+                        "The Operating System detected should not be an unknown type");
         }
 
         /// <summary>
@@ -74,11 +75,13 @@ namespace CSSSTests
         [Test()]
         public void TestOperatingSystemNameDetected()
         {
+            Assert.That(initTests, Is.Not.Null);
+
             Assert.Multiple(() =>
             {
-                Assert.IsTrue(initTests.SetOperatingSystemName(),
+                Assert.That(initTests.SetOperatingSystemName(), Is.True,
                               "The Operating System name should be detected and not empty");
-                Assert.IsNotEmpty(config.OperatingSystemName,
+                Assert.That(config.OperatingSystemName, Is.Not.Empty,
                                   "The Operating System name should be saved and not empty");
             });
         }
@@ -91,11 +94,13 @@ namespace CSSSTests
         [Test()]
         public void TestOperatingSystemVersionDetected()
         {
+            Assert.That(initTests, Is.Not.Null);
+
             Assert.Multiple(() =>
             {
-                Assert.IsTrue(initTests.SetOperatingSystemVersion(),
+                Assert.That(initTests.SetOperatingSystemVersion(), Is.True,
                               "The Operating System version should be detected and not empty");
-                Assert.IsNotEmpty(config.OperatingSystemVersion,
+                Assert.That(config.OperatingSystemVersion, Is.Not.Empty,
                                   "The Operating System version should be saved and not empty");
             });
         }
@@ -107,9 +112,11 @@ namespace CSSSTests
         [Test()]
         public void TestRuntimeEnvironmentTypeDetected()
         {
-            Assert.AreNotEqual(Config.RuntimeEnvironment.Unknown,
-                               initTests.SetRuntimeEnvironment(),
-                               "The runtime environment detected should not be an unknown type");
+            Assert.That(initTests, Is.Not.Null);
+
+            Assert.That(initTests.SetRuntimeEnvironment(),
+                        Is.Not.EqualTo(Config.RuntimeEnvironment.Unknown),
+                        "The runtime environment detected should not be an unknown type");
         }
     }
 }
