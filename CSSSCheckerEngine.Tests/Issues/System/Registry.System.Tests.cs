@@ -306,7 +306,7 @@ namespace CSSSCheckerEngineTests.Issues.System
                 return;
             }
 
-            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
+            _ = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "404";
@@ -324,7 +324,7 @@ namespace CSSSCheckerEngineTests.Issues.System
                 return;
             }
 
-            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
+            _ = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "404";
@@ -416,6 +416,12 @@ namespace CSSSCheckerEngineTests.Issues.System
         [Test()]
         public void TestRegistryKeyMissingValueNotMatchingAndShouldMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "KeyShouldExist";
             var registryValue = "KeyShouldExist";
@@ -426,6 +432,12 @@ namespace CSSSCheckerEngineTests.Issues.System
         [Test()]
         public void TestRegistryKeyMissingValueNotMatchingAndShouldNotMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "KeyShouldExist";
             var registryValue = "KeyShouldExist";
@@ -436,6 +448,12 @@ namespace CSSSCheckerEngineTests.Issues.System
         [Test()]
         public void TestRegistryValueWithoutPermissionReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_LOCAL_MACHINE\\SAM\\SAM\\Domains\\Account";
             var registryName = "F";
             var registryValue = (string?)null;
