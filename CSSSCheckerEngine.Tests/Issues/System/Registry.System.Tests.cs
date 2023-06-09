@@ -14,12 +14,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Diagnostics;
-using System.IO;
+using System.Runtime.InteropServices;
 using CheckAPI.System;
 using CSSSConfig;
-using NUnit.Framework;
 
 namespace CSSSCheckerEngineTests.Issues.System
 {
@@ -27,8 +24,6 @@ namespace CSSSCheckerEngineTests.Issues.System
     class RegistryTests
     {
         private Registry registrySystemChecks;
-
-        private static Config config;
 
         /// <summary>
         /// The root hive to use for testing the registry class
@@ -41,16 +36,11 @@ namespace CSSSCheckerEngineTests.Issues.System
         [OneTimeSetUp]
         protected void OneTimeSetUp()
         {
-            // The operating system needs to be set due to the `Registry` class
-            // using it get the relevant checking code
-            config = Config.GetCurrentConfig;
-            config.operatingSystemType = SetOperatingSystemType();
-
-            if (config.operatingSystemType != Config.OperatingSystemType.WinNT)
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Assert.Ignore("Registry tests have been ignored due to this Operating System not having a registry");
+                return;
             }
-
+            Config.GetCurrentConfig.operatingSystemType = Config.OperatingSystemType.WinNT;
             registrySystemChecks = new Registry();
 
             HiveRoot = "SOFTWARE\\CSSS";
@@ -63,7 +53,7 @@ namespace CSSSCheckerEngineTests.Issues.System
         [OneTimeTearDown]
         protected void OneTimeTearDown()
         {
-            if (config.operatingSystemType == Config.OperatingSystemType.WinNT)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // `DeleteSubKeyTree` is used to save having to delete any subkeys
                 // that are created, as `DeleteSubKey` doesn't do this
@@ -71,85 +61,15 @@ namespace CSSSCheckerEngineTests.Issues.System
             }
         }
 
-        /// <summary>
-        /// Sets the current operating system type that CSSS is running on
-        /// in the <see cref="T:CSSS.Config"/> class
-        /// 
-        /// <para>This is a stub of the function in `init.cs` in the CSSS project</para>
-        /// </summary>
-        /// <returns>The current operating system</returns>
-        public Config.OperatingSystemType SetOperatingSystemType()
-        {
-            // Seeing if CSSSCheckerEngineTests is running on WinNT
-            if (Path.DirectorySeparatorChar == '\\')
-            {
-                return Config.OperatingSystemType.WinNT;
-            }
-
-            // Attempting to identify the Unix-based OS based on the returned
-            // string from the `uname -s` command
-            // While currently only Linux is also supported by CSSS, a switch
-            // function is used here should additional OS support be added in
-            // the future
-            switch (ReadProcessOutput("uname", "-s").ToLower())
-            {
-                case "linux":
-                    return Config.OperatingSystemType.Linux;
-                default:
-                    break;
-            }
-
-            // We haven't been able to work out what Operating System CSSS
-            // is running on, so throw an error. It is up to the calling
-            // function to do something with this
-            throw new NotImplementedException("CSSSCheckerEngineTests do not support running on your Operating System");
-        }
-
-        /// <summary>
-        /// Reads system program process output to determine information about
-        /// the current Operating System type
-        /// 
-        /// <para>For Unix-like Operating Systems various commands can be used
-        /// to dertermine some information about the current computer, such as
-        /// the kernel type and version. This function serves as a wrapper to
-        /// those programs to return any data to CSSS</para>
-        /// 
-        /// <para>See: https://blez.wordpress.com/2012/09/17/determine-os-with-netmono/</para>
-        /// 
-        /// <para>This is a stub of the function in `init.cs` in the CSSS project</para>
-        /// </summary>
-        /// <returns>Any string returned from the program output</returns>
-        /// <param name="name">The name of the program to get system information</param>
-        /// <param name="args">Any arguments to pass to the program</param>
-        private static string ReadProcessOutput(string name, string args)
-        {
-            try
-            {
-                Process p = new Process();
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                if (args != null && args != "") p.StartInfo.Arguments = " " + args;
-                p.StartInfo.FileName = name;
-                p.Start();
-                // Do not wait for the child process to exit before
-                // reading to the end of its redirected stream.
-                // p.WaitForExit();
-                // Read the output stream first and then wait.
-                string output = p.StandardOutput.ReadToEnd();
-                p.WaitForExit();
-                if (output == null) output = "";
-                output = output.Trim();
-                return output;
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
         [Test()]
         public void TestRegistryValueWithExpectedStringValueMatchingAndShouldMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
             rk.SetValue("StringValueMatching", "ExpectedValue");
 
@@ -157,13 +77,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "StringValueMatching";
             var registryValue = "ExpectedValue";
             bool registryValueShouldMatch = true;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with string values matching and should match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values with string values matching and should match should return true");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedStringValueMatchingAndShouldNotMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
             rk.SetValue("StringValueMatching", "ExpectedValue");
 
@@ -171,13 +96,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "StringValueMatching";
             var registryValue = "ExpectedValue";
             bool registryValueShouldMatch = false;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with string values matching and should not match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry values with string values matching and should not match should return false");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedStringValueNotMatchingAndShouldMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
             rk.SetValue("StringValueNotMatching", "ActualValue");
 
@@ -185,13 +115,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "StringValueNotMatching";
             var registryValue = "ExpectedValue";
             bool registryValueShouldMatch = true;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with string values not matching and should match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry values with string values not matching and should match should return false");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedStringValueNotMatchingAndShouldNotMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\StringTests");
             rk.SetValue("StringValueNotMatching", "ActualValue");
 
@@ -199,13 +134,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "StringValueNotMatching";
             var registryValue = "ExpectedValue";
             bool registryValueShouldMatch = false;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with string values not matching and should not match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values with string values not matching and should not match should return true");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedDWORDValueMatchingAndShouldMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
             rk.SetValue("DWORDValueMatching", 2);
 
@@ -213,13 +153,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "DWORDValueMatching";
             var registryValue = 2.ToString();
             bool registryValueShouldMatch = true;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with DWORD values matching and should match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values with DWORD values matching and should match should return true");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedDWORDValueMatchingAndShouldNotMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
             rk.SetValue("DWORDValueMatching", 2);
 
@@ -227,13 +172,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "DWORDValueMatching";
             var registryValue = 2.ToString();
             bool registryValueShouldMatch = false;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with DWORD values matching and should not match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry values with DWORD values matching and should not match should return false");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedDWORDValueNotMatchingAndShouldMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
             rk.SetValue("DWORDValueNotMatching", 3);
 
@@ -241,13 +191,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "DWORDValueNotMatching";
             var registryValue = 2.ToString();
             bool registryValueShouldMatch = true;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with DWORD values not matching and should match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry values with DWORD values not matching and should match should return false");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedDWORDValueNotMatchingAndShouldNotMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\DWORDTests");
             rk.SetValue("DWORDValueNotMatching", 3);
 
@@ -255,13 +210,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "DWORDValueNotMatching";
             var registryValue = 2.ToString();
             bool registryValueShouldMatch = false;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with DWORD values not matching and should not match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values with DWORD values not matching and should not match should return true");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedBINARYValueMatchingAndShouldMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             // `binaryValue` = "C\0S\0S\0S\0"
             byte[] binaryValue = { 67, 0, 83, 0, 83, 0, 83, 0 };
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
@@ -271,13 +231,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "BINARYValueMatching";
             var registryValue = "43,00,53,00,53,00,53,00";
             bool registryValueShouldMatch = true;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with BINARY values matching and should match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values with BINARY values matching and should match should return true");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedBINARYValueMatchingAndShouldNotMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             // `binaryValue` = "C\0S\0S\0S\0"
             byte[] binaryValue = { 67, 0, 83, 0, 83, 0, 83, 0 };
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
@@ -287,13 +252,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "BINARYValueMatching";
             var registryValue = "43,00,53,00,53,00,53,00";
             bool registryValueShouldMatch = false;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with BINARY values matching and should not match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry values with BINARY values matching and should not match should return false");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedBINARYValueNotMatchingAndShouldMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             // `binaryValue` = "404"
             byte[] binaryValue = { 52, 48, 52 };
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
@@ -303,13 +273,18 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "BINARYValueNotMatching";
             var registryValue = "43,00,53,00,53,00,53,00";
             bool registryValueShouldMatch = true;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with BINARY values not matching and should match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry values with BINARY values not matching and should match should return false");
         }
 
         [Test()]
         public void TestRegistryValueWithExpectedBINARYValueNotMatchingAndShouldNotMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             // `binaryValue` = "404"
             byte[] binaryValue = { 52, 48, 52 };
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\BINARYTests");
@@ -319,117 +294,173 @@ namespace CSSSCheckerEngineTests.Issues.System
             var registryName = "BINARYValueNotMatching";
             var registryValue = "43,00,53,00,53,00,53,00";
             bool registryValueShouldMatch = false;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values with BINARY values not matching and should not match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values with BINARY values not matching and should not match should return true");
         }
 
         [Test()]
         public void TestRegistryValueMissingValueMatchingAndShouldMatchReturnsTrue()
         {
-            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
+            _ = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "404";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = true;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values not existing that should not exist and should match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry values not existing that should not exist and should match should return true");
         }
 
         [Test()]
         public void TestRegistryValueMissingValueMatchingAndShouldNotMatchReturnsFalse()
         {
-            var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
+            _ = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "404";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = false;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values not existing that should not exist and should not match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                        Is.False,
+                        "Registry values not existing that should not exist and should not match should return false");
         }
 
         [Test()]
         public void TestRegistryValueMissingValueNotMatchingAndShouldMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
             rk.SetValue("ShouldBeRemoved", 404);
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "ShouldBeRemoved";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = true;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values existing that should not exist and should match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                        Is.False,
+                        "Registry values existing that should not exist and should match should return false");
         }
 
         [Test()]
         public void TestRegistryValueMissingValueNotMatchingAndShouldNotMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var rk = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(HiveRoot + "\\ValueTests");
             rk.SetValue("ShouldBeRemoved", 404);
 
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests";
             var registryName = "ShouldBeRemoved";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = false;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values existing that should not exist and should not match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                        Is.True,
+                        "Registry values existing that should not exist and should not match should return true");
         }
 
         [Test()]
         public void TestRegistryKeyMissingValueMatchingAndShouldMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = true;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry keys not existing that should not exist and should match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                        Is.True,
+                        "Registry keys not existing that should not exist and should match should return true");
         }
 
         [Test()]
         public void TestRegistryKeyMissingValueMatchingAndShouldNotMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = false;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry keys not existing that should not exist and should not match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                        Is.False,
+                        "Registry keys not existing that should not exist and should not match should return false");
         }
 
         [Test()]
         public void TestRegistryKeyMissingValueNotMatchingAndShouldMatchReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "KeyShouldExist";
             var registryValue = "KeyShouldExist";
             bool registryValueShouldMatch = true;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry keys not existing that should exist and should match should return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.False, "Registry keys not existing that should exist and should match should return false");
         }
 
         [Test()]
         public void TestRegistryKeyMissingValueNotMatchingAndShouldNotMatchReturnsTrue()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_CURRENT_USER\\SOFTWARE\\CSSS\\ValueTests\\404";
             var registryName = "KeyShouldExist";
             var registryValue = "KeyShouldExist";
             bool registryValueShouldMatch = false;
-            Assert.IsTrue(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry keys not existing that should exist and should not match should return true");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch), Is.True, "Registry keys not existing that should exist and should not match should return true");
         }
 
         [Test()]
         public void TestRegistryValueWithoutPermissionReturnsFalse()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Assert.Ignore("Running Tests on non-Windows platform");
+                return;
+            }
+
             var registryPath = "HKEY_LOCAL_MACHINE\\SAM\\SAM\\Domains\\Account";
             var registryName = "F";
-            var registryValue = (string)null;
+            var registryValue = (string?)null;
             bool registryValueShouldMatch = true;
-            Assert.IsFalse(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
-                          "Registry values accessed without permission return false");
+            Assert.That(registrySystemChecks.CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch),
+                        Is.False,
+                        "Registry values accessed without permission return false");
         }
     }
 }

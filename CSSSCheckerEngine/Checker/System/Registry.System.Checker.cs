@@ -42,6 +42,6 @@ namespace Checker.System
         /// <param name="registryValue">The expected value of the registry key</param>
         /// <param name="registryValueShouldMatch">Should the value in the registry match what is in the issue file</param>
         /// <returns><c>true</c>, if the registry key value matches what is expected, <c>false</c> otherwise</returns>
-        public abstract bool CheckRegistryValue(string registryPath, string registryName, string registryValue, bool registryValueShouldMatch);
+        public abstract bool CheckRegistryValue(string registryPath, string registryName, string? registryValue, bool registryValueShouldMatch);
     }
 }

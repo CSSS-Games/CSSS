@@ -1,4 +1,4 @@
-//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
+﻿//  CSSSCheckerEngine - CyberSecurity Scoring System Checker Engine
 //  Copyright(C) 2017, 2019  Jonathan Hart (stuajnht) <stuajnht@users.noreply.github.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ namespace CheckAPI.System
         /// <param name="registryValue">The expected value of the registry key</param>
         /// <param name="registryValueShouldMatch">Should the value in the registry match what is in the issue file</param>
         /// <returns><c>true</c>, if the registry key value matches what is expected, <c>false</c> otherwise</returns>
-        public bool CheckRegistryValue(string registryPath, string registryName, string registryValue, bool registryValueShouldMatch)
+        public bool CheckRegistryValue(string registryPath, string registryName, string? registryValue, bool registryValueShouldMatch)
         {
             return RegistrySystemFactory.GetCurrentOperatingSystemClass().CheckRegistryValue(registryPath, registryName, registryValue, registryValueShouldMatch);
         }

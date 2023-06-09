@@ -14,10 +14,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using CSSSConfig;
@@ -135,7 +132,6 @@ namespace CSSS
                 try
                 {
                     logger.Debug("Checking if CSSS is already running");
-                    config.CSSSRuntimeLockServer = new TcpListener(IPAddress.Any, 55555);
                     config.CSSSRuntimeLockServer.Start();
                 }
                 catch (SocketException)

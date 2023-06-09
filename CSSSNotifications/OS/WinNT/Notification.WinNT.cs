@@ -14,7 +14,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System.Drawing;
 using CSSSNotifications;
 
 namespace OS.WinNT
@@ -27,7 +26,9 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsGained()
         {
+#if WINDOWS && false
             ShowNotification(notificationMessageTextPointsGained, SystemIcons.Information);
+#endif
         }
 
         /// <summary>
@@ -36,7 +37,9 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsLost()
         {
+#if WINDOWS && false
             ShowNotification(notificationMessageTextPointsLost, SystemIcons.Error);
+#endif
         }
 
         /// <summary>
@@ -45,9 +48,12 @@ namespace OS.WinNT
         /// </summary>
         public override void PointsChanged()
         {
+#if WINDOWS && false
             ShowNotification(notificationMessageTextPointsChanged, SystemIcons.Warning);
+#endif
         }
 
+#if WINDOWS && false
         /// <summary>
         /// Shows the notification
         /// 
@@ -58,7 +64,7 @@ namespace OS.WinNT
         /// <param name="title">The text to display in the notification title</param>
         private void ShowNotification(string message, Icon icon, string title = notificationTitleText)
         {
-            using (var notification = new System.Windows.Forms.NotifyIcon()
+            using (var notification = new NotifyIcon()
             {
                 Visible = true,
                 Icon = icon,
@@ -70,5 +76,6 @@ namespace OS.WinNT
                 notification.ShowBalloonTip(5000);
             }
         }
+#endif
     }
 }

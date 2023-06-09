@@ -14,27 +14,44 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using CheckAPI.Files;
 using CSSSConfig;
-using NUnit.Framework;
 
 namespace CSSSCheckerEngineTests.Issues.Files
 {
     [TestFixture()]
-    class ExistenceTests
+    class ContentsTests
     {
-        private Existence existenceFilesChecks;
+        private Contents contentsFilesChecks;
 
         private static Config config;
 
         /// <summary>
-        /// A string to a file that exists
+        /// A string to a file that has valid contents
         /// </summary>
-        private String existingFilePath;
+        private String validFilePath;
+
+        /// <summary>
+        /// A list string of the valid file contents
+        /// </summary>
+        private List<string> validFileContents;
+
+        /// <summary>
+        /// A string to a file that has invalid contents
+        /// </summary>
+        private String invalidFilePath;
+
+        /// <summary>
+        /// A list string of the invalid file contents
+        /// </summary>
+        private List<string> invalidFileContents;
+
+        /// <summary>
+        /// A list string to contain the output that is being expected
+        /// </summary>
+        private List<string> expectedFileContents;
 
         /// <summary>
         /// A string to a file that doesn't exist
@@ -52,14 +69,32 @@ namespace CSSSCheckerEngineTests.Issues.Files
             var outputDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName
                                 + Path.DirectorySeparatorChar;
 
-            existingFilePath = outputDirectory + "CSSSCheckerEngine.dll";
-            nonExistingFilePath = outputDirectory + "404.exe";
+            validFilePath = outputDirectory + "Question 1.txt";
+            invalidFilePath = outputDirectory + "Question 2.txt";
+            nonExistingFilePath = outputDirectory + "404.txt";
 
-            // The operating system needs to be set due to the `Existence` class
+            expectedFileContents = new List<string> { "Hello World!" };
+            validFileContents = expectedFileContents;
+            invalidFileContents = new List<string> { "Hello World" };
+
+            File.WriteAllLines(validFilePath, validFileContents);
+            File.WriteAllLines(invalidFilePath, invalidFileContents);
+
+            // The operating system needs to be set due to the `Contents` class
             // using it get the relevant checking code
             config = Config.GetCurrentConfig;
             config.operatingSystemType = SetOperatingSystemType();
-            existenceFilesChecks = new Existence();
+            contentsFilesChecks = new Contents();
+        }
+
+        /// <summary>
+        /// Deletes the files that are to be checked (to keep things tidy)
+        /// </summary>
+        [OneTimeTearDown]
+        protected void OneTimeTearDown()
+        {
+            File.Delete(validFilePath);
+            File.Delete(invalidFilePath);
         }
 
         /// <summary>
@@ -69,7 +104,7 @@ namespace CSSSCheckerEngineTests.Issues.Files
         /// <para>This is a stub of the function in `init.cs` in the CSSS project</para>
         /// </summary>
         /// <returns>The current operating system</returns>
-        public Config.OperatingSystemType SetOperatingSystemType()
+        public static Config.OperatingSystemType SetOperatingSystemType()
         {
             // Seeing if CSSSCheckerEngineTests is running on WinNT
             if (Path.DirectorySeparatorChar == '\\')
@@ -128,7 +163,7 @@ namespace CSSSCheckerEngineTests.Issues.Files
                 // Read the output stream first and then wait.
                 string output = p.StandardOutput.ReadToEnd();
                 p.WaitForExit();
-                if (output == null) output = "";
+                output ??= "";
                 output = output.Trim();
                 return output;
             }
@@ -138,82 +173,28 @@ namespace CSSSCheckerEngineTests.Issues.Files
             }
         }
 
-        // There are four options that can happen when checking to see if
-        // the file exists. These are:
-        //   * 1: File exists, it should exist
-        //   * 2: File exists, it shouldn't exist
-        //   * 3: File doesn't exist, it should exist
-        //   * 4: File doesn't exist, it shouldn't exist
-        //
-        // For each of the above, the following should happen:
-        //   * 1: Gain points
-        //   * 2: Loose points
-        //   * 3: Loose points
-        //   * 4: Gain points
-        //
-        // However, should this be a check that issues a penalty, then the
-        // reverse of the above should happen:
-        //   * 1: Loose points
-        //   * 2: Gain points
-        //   * 3: Gain points
-        //   * 4: Loose points
-        //
-        // A "gain points" should return `True` - "loose points" returns `False`
-
         [Test()]
-        public void TestFileDoesExistAndShouldExistAndIsNotPenaltyIssue()
+        public void TestFileDoesExistAndDoesHaveValidContentReturnsTrue()
         {
-            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(existingFilePath, true, false),
-                          "Files that exist and should exist and aren't a penalty should return True");
+            Assert.That(contentsFilesChecks.CheckFileContents(validFilePath, expectedFileContents),
+                        Is.True,
+                        "Files that exist and have valid contents should return True");
         }
 
         [Test()]
-        public void TestFileDoesExistAndShouldNotExistAndIsNotPenaltyIssue()
+        public void TestFileDoesExistAndDoesNotHaveValidContentReturnsFalse()
         {
-            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(existingFilePath, false, false),
-                          "Files that exist and shouldn't exist and aren't a penalty should return False");
+            Assert.That(contentsFilesChecks.CheckFileContents(invalidFilePath, expectedFileContents),
+                        Is.False,
+                        "Files that exist and have invalid contents should return False");
         }
 
         [Test()]
-        public void TestFileDoesNotExistAndShouldExistAndIsNotPenaltyIssue()
+        public void TestFileDoesNotExistReturnsFalse()
         {
-            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, true, false),
-                          "Files that don't exist and should exist and aren't a penalty should return False");
-        }
-
-        [Test()]
-        public void TestFileDoesNotExistAndShouldNotExistAndIsNotPenaltyIssue()
-        {
-            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, false, false),
-                          "Files that don't exist and shouldn't exist and aren't a penalty should return True");
-        }
-
-        [Test()]
-        public void TestFileDoesExistAndShouldExistAndIsPenaltyIssue()
-        {
-            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(existingFilePath, true, true),
-                          "Files that exist and should exist and are a penalty should return False");
-        }
-
-        [Test()]
-        public void TestFileDoesExistAndShouldNotExistAndIsPenaltyIssue()
-        {
-            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(existingFilePath, false, true),
-                          "Files that exist and shouldn't exist and are a penalty should return True");
-        }
-
-        [Test()]
-        public void TestFileDoesNotExistAndShouldExistAndIsPenaltyIssue()
-        {
-            Assert.IsTrue(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, true, true),
-                          "Files that don't exist and should exist and are a penalty should return True");
-        }
-
-        [Test()]
-        public void TestFileDoesNotExistAndShouldNotExistAndIsPenaltyIssue()
-        {
-            Assert.IsFalse(existenceFilesChecks.CheckFileExistence(nonExistingFilePath, false, true),
-                          "Files that don't exist and shouldn't exist and are a penalty should return False");
+            Assert.That(contentsFilesChecks.CheckFileContents(nonExistingFilePath, expectedFileContents),
+                        Is.False,
+                        "Files that do not exist should return False");
         }
     }
 }

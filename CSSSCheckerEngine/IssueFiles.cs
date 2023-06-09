@@ -14,8 +14,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using CSSSConfig;
@@ -31,13 +29,13 @@ namespace CSSSCheckerEngine
     /// </summary>
     public class IssueFiles
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Creating an instance of the CSSS config class, to be
         /// able to read and set values for it
         /// </summary>
-        private static Config config = Config.GetCurrentConfig;
+        private static readonly Config config = Config.GetCurrentConfig;
 
         /// <summary>
         /// Sees if the issue files have been linted or are being
@@ -93,7 +91,7 @@ namespace CSSSCheckerEngine
 
             try
             {
-                dynamic issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
+                dynamic? issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
                 {
                     Error = HandleDeserializationError
                 });
@@ -158,13 +156,15 @@ namespace CSSSCheckerEngine
                     issueFileContent = SupportLibrary.Encryption.String.Decrypt(issueFileContent);
                 }
 
-                dynamic issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
+                dynamic? issueFileJSON = JsonConvert.DeserializeObject(issueFileContent, new JsonSerializerSettings
                 {
                     Error = HandleDeserializationError
                 });
-
-                config.AddIssueFile((string)issueFileJSON.Category, issueFileJSON);
-                logger.Debug("Added issue category: {0}", issueFileJSON.Category);
+                if (issueFileJSON != null)
+                {
+                    config.AddIssueFile((string)issueFileJSON.Category, issueFileJSON);
+                    logger.Debug("Added issue category: {0}", issueFileJSON.Category);
+                }
             }
             catch (CryptographicException e)
             {
@@ -202,7 +202,7 @@ namespace CSSSCheckerEngine
         /// then the plaintext JSON files are deleted</para>
         /// </summary>
         /// <returns><c>true</c>, if all issue files were prepared, <c>false</c> if there were problems</returns>
-        public bool PrepareAllIssueFiles()
+        public static bool PrepareAllIssueFiles()
         {
             logger.Info("Preparing to encrypt all issue files");
 
@@ -248,7 +248,7 @@ namespace CSSSCheckerEngine
         /// </summary>
         /// <returns><c>true</c>, if issue file was encrypted, <c>false</c> otherwise</returns>
         /// <param name="issueFilePath">The full path to the issue file</param>
-        private bool PrepareIssueFile(string issueFilePath)
+        private static bool PrepareIssueFile(string issueFilePath)
         {
             var issueFilePrepared = true;
 
@@ -286,7 +286,7 @@ namespace CSSSCheckerEngine
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="errorArgs">Error arguments</param>
-        private void HandleDeserializationError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
+        private void HandleDeserializationError(object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
         {
             var currentError = errorArgs.ErrorContext.Error.Message;
             errorArgs.ErrorContext.Handled = true;
@@ -297,9 +297,9 @@ namespace CSSSCheckerEngine
         /// Gets the filesystem location of the issue file directory
         /// </summary>
         /// <returns>The issue file directory location</returns>
-        public string GetIssueFilesDirectory()
+        public static string GetIssueFilesDirectory()
         {
-            string CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+            var CSSSDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
             return CSSSDirectory + Path.DirectorySeparatorChar + "Issues";
         }
 
@@ -314,9 +314,9 @@ namespace CSSSCheckerEngine
         /// See: https://social.msdn.microsoft.com/Forums/en-US/7d8798db-32eb-4886-9531-31b3decba018/#25e02b75-16d1-44e6-a04c-a6ab5ad88403
         /// </summary>
         /// <returns>A path array to all of the issue files</returns>
-        public string[] GetAllIssueFiles()
+        public static string[] GetAllIssueFiles()
         {
-            var issueFileExtension = "";
+            string issueFileExtension;
             if (config.CSSSProgramMode.HasFlag(Config.CSSSModes.Start))
             {
                 issueFileExtension = "*.issue";
@@ -337,7 +337,7 @@ namespace CSSSCheckerEngine
         /// place
         /// </summary>
         /// <returns>The file name for the new issue file</returns>
-        private string GenerateFileName()
+        private static string GenerateFileName()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var stringChars = new char[8];
